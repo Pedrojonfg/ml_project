@@ -1,0 +1,100 @@
+\subsection{Opción 6 --- Matbench}
+
+\begin{frame}{6 · Portada --- ¿Qué tan ``conductor'' es un material?}
+  \OptionHeader{Condicional nº 6}{Materiales}{%
+    Predecimos una propiedad clave de materiales (el band gap) con un banco de datos estándar, midiendo error e incertidumbre.
+  }
+\end{frame}
+
+\begin{frame}{6 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Para inventar una batería, un chip o un panel, hay que probar muchos materiales.
+    \item Probarlos en laboratorio o simularlos átomo a átomo es \textbf{caro y lento}.
+    \item El \emph{band gap} resume, a grandes rasgos, si algo se comporta como metal, semiconductor o aislante.
+    \item Si un modelo estima esa propiedad bien --- y dice cuándo duda --- se pueden priorizar candidatos.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{6 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.5cm] (a) {Receta\\(composición)};
+    \node[box, text width=3.5cm, right=0.5cm of a] (b) {Modelo\\que estima};
+    \node[boxdark, text width=3.5cm, right=0.5cm of b] (c) {``Nota'' +\\``cómo de seguro''};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.35em}
+  Como estimar calorías de un plato por ingredientes: útil si también marcas la incertidumbre.
+\end{frame}
+
+\begin{frame}{6 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Convertir la fórmula química (o estructura) en variables numéricas.
+    \item Comparar regresiones clásicas, árboles y redes.
+    \item Reportar no solo el error medio: también \textbf{cuándo} el modelo está perdido.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{6 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.8cm]
+    \item[Band gap] Escala de energía relacionada con el comportamiento electrónico.
+    \item[Matbench] Banco de tareas estándar de ML para materiales.
+    \item[UQ] Cuantificar incertidumbre (``no solo el número, también la duda'').
+  \end{description}
+\end{frame}
+
+\begin{frame}{6 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    ¿Qué combinación de representaciones + modelos minimiza el error de band gap con incertidumbre calibrada, y en qué familias químicas falla más?
+  \end{block}
+\end{frame}
+
+\begin{frame}{6 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Elegir\\tarea}{Crear\\variables}{Árboles /\\boosting}{Red +\\incertidumbre}{Errores por\\química}
+\end{frame}
+
+\begin{frame}{6 · Datos}
+  \begin{itemize}
+    \item Matbench: tareas limpias y citables.
+    \item Empezar por la versión experimental más pequeña ($\sim$4\,600); escalar si sobra tiempo.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{6 · Métodos del curso y más allá}
+  \MethodsSplit{Regresión · Árboles / boosting · Kernels · Validación anidada}{Multi-fidelidad · Conformal / GP · Análisis por familia química}
+\end{frame}
+
+\begin{frame}{6 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Datos impecables.
+        \item Muy articulable con el temario.
+        \item La incertidumbre aporta ambición sobria.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{7}{accent}
+      \ScoreBar{Datos}{10}{good}
+      \ScoreBar{Factibilidad}{9}{good}
+      \ScoreBar{Wow Pedro}{6}{bad}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{6 · Por qué encaja con nosotros}
+  \FitDual{Ciencia dura OK, pero menos emoción ``espacial''. Hace falta el giro de incertidumbre o se queda corto.}{Buen encaje con trabajo limpio, comparación y resultados claros.}{6}{7}
+\end{frame}
+
+\begin{frame}{6 · Pros y contras}
+  \ProCon{Muy factible\\Datos excelentes\\Fácil de defender\\UQ seria}{Menos impacto ``wow''\\Riesgo de parecer solo un ranking\\Mario no viene de materials\\Pedro puede pedirlo más ambicioso}
+\end{frame}
+
+\begin{frame}{6 · Impacto}
+  Acelerar el filtrado de materiales candidatos --- la aportación es método + duda calibrada, no un material nuevo.
+\end{frame}
+
+\begin{frame}{6 · Veredicto}
+  \Verdict{Condicional --- excelente plan B}{Elegidla si priorizáis ejecución limpia y nota sólida. Subid ambición con incertidumbre.}
+\end{frame}

@@ -1,0 +1,757 @@
+% !TEX program = pdflatex
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{enumitem}
+\setlist{leftmargin=*,itemsep=0.22em,topsep=0.15em}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{%
+  \hfill{\scriptsize\color{black!60}\insertsectionhead\ \textbar\ \insertframenumber/\inserttotalframenumber}\hspace{1em}\vspace{0.35em}%
+}
+
+\definecolor{ieblue}{RGB}{0,51,102}
+\definecolor{good}{RGB}{34,120,70}
+\definecolor{bad}{RGB}{160,40,40}
+\definecolor{soft}{RGB}{245,247,250}
+\definecolor{accent}{RGB}{0,120,160}
+\definecolor{esa}{RGB}{0,70,130}
+\definecolor{phb}{RGB}{180,90,20}
+\setbeamercolor{structure}{fg=ieblue}
+\setbeamercolor{frametitle}{fg=ieblue,bg=soft}
+\setbeamercolor{block title}{bg=ieblue,fg=white}
+\setbeamercolor{block body}{bg=soft}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+
+\input{tikz-helpers}
+
+\title{ESA vs PHBench}
+\subtitle{Decision deck --- shortlist final Pedro $\times$ Mario}
+\author{Deep research $\cdot$ Octubre 2026}
+\date{11 octubre 2026}
+\institute{BAM $\cdot$ Machine Learning \& Communication Skills $\cdot$ IE University}
+
+\begin{document}
+
+\begin{frame}{Portada}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Para qué sirve este deck}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Ya acotamos a \textbf{dos} opciones finales.
+        \item Aquí comparamos en profundidad, sin jerga innecesaria.
+        \item Objetivo: elegir \textbf{1 principal + 1 reserva} esta noche.
+        \item Si una no tiene datos mañana, no puede ser principal.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{tikzpicture}
+        \node[boxdark, text width=4.4cm] (a) {1. Entender cada una};
+        \node[box, text width=4.4cm, below=0.28cm of a] (b) {2. Comparar cara a cara};
+        \node[box, text width=4.4cm, below=0.28cm of b] (c) {3. Escenarios de decisión};
+        \node[boxdark, text width=4.4cm, below=0.28cm of c] (d) {4. Principal + reserva};
+        \draw[arr] (a)--(b); \draw[arr] (b)--(c); \draw[arr] (c)--(d);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Las dos finalistas (en una frase)}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=6pt]{block title}
+        \textbf{A · ESA Collision Avoidance}
+      \end{beamercolorbox}
+      \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=6pt]{block body}
+        \scriptsize Con avisos tempranos de ``casi choque'' en órbita, anticipar si el riesgo final será grave --- con datos oficiales ESA.
+      \end{beamercolorbox}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=6pt]{block title}
+        \textbf{B · PHBench (Series A)}
+      \end{beamercolorbox}
+      \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=6pt]{block body}
+        \scriptsize Con señales públicas del lanzamiento en Product Hunt, ordenar qué startups merecen atención por posible Series A.
+      \end{beamercolorbox}
+    \end{column}
+  \end{columns}
+  \vspace{0.6em}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[boxdark, text width=3.8cm, fill=esa] {Espacio / deeptech};
+    \node[font=\Large\bfseries] at (5.2,0) {vs};
+    \node[boxdark, text width=3.8cm, fill=phb, xshift=7.2cm] {VC / ranking};
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Filtro del curso (igual para las dos)}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[boxdark, text width=2.5cm] (d) {Datos reales\\manejables};
+    \node[boxdark, text width=2.5cm, right=0.45cm of d] (m) {Métodos del\\temario (+extra)};
+    \node[boxdark, text width=2.5cm, right=0.45cm of m] (a) {Ambición\\visible (25\%)};
+    \node[boxdark, text width=2.5cm, right=0.45cm of a] (o) {Defendible\\en oral};
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.45em}
+  \begin{block}{Marco práctico}
+    Python + scikit-learn + PyTorch \quad$\cdot$\quad $\sim$6 semanas \quad$\cdot$\quad informe + GitHub con historial real \quad$\cdot$\quad proposal $\sim$2 páginas \textbf{ahora}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Filtro nuestro (Pedro $\times$ Mario)}
+  \FitDual{Deeptech, física, espacio, quantum. Rechaza lo genérico. Quiere impresionar. No busca el camino fácil.}{Finanzas y sistemas de recomendación. Quiere originalidad, buenos datos y comparación limpia.}{---}{---}
+  \vspace{0.4em}
+  \begin{block}{Vetos}
+    \textbf{Mario:} nada de salud / biomedicina. \quad
+    \textbf{Pedro:} nada de proyecto genérico de estudiante (crédito, house prices, bolsa típica).
+  \end{block}
+\end{frame}
+
+% ============================================================
+\section{Opción A --- ESA}
+% ============================================================
+
+\begin{frame}{A · Portada --- Evitar choques entre satélites}
+  \OptionHeader{Finalista A}{Espacio / ESA}{%
+    Usamos avisos oficiales de la Agencia Espacial Europea para anticipar si dos objetos en órbita van a acercarse de forma peligrosa.
+  }
+\end{frame}
+
+\begin{frame}{A · Imagina esto (sin jerga)}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item El espacio cercano es una \textbf{autopista muy llena}.
+        \item Satélites y basura espacial circulan a miles de km/h.
+        \item Cuando dos objetos se van a cruzar cerca, llega un \textbf{aviso} (CDM).
+        \item Ese aviso se actualiza durante días: el riesgo sube o baja.
+        \item Alguien decide: \textbf{¿desvío el satélite o no?}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{tikzpicture}
+        \draw[thick, ieblue] (0,0) circle (1.1);
+        \node[font=\tiny] at (0,0) {Tierra};
+        \draw[thick, accent] (0,0) circle (1.65);
+        \fill[ieblue] (1.5,0.65) circle (0.1);
+        \fill[bad] (1.85,0.4) circle (0.09);
+        \node[font=\tiny, align=center] at (0.9,-1.95) {dos objetos\\se acercan};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{A · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.4cm] (a) {Parte del tiempo\\a las 10:00};
+    \node[box, text width=3.4cm, right=0.55cm of a] (b) {¿Tormenta fuerte\\a las 18:00?};
+    \node[boxdark, text width=3.4cm, right=0.55cm of b] (c) {Decidir si\\cancelar el plan};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.45em}
+  Con el aviso \textbf{temprano} (p.\ ej.\ $\geq$2 días antes), ¿podemos estimar el riesgo \textbf{final}?\\
+  Si avisamos bien y pronto: menos maniobras inútiles y menos peligros ignorados.
+\end{frame}
+
+\begin{frame}{A · ¿Qué haría el machine learning?}
+  \begin{itemize}
+    \item Hoy hay física + operadores humanos mirando muchos avisos.
+    \item Nosotros: con la secuencia truncada, estimar el riesgo del último aviso.
+    \item Éxito = detectar bien los casos \textbf{raros y peligrosos}, no acertar el 99\% fácil.
+    \item Extra de ambición: \textbf{calibración}, curvas de aviso temprano, o variables físicas explícitas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{A · Glosario rápido}
+  \begin{description}[style=nextline,leftmargin=1.4cm,font=\bfseries\scriptsize]
+    \item[CDM] Mensaje de ``casi choque'': una fila con distancia, incertidumbre y riesgo.
+    \item[Evento] Toda la secuencia de avisos del mismo acercamiento.
+    \item[TCA] Momento del máximo acercamiento.
+    \item[High-risk] Umbral operativo típico: $\log_{10} r \geq -6$ (riesgo $\geq 10^{-6}$).
+    \item[LRP] Baseline fuerte: ``usa el último riesgo conocido $\geq$2 días antes''.
+  \end{description}
+\end{frame}
+
+\begin{frame}{A · Pregunta de investigación}
+  \begin{block}{Principal}
+    Si solo vemos parte de la secuencia (hasta $\geq$2 días antes del TCA), ¿predecimos el riesgo final mejor que reglas simples (LRP)?
+  \end{block}
+  \begin{block}{Secundarias (elegid 1 como gancho)}
+    \scriptsize
+    (i) ¿Cómo cae la calidad al avisar cada vez antes? \quad
+    (ii) ¿Las probabilidades están bien calibradas? \quad
+    (iii) ¿Hay transferencia entre misiones? \quad
+    (iv) ¿Ayudan variables físicas explícitas?
+  \end{block}
+\end{frame}
+
+\begin{frame}{A · Datos (hechos concretos)}
+  \begin{itemize}
+    \item Zenodo público: \texttt{zenodo.org/records/4463683} --- \textbf{descarga inmediata} (CC BY 4.0).
+    \item Train: 162\,634 filas / 13\,154 eventos \quad·\quad Test: 24\,484 / 2\,167.
+    \item $\sim$103 variables por CDM; riesgo en $\log_{10}$.
+    \item High-risk ($r\geq 10^{-6}$): $\sim$3{,}4\% en train; test enriquecido $\sim$6{,}9\%.
+    \item Paper: arXiv:2008.03069. Winners: reglas metric-aware o LSTM siamesa --- no DL genérico.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{A · Baseline que hay que batir (o explicar)}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.6cm] (c) {Constante $r=-5$\\{\scriptsize $L\approx 2.50$}};
+    \node[boxdark, text width=3.6cm, right=0.7cm of c] (l) {Latest Risk (LRP)\\{\scriptsize $L\approx 0.694$}};
+    \node[box, text width=3.6cm, right=0.7cm of l] (w) {Solo $\sim$12/97\\equipos lo batieron};
+    \draw[arr] (c)--(l); \draw[arr] (l)--(w);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.45em}
+  \textbf{Implicación:} no basta con ``entrenar un XGBoost''. El valor está en el \textbf{ángulo} (early-warning, calibración, física, transfer).
+\end{frame}
+
+\begin{frame}{A · Qué se intentó ya (competición Kelvins 2019)}
+  \begin{itemize}
+    \item Reto oficial ESA (Kelvins): $\sim$97 equipos; paper Uriot et al.\ (arXiv:2008.03069).
+    \item La regla ingenua \textbf{LRP} (último riesgo $\geq$2 días antes) fue mejor que el 85\% de los equipos.
+    \item Ganadores no fueron ``redes profundas genéricas'':
+    \begin{itemize}
+      \item \textbf{1º sesc (Honda RI):} cascada de reglas sobre el riesgo a $-$2 días + recortes metric-aware.
+      \item \textbf{3º Magpies:} LSTM siamesa para detectar saltos low$\to$high + ensemble.
+    \end{itemize}
+    \item Muchos probaron AutoML / RF / tsfresh y \textbf{sobreajustaron}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{A · Qué queda abierto (no es cosplay de leaderboard)}
+  \begin{itemize}
+    \item La competición optimizó una loss rara ($L = \mathrm{MSE}_{HR}/F_2$). Nosotros podemos elegir un claim científico distinto.
+    \item Aún poco explorado con rigor: \textbf{curvas de lead-time}, \textbf{calibración/UQ}, leave-mission-out, ablación física limpia.
+    \item Oral fuerte: ``citamos a sesc/Magpies como baseline; nuestra contribución es X''.
+    \item \textbf{No} afirmar: ``vamos a ganar Kelvins'' ni ``XGBoost nuevo''.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{A · Cómo lo haríamos (6 semanas)}
+  \PipelineFive{EDA +\\baselines}{Features\\físicas}{Trees /\\logística}{NN corta\\+ calibrar}{Curvas\\lead-time}
+  \vspace{0.35em}
+  \begin{itemize}
+    \item Unidad de análisis: cada \textbf{acercamiento completo} (no cada fila suelta).
+    \item Métrica oficial del reto: mezcla F2 (casos graves) + error en high-risk.
+    \item Oral: cuándo ayuda al operador y cuándo falla.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{A · Métodos del curso y más allá}
+  \MethodsSplit{Regresión / logística · Árboles / boosting · Validación cuidadosa · Ingeniería de variables}{Serie corta / NN · Calibración · Features orbitales · Opcional: incertidumbre / GP}
+\end{frame}
+
+\begin{frame}{A · Ángulos de originalidad (elegid uno)}
+  \begin{enumerate}
+    \item Curvas de \textbf{early-warning}: calidad vs días de antelación.
+    \item \textbf{Calibración} e uncertainty (no solo score de competición).
+    \item Transfer entre \texttt{mission\_id} (el paper documenta shift).
+    \item Features físicas + ablación limpia.
+    \item Clasificar high-risk + regresión condicional (como el diseño del score).
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{A · Encaje Pedro / Mario}
+  \FitDual{Máximo: espacio, ESA, física, anti-genérico. Lidera narrativa SSA y variables orbitales.}{Lidera métricas, rare events, calibración y comparación limpia de modelos.}{10}{7}
+\end{frame}
+
+\begin{frame}{A · Scorecard}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \ScoreBar{Ambición / wow}{9}{ieblue}
+      \ScoreBar{Datos / claridad}{9}{accent}
+      \ScoreBar{Factibilidad 6 sem.}{8}{good}
+      \ScoreBar{Afinidad Pedro}{10}{ieblue}
+      \ScoreBar{Afinidad Mario}{7}{accent}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \ScoreBar{Oral}{9}{ieblue}
+      \ScoreBar{Portfolio}{9}{accent}
+      \ScoreBar{Alineación Molina}{9}{good}
+      \ScoreBar{Diferenciación}{9}{ieblue}
+      \ScoreBar{Riesgo acceso datos}{2}{good}
+    \end{column}
+  \end{columns}
+  \vspace{0.3em}
+  {\scriptsize Riesgo acceso: 1 = bajo (bueno), 10 = alto (malo). Aquí \textbf{2} = Zenodo ya disponible.}
+\end{frame}
+
+\begin{frame}{A · Pros y contras}
+  \ProCon{Historia espacial muy fuerte\\Datos oficiales, descarga ya\\Factible en 6 semanas\\Buen oral físico / UQ\\Alineado con Molina}{Casos graves muy raros\\Competición 2019 ya cerrada\\Pocas ``fotos'' visuales\\Hay que aportar ángulo propio\\Oral puede ser muy técnico}
+\end{frame}
+
+\begin{frame}{A · Veredicto parcial}
+  \Verdict{Muy fuerte como principal}{Ideal si la identidad es ``espacio / ESA / deeptech''. Reserva natural: PHBench.}
+\end{frame}
+
+% ============================================================
+\section{Opción B --- PHBench}
+% ============================================================
+
+\begin{frame}{B · Portada --- ¿Qué startups llegan a Series A?}
+  \OptionHeader{Finalista B}{Inversión / VC}{%
+    Usamos señales públicas del día del lanzamiento en Product Hunt para estimar qué productos acaban levantando una ronda Series A.
+  }
+\end{frame}
+
+\begin{frame}{B · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Cada día salen cientos de apps y productos nuevos.
+    \item Casi ninguno consigue una gran ronda (Series A) en $\sim$18 meses.
+    \item Product Hunt es un ``escaparate'' público: votos, comentarios, equipo\ldots
+    \item Un analista no puede mirarlo todo: necesita una \textbf{lista ordenada}.
+    \item Nosotros entrenamos modelos que intentan hacer ese ranking con datos pasados.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{B · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.2cm] (a) {Muchas\\candidaturas};
+    \node[box, text width=3.2cm, right=0.6cm of a] (b) {Pocas\\plazas};
+    \node[boxdark, text width=3.2cm, right=0.6cm of b] (c) {Hay que\\priorizar};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.45em}
+  Mismo tipo de problema que filtrar muchas solicitudes cuando solo unas pocas son ``éxito''.\\
+  \textbf{No} es predecir si sube o baja una acción en bolsa.
+\end{frame}
+
+\begin{frame}{B · ¿Qué haría el machine learning?}
+  \begin{itemize}
+    \item Aprender patrones en lanzamientos antiguos (votos, temas, señales del día).
+    \item Predecir probabilidad de Series A --- éxito \textbf{rarísimo} ($\sim$1 de cada 127).
+    \item Evaluar como ranking: ``de los 50 que marcamos, ¿cuántos acertamos?''
+    \item Cuidado crítico: no usar información del \textbf{futuro} (fugas temporales).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{B · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.5cm]
+    \item[Series A] Primera gran ronda institucional de una startup.
+    \item[Product Hunt] Comunidad donde se lanzan y votan productos digitales.
+    \item[F0.5] Métrica primaria del benchmark: prioriza precisión (mejor pocos aciertos buenos).
+    \item[Lift@k] Cuánto mejor que el azar es tu top-$k$.
+    \item[Fuga] Variable que ``mira al futuro'' (p.\ ej.\ seguidores medidos años después).
+  \end{description}
+\end{frame}
+
+\begin{frame}{B · Pregunta de investigación}
+  \begin{block}{Principal}
+    Con señales del día del launch, ¿qué modelos ordenan mejor los candidatos a Series A en 18 meses, respetando el orden temporal?
+  \end{block}
+  \begin{block}{Secundarias (elegid 1 como gancho)}
+    \scriptsize
+    (i) Ranking semanal tipo ``cola de analista''. \quad
+    (ii) Ablación honesta de features con fuga. \quad
+    (iii) Calibración + curvas precisión-capacidad. \quad
+    (iv) ¿Cambian los patrones por ciclo de mercado?
+  \end{block}
+\end{frame}
+
+\begin{frame}{B · Datos (hechos concretos)}
+  \begin{itemize}
+    \item $\sim$67\,292 launches; 528 positivos (0{,}78\%); tabular anonimizado; CC BY 4.0.
+    \item \textbf{Sin} tagline/descripción cruda en el release público --- no pitch SBERT en week 1.
+    \item Champion test: AP 0{,}037 ($\sim$4{,}7$\times$ random), F$_{0.5}$ 0{,}097 (val inflada).
+    \item HF gated \textbf{o} email \texttt{benchmark@vela.partners} · paper arXiv:2605.02974.
+  \end{itemize}
+  \begin{block}{Riesgo operativo}
+    Sin CSV mañana $\rightarrow$ no primary. Fallback si el gate falla: \textbf{VCBench} (no dual-core).
+  \end{block}
+\end{frame}
+
+\begin{frame}{B · Métricas y trampas documentadas}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Métricas oficiales}
+      \begin{itemize}
+        \item Primaria: \textbf{F0.5}
+        \item También: P@50/100/200, AP, lift
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Trampas}
+      \begin{itemize}
+        \item Fuga en \texttt{maker\_followers}
+        \item Cohort 2025 parcialmente resuelto
+        \item Sesgo: PH $\neq$ universo startups
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.4em}
+  Hablar de estas trampas en el oral = señal de madurez (no es un bug vuestro: está en el paper).
+\end{frame}
+
+\begin{frame}{B · Qué se ha intentado ya (benchmark 2026)}
+  \begin{itemize}
+    \item Benchmark fresco (Ihlamur et al., arXiv:2605.02974) con baselines públicos.
+    \item \textbf{Champion:} ensemble de árboles (Top-3) --- test AP 0{,}037 / F$_{0.5}$ 0{,}097 ($\sim$4{,}7$\times$ random).
+    \item Baseline oficial: regresión logística (FS4) --- test AP 0{,}024 / F$_{0.5}$ 0{,}045.
+    \item Dominan: gradient boosting + interacciones + pesos de clase + calibración isotónica.
+    \item LLMs zero-shot (Gemini, números anonimizados): a veces ganan en F$_{0.5}$ puntual, \textbf{pierden en AP}; modelo más grande $\neq$ mejor.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{B · Qué queda abierto (ángulo propio)}
+  \begin{itemize}
+    \item Holdout \textbf{temporal} (train $\leq$2023 $\to$ eval 2024--25) --- lo dejan los autores como future work.
+    \item Calibración hecha bien (ellos calibran en el mismo val que miden).
+    \item Ablación honesta de fuga en followers; lift@$k$ con presupuesto de analista.
+    \item Brazo tabular PyTorch vs árboles; opcional: LLM como ``picker'' + ML como ranker.
+    \item \textbf{No} original: ``corrimos XGBoost'' ni ``los LLMs hacen VC'' sin protocolo.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{B · Cómo lo haríamos (6 semanas)}
+  \PipelineFive{Acceso +\\EDA}{Limpieza\\fugas}{LR / trees\\+ ranking}{Calibrar\\+ utilidades}{Errores +\\ciclos}
+\end{frame}
+
+\begin{frame}{B · Métodos del curso y más allá}
+  \MethodsSplit{Logística regularizada · Boosting · Validación temporal · Métricas de ranking}{Calibración · Ablaciones de fuga · Ensambles · Análisis por cohorte / ciclo}
+\end{frame}
+
+\begin{frame}{B · Ángulos de originalidad (elegid uno)}
+  \begin{enumerate}
+    \item Framing \textbf{rank-the-weekly-queue} + lift@$k$ / presupuesto semanal.
+    \item Ablación honesta de features con fuga temporal.
+    \item Holdout temporal (train $\leq$2023, eval 2024--25).
+    \item Calibración anidada + curvas precisión-capacidad.
+    \item Topics / stats de superficie (no embeddings de texto crudo).
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{B · Encaje Pedro / Mario}
+  \FitDual{VC innovador (no bolsa genérica). Portfolio fuerte. Menos ``física'', más narrativa de mercado.}{Máximo: finanzas + ranking. Datos claros, comparación limpia, métricas de negocio.}{8}{10}
+\end{frame}
+
+\begin{frame}{B · Scorecard}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \ScoreBar{Ambición / wow}{9}{ieblue}
+      \ScoreBar{Datos / claridad}{8}{accent}
+      \ScoreBar{Factibilidad 6 sem.}{7}{accent}
+      \ScoreBar{Afinidad Pedro}{8}{accent}
+      \ScoreBar{Afinidad Mario}{10}{good}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \ScoreBar{Oral}{8}{ieblue}
+      \ScoreBar{Portfolio}{10}{good}
+      \ScoreBar{Alineación Molina}{6}{accent}
+      \ScoreBar{Diferenciación}{9}{ieblue}
+      \ScoreBar{Riesgo acceso datos}{7}{bad}
+    \end{column}
+  \end{columns}
+  \vspace{0.3em}
+  {\scriptsize Riesgo acceso 7/10: HF gated + email. Mitigable si confirmáis acceso esta noche.}
+\end{frame}
+
+\begin{frame}{B · Pros y contras}
+  \ProCon{Poco genérico / fresco 2026\\Encaja muy bien con Mario\\Baselines y leaderboard listos\\Historia fuerte en entrevista\\Métricas de ranking naturales}{Acceso a datos por confirmar\\Desbalance brutal (0{,}78\%)\\Fácil contaminar con futuro\\Menos deeptech físico\\Ética / sesgo en el oral}
+\end{frame}
+
+\begin{frame}{B · Veredicto parcial}
+  \Verdict{Muy fuerte si hay datos ya}{Ideal si la identidad es ``VC / portfolio / ranking''. Sin acceso confirmado, mejor como reserva.}
+\end{frame}
+
+% ============================================================
+\section{Cara a cara}
+% ============================================================
+
+\begin{frame}{Cara a cara · Identidad del proyecto}
+  \noindent
+  \begin{minipage}[t]{0.48\textwidth}
+    \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=8pt,center]{block title}
+      \textbf{ESA}\\[0.35em]
+      {\scriptsize\normalfont ``Trabajamos con datos de la Agencia Espacial Europea para avisar antes del riesgo.''}
+    \end{beamercolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=8pt,center]{block title}
+      \textbf{PHBench}\\[0.35em]
+      {\scriptsize\normalfont ``Ordenamos la cola semanal de launches para no perder tiempo en early-stage.''}
+    \end{beamercolorbox}
+  \end{minipage}
+  \vspace{0.55em}
+  Pregunta guía: \textbf{¿qué frase queréis decir en la primera frase del oral?}
+\end{frame}
+
+\begin{frame}{Cara a cara · Tabla resumen (1--10)}
+  \tiny
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{@{}lcc@{}}
+    \toprule
+    Criterio & ESA & PHBench \\
+    \midrule
+    Ambición / wow & 9 & 9 \\
+    Calidad / claridad datos & 9 & 8 \\
+    Factibilidad 6 semanas & 8 & 7 \\
+    Afinidad Pedro & 10 & 8 \\
+    Afinidad Mario & 7 & 10 \\
+    Articulable con temario & 9 & 9 \\
+    Defendible en oral & 9 & 8 \\
+    Portfolio laboral & 9 & 10 \\
+    Alineación Molina (física / UQ) & 9 & 7 \\
+    Diferenciación vs genérico & 9 & 8 \\
+    Riesgo de verse genérico ($\uparrow$=peor) & \textbf{2} & 4 \\
+    Riesgo de no poder empezar mañana ($\uparrow$=peor) & \textbf{2} & \textbf{7} \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Cara a cara · Quién gana cada eje}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Gana ESA}
+        \scriptsize
+        Acceso inmediato · Pedro/espacio · Molina/física/calibración · narrativa ESA · menor fricción esta noche
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Gana PHBench}
+        \scriptsize
+        Mario/ranking · portfolio VC · frescura 2026 · métricas de negocio · entrevista ``data for investing''
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.45em}
+  Empate real en ambición y diferenciación. El desempate práctico es: \textbf{¿datos en disco mañana?}
+\end{frame}
+
+\begin{frame}{Cara a cara · Tipo de ML}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=5.0cm] (a) {\textbf{ESA}\\serie corta por evento\\regresión + rare events\\física / calibración};
+    \node[box, text width=5.0cm, right=0.55cm of a] (b) {\textbf{PHBench}\\tabular + ranking\\clasificación extrema\\validación temporal / fugas};
+    \draw[arr] (a)--(b);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.45em}
+  Ambas usan el temario (trees, logística, validación). El ``extra'' es distinto: física/UQ vs ranking/ética de datos.
+\end{frame}
+
+\begin{frame}{Cara a cara · Oral (50\%)}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{ESA --- preguntas típicas}
+      \begin{itemize}
+        \item ¿Qué es un CDM?
+        \item ¿Por qué no basta el accuracy?
+        \item ¿Qué es LRP y por qué es fuerte?
+        \item ¿Calibración vs score?
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{PHBench --- preguntas típicas}
+      \begin{itemize}
+        \item ¿Causalidad o correlación?
+        \item ¿Sesgo de Product Hunt?
+        \item ¿Qué fugas evitasteis?
+        \item ¿Por qué F0.5 y no F1?
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Cara a cara · Proposal de 2 páginas}
+  \begin{itemize}
+    \item \textbf{ESA:} más fácil de escribir ya (links Zenodo + pregunta + baseline LRP + ángulo early-warning).
+    \item \textbf{PHBench:} igual de redactable, pero debéis mencionar plan de acceso y métricas F0.5 / P@k.
+    \item En ambos casos: un solo gancho de novedad, no tres.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Cara a cara · Riesgos que matan el proyecto}
+  \ProCon{\textbf{ESA}\\Quedarse en ``rehacer la competición''\\sin ángulo propio\\$\rightarrow$ oral flojo de originalidad}{\textbf{PHBench}\\Empezar sin CSV\\o ignorar fugas temporales\\$\rightarrow$ resultados no creíbles}
+\end{frame}
+
+\begin{frame}{Cara a cara · Visual de trade-offs}
+  \begin{center}
+  \begin{tikzpicture}[scale=0.95]
+    % axes
+    \draw[->, thick] (0,0) -- (8.2,0) node[right, font=\scriptsize] {Afinidad Mario};
+    \draw[->, thick] (0,0) -- (0,5.2) node[above, font=\scriptsize] {Afinidad Pedro};
+    \node[boxdark, fill=esa, text width=2.4cm] at (5.0,4.3) {ESA\\{\scriptsize Pedro 10 · Mario 7}};
+    \node[boxdark, fill=phb, text width=2.4cm] at (7.0,3.4) {PHBench\\{\scriptsize Pedro 8 · Mario 10}};
+    \node[font=\tiny, gray] at (4,-0.45) {ambas son ambiciosas; el eje es identidad};
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% ============================================================
+\section{Decisión}
+% ============================================================
+
+\begin{frame}{Escenarios --- elegid el vuestro}
+  \tiny
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}p{7.2cm}l@{}}
+    \toprule
+    Situación & Elegir \\
+    \midrule
+    Queréis identidad ``espacio / ESA / deeptech'' & \textbf{ESA} \\
+    Queréis identidad ``VC / portfolio / ranking'' & \textbf{PHBench}* \\
+    Proposal hoy y PHBench aún sin acceso & \textbf{ESA} + PHBench reserva \\
+    Mario debe brillar en métricas de negocio & \textbf{PHBench}* \\
+    Maximizar alineación Molina (física / UQ) & \textbf{ESA} \\
+    Teméis parecer ``otra competición Kelvins'' & PHBench* o ESA con ángulo claro \\
+    \bottomrule
+  \end{tabular}\\[0.4em]
+  {\scriptsize *Solo si el acceso a datos está confirmado (HF o email).}
+\end{frame}
+
+\begin{frame}{Recomendación opinada (research)}
+  \Verdict{Default: ESA primary · PHBench reserva}{Confianza $\sim$72\%. Con peso oral (50\%) + ambición (25\%), ESA gana por margen estrecho pero real.}
+  \vspace{0.25em}
+  \begin{block}{Por qué}
+    Dato listo · física/UQ · Pedro a tope. Mario no pierde: lidera rare events, calibración y ``cuándo el modelo miente''.
+  \end{block}
+  \begin{block}{Vista disidente ($\sim$28\%)}
+    Si el portfolio VC importa más esta noche \textbf{y} hay acceso a datos $\rightarrow$ PHBench primary.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Híbridos a evitar (falsos compromisos)}
+  \begin{itemize}
+    \item ESA + PHBench en \textbf{un} proyecto $\rightarrow$ dos RQs, oral diluido.
+    \item Metáfora ``Series A $\approx$ riesgo orbital'' $\rightarrow$ deck, no ciencia.
+    \item Mitad-mitad ``por equidad'' $\rightarrow$ equidad de \textbf{roles}, no de tema.
+    \item Transformer ``porque SOTA'' como núcleo $\rightarrow$ ambición falsa.
+  \end{itemize}
+  \vspace{0.35em}
+  \begin{block}{Compromiso sano}
+    Un primary + un backup en 3 líneas + roles asimétricos claros.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Checklist proposal (gates duros)}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item Primary elegido (A o B)
+        \item Backup en 3 líneas
+        \item RQ falsable (1 frase)
+        \item URL datos + estado de acceso
+        \item Unidad de análisis clara
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{itemize}
+        \item Métrica rare-events (no accuracy)
+        \item Split sin filtrar futuro
+        \item Un solo ángulo propio
+        \item Ancla temario sklearn + PyTorch
+        \item Roles Pedro / Mario / oral
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Reglas de decisión (recordatorio)}
+  \begin{itemize}
+    \item Pedro puede vetar lo \textbf{genérico}.
+    \item Mario puede vetar lo \textbf{mal definido}.
+    \item Ambición alta, pero ejecutable en 6 semanas.
+    \item Solo \textbf{un} gancho de novedad.
+    \item Oral: Mario abre con datos/métricas; Pedro cierra con el porqué.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Scorecard para rellenar juntos}
+  \tiny
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{@{}clcccc@{}}
+    \toprule
+    & Opción & Pedro (1--5) & Mario (1--5) & Factib. & ¿Principal? \\
+    \midrule
+    A & ESA Collision Avoidance & & & & \\
+    B & PHBench Series A & & & & \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.55em}
+  \normalsize
+  Descartad como principal cualquier opción con factibilidad $<$ 3 \textbf{o} sin datos esta semana.
+\end{frame}
+
+\begin{frame}{Spike de 48 horas (si empatáis)}
+  \noindent
+  \begin{minipage}[t]{0.48\textwidth}
+    \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=6pt,center]{block title}
+      \scriptsize ESA: Zenodo + 2 plots + baseline LRP
+    \end{beamercolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \begin{beamercolorbox}[wd=\textwidth,rounded=true,sep=6pt,center]{block title}
+      \scriptsize PHBench: pedir acceso HF + email hoy
+    \end{beamercolorbox}
+  \end{minipage}
+  \vspace{0.45em}
+  \begin{block}{Regla de desempate}
+    Si en 24h no hay CSV de PHBench $\rightarrow$ ESA primary. Decidir con evidencia, no con vibes.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Plan inmediato tras elegir}
+  \PipelineFive{Elegir\\principal}{Fijar\\reserva}{Bajar\\datos}{2--3\\gráficos}{Escribir\\proposal}
+  \vspace{0.45em}
+  \begin{block}{La proposal debe incluir}
+    Pregunta precisa · motivación · dataset · exploración preliminar · método inicial · plan de 6 semanas.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Fuentes clave}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{ESA}
+      \begin{itemize}
+        \item zenodo.org/records/4463683
+        \item kelvins.esa.int/...
+        \item arXiv:2008.03069
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{PHBench}
+      \begin{itemize}
+        \item phbench.com
+        \item github.com/ihlamury/phbench
+        \item arXiv:2605.02974
+        \item HF: ihlamury/phbench
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.35em}
+  {\scriptsize
+  Comparativa: \texttt{research-brief-esa-vs-phbench.md}\\
+  Deep A/B: \texttt{research-brief-esa-collision-avoidance-deep.md} · \texttt{research-brief-phbench-deep.md}}
+\end{frame}
+
+\begin{frame}{Cierre}
+  \begin{center}
+    {\Large\textbf{¿ESA o PHBench?}}\\[0.6em]
+    Una principal. Una reserva.\\[0.4em]
+    Luego: datos en disco $\rightarrow$ proposal.
+  \end{center}
+\end{frame}
+
+\end{document}

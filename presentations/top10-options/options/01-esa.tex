@@ -1,0 +1,119 @@
+\subsection{Opción 1 --- ESA Collision Avoidance}
+
+\begin{frame}{1 · Portada --- Evitar choques entre satélites}
+  \OptionHeader{Recomendada nº 1}{Espacio / ESA}{%
+    Usamos avisos oficiales de la Agencia Espacial Europea para anticipar si dos objetos en órbita van a acercarse de forma peligrosa.
+  }
+\end{frame}
+
+\begin{frame}{1 · Imagina esto (sin jerga)}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Piensa en el espacio cercano a la Tierra como una \textbf{autopista muy llena}.
+        \item Satélites, restos de cohetes y basura espacial circulan a miles de km/h.
+        \item Cuando dos objetos se van a cruzar cerca, llega un \textbf{aviso} (como un parte meteorológico del riesgo).
+        \item Ese aviso se actualiza varias veces: el riesgo sube o baja según llegan mejores medidas.
+        \item Alguien tiene que decidir: \textbf{¿desvío el satélite o no?}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{tikzpicture}
+        \draw[thick, ieblue] (0,0) circle (1.1);
+        \node[font=\tiny] at (0,0) {Tierra};
+        \draw[thick, accent] (0,0) circle (1.65);
+        \fill[ieblue] (1.5,0.65) circle (0.1);
+        \fill[bad] (1.85,0.4) circle (0.09);
+        \node[font=\tiny, align=center] at (0.9,-1.95) {dos objetos\\se acercan};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{1 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Hoy hay física + operadores humanos mirando muchos avisos.
+    \item Nosotros preguntamos: \textbf{con los avisos tempranos}, ¿podemos estimar cómo de grave será el riesgo al final?
+    \item Es parecido a: ``con el parte de las 10:00, ¿prevemos si la tormenta de las 18:00 será fuerte?''
+    \item Si el modelo avisa bien y pronto, se pueden evitar maniobras innecesarias (gastan combustible) y no ignorar peligros reales.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{1 · Palabras que vas a oír (glosario rápido)}
+  \begin{description}[style=nextline,leftmargin=1.2cm,font=\bfseries\scriptsize]
+    \item[CDM] Mensaje de ``casi choque'': una fila de datos con distancia, incertidumbre y riesgo estimado.
+    \item[Evento] Toda la secuencia de avisos del mismo acercamiento (no una sola fila).
+    \item[TCA] Momento del máximo acercamiento.
+    \item[Desbalance] Casi todos los casos son ``poco peligro''; los graves son raros --- por eso no vale mirar solo ``aciertos totales''.
+  \end{description}
+\end{frame}
+
+\begin{frame}{1 · Pregunta de investigación}
+  \begin{block}{Pregunta principal}
+    Si solo vemos parte de la secuencia de avisos (por ejemplo, hasta 2 días antes), ¿podemos predecir el riesgo del último aviso mejor que reglas simples?
+  \end{block}
+  \begin{block}{Pregunta secundaria}
+    ¿Ayuda meter variables físicas (distancia, incertidumbre de posición) para reducir falsas alarmas?
+  \end{block}
+\end{frame}
+
+\begin{frame}{1 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Explorar\\datos}{Crear\\variables}{Modelos\\clásicos}{Redes +\\calibración}{Comparar\\con/sin física}
+  \vspace{0.4em}
+  \begin{itemize}
+    \item Unidad de análisis: cada \textbf{acercamiento completo}.
+    \item Éxito = detectar bien los casos raros y peligrosos, no acertar el 99\% fácil.
+    \item Entregable oral: cuándo el modelo ayuda al operador y cuándo se equivoca.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{1 · De dónde salen los datos}
+  \begin{itemize}
+    \item Dataset público de la \textbf{ESA} (reto Kelvins / Collision Avoidance).
+    \item Miles de acercamientos reales (2015--2019) con muchas variables por aviso.
+    \item Ventaja: no hace falta bajar imágenes de satélite; es tabla + series.
+    \item Reto: hay papers de competición --- hay que aportar un \textbf{ángulo propio} (avisar antes, calibrar probabilidades, física).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{1 · Métodos del curso y más allá}
+  \MethodsSplit{Regresión / logística · Árboles / boosting · Validación cuidadosa · Ingeniería de variables}{Red secuencial pequeña · Calibración de probabilidades · Variables orbitales · Opcional: procesos gaussianos}
+\end{frame}
+
+\begin{frame}{1 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Datos reales y poco típicos de estudiante.
+        \item Comparación de modelos natural.
+        \item Limitaciones claras (rareza, incertidumbre).
+        \item Oral defendible: física + métricas.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{9}{ieblue}
+      \ScoreBar{Datos}{9}{accent}
+      \ScoreBar{Factibilidad}{8}{good}
+      \ScoreBar{Oral}{9}{ieblue}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{1 · Por qué encaja con nosotros}
+  \FitDual{Le encanta el espacio. Evita proyectos genéricos. Puede liderar la parte física y la historia SSA.}{Puede liderar métricas, casos raros, calibración y la comparación limpia de modelos.}{10}{7}
+\end{frame}
+
+\begin{frame}{1 · Pros y contras}
+  \ProCon{Historia espacial muy fuerte\\Datos oficiales ESA\\Factible en 6 semanas\\Buen oral}{Casos peligrosos muy raros\\Ya hay resultados de competición\\Pocas imágenes ``bonitas''\\Hay que aportar ángulo propio}
+\end{frame}
+
+\begin{frame}{1 · Impacto (con los pies en el suelo)}
+  \begin{itemize}
+    \item Mejor aviso temprano $\rightarrow$ menos maniobras inútiles y más seguridad.
+    \item No pretendemos sustituir el control de misión de la ESA: es un estudio académico con datos históricos.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{1 · Veredicto}
+  \Verdict{Muy recomendada (prioridad alta)}{Ideal si queréis que el proyecto se lea como ``espacio / ESA''. Alternativas cercanas: dinámica orbital (nº 4) o incendios por satélite (nº 5).}
+\end{frame}

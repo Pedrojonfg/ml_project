@@ -1,0 +1,100 @@
+\subsection{Opción 9 --- OSCD}
+
+\begin{frame}{9 · Portada --- ¿Qué cambió en la ciudad entre dos fotos satélite?}
+  \OptionHeader{Condicional nº 9}{Satélite / ciudades}{%
+    Detectamos cambios urbanos comparando dos imágenes Sentinel-2 del mismo lugar en fechas distintas.
+  }
+\end{frame}
+
+\begin{frame}{9 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Google Earth, pero con propósito científico: dos fotos del mismo barrio, años distintos.
+    \item Queremos un mapa que diga: aquí había campo y ahora hay edificios; aquí abrieron una carretera\ldots
+    \item Eso sirve a urbanismo, seguros, ONGs, gobiernos.
+    \item El peligro académico: el tema está muy visto --- sin un giro propio parece proyecto genérico.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{9 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=2.8cm, minimum height=1.5cm] (a) {Foto\\antes};
+    \node[box, text width=2.8cm, minimum height=1.5cm, right=0.55cm of a] (b) {Foto\\después};
+    \node[boxdark, text width=3.0cm, right=0.55cm of b] (c) {Mapa de\\``qué cambió''};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.4em}
+  Como el juego de ``encuentra las 7 diferencias'', pero automático y sobre ciudades enteras.
+\end{frame}
+
+\begin{frame}{9 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Baseline sencillo: diferencias de índices de vegetación + bosque aleatorio.
+    \item Modelo más flexible: red que mira el par de imágenes a la vez.
+    \item Giro obligatorio: importancia de bandas, incertidumbre, o transfer entre ciudades.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{9 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.5cm]
+    \item[Change detection] Marcar píxeles que cambiaron entre dos fechas.
+    \item[OSCD] Dataset pequeño y clásico de cambio urbano con Sentinel-2.
+    \item[Siamesa] Red que procesa las dos imágenes de forma emparejada.
+  \end{description}
+\end{frame}
+
+\begin{frame}{9 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    ¿Una red emparejada supera a índices + bosque aleatorio en OSCD, y qué bandas importan más si exigimos incertidumbre o transferencia entre ciudades?
+  \end{block}
+\end{frame}
+
+\begin{frame}{9 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Bajar\\OSCD}{Baseline\\índices}{Red\\emparejada}{Ablación\\bandas}{Giro\\UQ/transfer}
+\end{frame}
+
+\begin{frame}{9 · Datos}
+  \begin{itemize}
+    \item 24 pares de imágenes; etiquetas en 14.
+    \item Muy manejable, pero poca muestra $\Rightarrow$ cuidado con conclusiones.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{9 · Métodos del curso y más allá}
+  \MethodsSplit{Árboles · Ingeniería de variables · Clasificación · Validación}{CNN emparejada · Ablación de bandas · Incertidumbre · Transfer entre ciudades}
+\end{frame}
+
+\begin{frame}{9 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Datos reales de satélite.
+        \item Camino claro curso $\rightarrow$ PyTorch.
+        \item Figuras fuertes.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{6}{accent}
+      \ScoreBar{Factibilidad}{9}{good}
+      \ScoreBar{Riesgo genérico}{8}{bad}
+      \ScoreBar{Visuales}{8}{good}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{9 · Por qué encaja con nosotros}
+  \FitDual{Satélites OK, pero necesita un giro o lo verá genérico.}{Visión media. Comparación OK. Menos pasión que finanzas.}{7}{6}
+\end{frame}
+
+\begin{frame}{9 · Pros y contras}
+  \ProCon{Muy factible\\Dataset clásico\\Buenas visualizaciones\\Fácil de explicar}{Tema saturado\\Pocos pares\\Riesgo de verse genérico\\Menos diferenciación que ESA/incendios}
+\end{frame}
+
+\begin{frame}{9 · Impacto}
+  Monitorizar expansión urbana --- el valor real depende del giro (bandas, incertidumbre, transferencia).
+\end{frame}
+
+\begin{frame}{9 · Veredicto}
+  \Verdict{Condicional --- solo con giro propio}{Respaldo EO si incendios es demasiado pesado. Sin giro: mejor no.}
+\end{frame}

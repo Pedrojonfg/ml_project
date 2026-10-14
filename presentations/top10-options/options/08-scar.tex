@@ -1,0 +1,102 @@
+\subsection{Opción 8 --- SCAR}
+
+\begin{frame}{8 · Portada --- ¿La IA entiende analogías de verdad?}
+  \OptionHeader{Condicional nº 8}{Lenguaje / abducción}{%
+    Medimos si un modelo no solo elige una analogía ``parecida'', sino que alinea correctamente las piezas de dos sistemas (mapa estructural).
+  }
+\end{frame}
+
+\begin{frame}{8 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Decimos: ``el átomo es como un sistema solar''.
+    \item No basta con decir ``sí, hay analogía''.
+    \item Hay que mapear: Sol$\leftrightarrow$núcleo, planetas$\leftrightarrow$electrones,\ldots
+    \item SCAR es un examen de ese mapeo en analogías científicas.
+    \item Muchos modelos fallan ahí aunque acierten preguntas fáciles de parecido.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{8 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.3cm] (a) {Equipo de\\fútbol};
+    \node[box, text width=3.3cm, right=0.5cm of a] (b) {Orquesta};
+    \node[boxdark, text width=3.5cm, below=0.55cm of $(a)!0.5!(b)$] (c) {entrenador$\leftrightarrow$director\\jugadores$\leftrightarrow$músicos};
+    \draw[arr] (a)|-(c); \draw[arr] (b)|-(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.35em}
+  Entender la analogía es construir el diccionario entre piezas, no solo sentir que ``se parecen''.
+\end{frame}
+
+\begin{frame}{8 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Representar conceptos con embeddings.
+    \item Proponer emparejamientos (matching) y puntuarlos.
+    \item Comparar con reglas simples de solapamiento de palabras.
+    \item Usar un LLM grande solo como contraste, no como autor del report.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{8 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.8cm]
+    \item[Abducción] Inferir la mejor explicación/estructura a partir de indicios.
+    \item[Mapping] Correspondencia pieza a pieza entre dos sistemas.
+    \item[SCAR] Benchmark de analogías científicas con estructura.
+  \end{description}
+\end{frame}
+
+\begin{frame}{8 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    ¿Qué representaciones y algoritmos de emparejamiento recuperan mejor los mappings de SCAR, y en qué dominios fallan frente a un LLM en few-shot?
+  \end{block}
+\end{frame}
+
+\begin{frame}{8 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Cargar\\SCAR}{Baselines\\léxicos}{Embeddings\\+ matching}{Contraste\\LLM}{Errores por\\dominio}
+\end{frame}
+
+\begin{frame}{8 · Datos}
+  \begin{itemize}
+    \item 400 analogías, 13 dominios, 1600 mappings.
+    \item Tamaño ideal para un proyecto de curso.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{8 · Métodos del curso y más allá}
+  \MethodsSplit{Kernels / SVM · Árboles · PCA / similitud · Clasificación}{Embeddings de frases · Matching · Transformer pequeño · LLM solo como contraste}
+\end{frame}
+
+\begin{frame}{8 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Muy original.
+        \item Bibliografía rica.
+        \item Oral intelectual fuerte.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{9}{ieblue}
+      \ScoreBar{Profundidad NLP}{9}{accent}
+      \ScoreBar{Factibilidad}{6}{accent}
+      \ScoreBar{Portfolio}{6}{bad}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{8 · Por qué encaja con nosotros}
+  \FitDual{Encaja con abducción / límites del lenguaje si el problema es ambicioso.}{NLP alto. Puede llevar métodos y análisis.}{9}{9}
+\end{frame}
+
+\begin{frame}{8 · Pros y contras}
+  \ProCon{Muy temático con abducción\\Diferenciador\\Dataset manejable}{Más pesado que SCAN\\Menos portfolio ``producto''\\Evaluar matching es delicado\\Solapa con la opción 3}
+\end{frame}
+
+\begin{frame}{8 · Impacto}
+  Mejores pruebas de razonamiento analógico --- para evaluar modelos con más honestidad.
+\end{frame}
+
+\begin{frame}{8 · Veredicto}
+  \Verdict{Condicional --- respaldo de SCAN}{Si queréis abducción más ``paper de NLP''. No dos núcleos 3 y 8 a la vez.}
+\end{frame}

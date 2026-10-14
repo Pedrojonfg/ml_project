@@ -1,0 +1,37 @@
+# Data (download from Zenodo DOI 10.5281/zenodo.4463683)
+data/
+
+# Course materials and third-party papers (not ours to redistribute)
+/MachineLearning_IEUniversity*.pdf
+/SyllabusPDF_*.pdf
+/project_ML_commskills_*.pdf
+research/papers/
+*.zip
+*Zone.Identifier
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.blg
+*.bbl
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,103 @@
+\subsection{Opción 4 --- Orbital HNN / PINN}
+
+\begin{frame}{4 · Portada --- Enseñar física a la red neuronal}
+  \OptionHeader{Recomendada nº 4}{Física + ML}{%
+    Entrenamos modelos que predicen trayectorias, pero obligándolos a respetar reglas físicas (energía, momento), y medimos si extrapolan mejor.
+  }
+\end{frame}
+
+\begin{frame}{4 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Una red neuronal puede ``copiar'' una órbita en los datos de entrenamiento.
+    \item Cuando le pides el futuro un poco más lejos, a veces \textbf{se desmadra}: la trayectoria deja de parecer física.
+    \item Un ingeniero sabe que ciertas cantidades no deberían ``desaparecer'' (energía, momento angular).
+    \item La idea: meter esas reglas dentro del aprendizaje, no solo mirar el error numérico.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{4 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.4cm] (a) {Aprender a tirar\\una pelota};
+    \node[box, text width=3.4cm, right=0.5cm of a] (b) {Sin gravedad\\en la cabeza};
+    \node[boxdark, text width=3.4cm, right=0.5cm of b] (c) {Con gravedad\\como regla};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.4em}
+  Con la regla, suele hacer falta \textbf{menos datos} y el modelo aguanta mejor situaciones nuevas.\\
+  Condición: debe haber un ancla en datos reales (no solo un ejercicio de libro).
+\end{frame}
+
+\begin{frame}{4 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Comparar: regresión clásica / red normal / red con física (PINN o red hamiltoniana).
+    \item Medir dos cosas: ¿acota bien la posición? ¿respeta la física (poca deriva de energía)?
+    \item Hacer ablación: apagar la física y ver qué se rompe.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{4 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.6cm]
+    \item[PINN] Red que penaliza incumplir una ecuación física.
+    \item[HNN] Red que aprende una energía y avanza de forma más ``física''.
+    \item[Extrapolación] Predecir fuera del intervalo visto.
+    \item[Ablación] Quitar una pieza del modelo para ver si importaba.
+  \end{description}
+\end{frame}
+
+\begin{frame}{4 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    ¿Un modelo con reglas físicas reduce el error al extrapolar y conserva mejor energía/momento que una red sin esas reglas, con pocos datos ruidosos?
+  \end{block}
+\end{frame}
+
+\begin{frame}{4 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Elegir\\sistema}{Modelos\\base}{PINN\\o HNN}{Medir\\error+física}{Ablación\\del prior}
+\end{frame}
+
+\begin{frame}{4 · Datos posibles}
+  \begin{itemize}
+    \item Simulación controlada + ruido (para entender).
+    \item Ancla real: catálogos orbitales, velocidades radiales de exoplanetas, o un péndulo medido.
+    \item En la proposal hay que nombrar ya cuál será el ancla.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{4 · Métodos del curso y más allá}
+  \MethodsSplit{Regresión · Redes del curso · Regularización · Validación}{PINN · Redes hamiltonianas · Residuo con GP · Latentes con significado físico}
+\end{frame}
+
+\begin{frame}{4 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Ambición metodológica (no solo accuracy).
+        \item Muy alineado con el estilo del profesor (mecanismo + comparación).
+        \item Oral exigente pero brillante si se domina.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{9}{ieblue}
+      \ScoreBar{Alineación profe}{10}{good}
+      \ScoreBar{Factibilidad}{7}{accent}
+      \ScoreBar{Afinidad Mario}{6}{bad}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{4 · Por qué encaja con nosotros}
+  \FitDual{Física al máximo. Puede proponer la capa creativa (ruido, disipación, incertidumbre).}{Puede reproducir papers y llevar la comparación rigurosa. Menos ``producto de negocio''.}{10}{6}
+\end{frame}
+
+\begin{frame}{4 · Pros y contras}
+  \ProCon{Muy alineado con el profe\\Pedro muy motivado\\Ablaciones potentes\\Historia científica limpia}{Riesgo de parecer demo de libro\\Mario menos enganchado\\Hay que fijar dato real\\Menos portfolio VC}
+\end{frame}
+
+\begin{frame}{4 · Impacto}
+  Mejores predicciones de dinámica con menos datos --- idea transferable a espacio, control y ciencia computacional.
+\end{frame}
+
+\begin{frame}{4 · Veredicto}
+  \Verdict{Recomendada (con condición)}{Solo si en la proposal ya hay dato real + baselines. Ideal para identidad ``física / método del profe sin bio''.}
+\end{frame}

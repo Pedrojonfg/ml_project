@@ -1,0 +1,108 @@
+\subsection{Opción 2 --- PHBench}
+
+\begin{frame}{2 · Portada --- ¿Qué startups llegan a Series A?}
+  \OptionHeader{Recomendada nº 2}{Inversión / VC}{%
+    Usamos señales públicas del día del lanzamiento en Product Hunt para estimar qué productos acaban levantando una ronda Series A.
+  }
+\end{frame}
+
+\begin{frame}{2 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Cada día salen cientos de apps y productos nuevos.
+    \item Casi ninguno consigue una gran ronda de inversión (Series A) en el año y medio siguiente.
+    \item Product Hunt es como un ``escaparate'' público: votos, comentarios, equipo, descripción\ldots
+    \item Un inversor no puede mirarlo todo: necesita una \textbf{lista ordenada} de ``esto merece 10 minutos''.
+    \item Nosotros entrenamos modelos que intentan hacer ese ranking con datos pasados.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{2 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.2cm] (a) {Muchas\\candidaturas};
+    \node[box, text width=3.2cm, right=0.6cm of a] (b) {Pocas\\plazas};
+    \node[boxdark, text width=3.2cm, right=0.6cm of b] (c) {Hay que\\priorizar};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.5em}
+  Es el mismo tipo de problema que filtrar muchas solicitudes cuando solo unas pocas son ``éxito''.\\
+  \textbf{No} es predecir si sube o baja una acción en bolsa.
+\end{frame}
+
+\begin{frame}{2 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Aprender patrones en lanzamientos antiguos (cuántos votos, qué temas, qué texto\ldots).
+    \item Predecir la probabilidad de Series A --- sabiendo que el éxito es \textbf{rarísimo} ($\sim$1 de cada 130).
+    \item Evaluar con métricas de ranking: ``de los 50 que marcamos como prometedores, ¿cuántos acertamos?''
+    \item Cuidado crítico: no usar información del futuro (fugas temporales).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{2 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.4cm]
+    \item[Series A] Primera gran ronda institucional de una startup.
+    \item[Product Hunt] Comunidad donde se lanzan productos digitales y se votan.
+    \item[Desbalance] Casi todo es ``no Series A''; acertar el ``no'' es fácil y engañoso.
+    \item[PHBench] Benchmark abierto (2026) con launches etiquetados.
+  \end{description}
+\end{frame}
+
+\begin{frame}{2 · Pregunta de investigación}
+  \begin{block}{Pregunta principal}
+    Con señales del día del launch, ¿qué modelos ordenan mejor los candidatos a Series A en 18 meses, respetando el orden temporal de los datos?
+  \end{block}
+  \begin{block}{Pregunta secundaria}
+    ¿El texto de la descripción aporta algo más allá de los números (votos, ranking del día\ldots)?
+  \end{block}
+\end{frame}
+
+\begin{frame}{2 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Orden\\temporal}{Variables\\+ texto}{Modelos\\clásicos}{Calibrar\\probabilidades}{Analizar\\errores}
+\end{frame}
+
+\begin{frame}{2 · Datos}
+  \begin{itemize}
+    \item $\sim$67\,000 lanzamientos (2019--2025), $\sim$61 variables documentadas.
+    \item Etiquetas de Series A auditadas; hay clasificación pública de referencia.
+    \item Acción inmediata: confirmar acceso al dataset (Hugging Face).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{2 · Métodos del curso y más allá}
+  \MethodsSplit{Logística regularizada · Árboles / boosting · Validación temporal · Métricas de ranking}{Representaciones de texto · Ensambles · Calibración · Análisis de qué variables importan}
+\end{frame}
+
+\begin{frame}{2 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Original frente a crédito/bolsa típicos.
+        \item Obliga a rigor con eventos raros.
+        \item Muy enseñable en entrevistas.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{9}{ieblue}
+      \ScoreBar{Datos}{9}{accent}
+      \ScoreBar{Factibilidad}{8}{good}
+      \ScoreBar{Portfolio}{10}{good}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{2 · Por qué encaja con nosotros}
+  \FitDual{Le interesa el mundo VC y rechaza finanzas ``de siempre''. Buen portfolio.}{Finanzas + sistemas de recomendación/ranking. Quiere datos claros y comparación limpia.}{8}{10}
+\end{frame}
+
+\begin{frame}{2 · Pros y contras}
+  \ProCon{Poco genérico\\Encaja con los dos\\Baselines listos\\Historia fuerte en entrevista}{Éxitos muy raros\\Acceso a datos por confirmar\\Fácil contaminar con futuro\\Menos ``deeptech físico''}
+\end{frame}
+
+\begin{frame}{2 · Impacto}
+  Ayudar a priorizar atención en early-stage con datos públicos. No es consejo financiero: es un ranking empírico con error.
+\end{frame}
+
+\begin{frame}{2 · Veredicto}
+  \Verdict{Muy recomendada (prioridad alta)}{Ideal si la identidad es ``inversión / portfolio''. No la combineéis como núcleo con VCBench (nº 7).}
+\end{frame}

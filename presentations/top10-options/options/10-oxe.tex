@@ -1,0 +1,106 @@
+\subsection{Opción 10 --- OXE subset}
+
+\begin{frame}{10 · Portada --- Reutilizar experiencias de robots}
+  \OptionHeader{Condicional nº 10}{Robótica}{%
+    En un trozo pequeño de un gran dataset de robots, aprendemos a recomendar demostraciones útiles (o a predecir éxito/fallo) --- sin entrenar un modelo gigante.
+  }
+\end{frame}
+
+\begin{frame}{10 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Hay muchos vídeos/demostraciones de brazos robot haciendo tareas (coger, colocar,\ldots).
+    \item Cuando llega una tarea nueva, ¿qué demostraciones antiguas se parecen más?
+    \item Eso es un \textbf{sistema de recomendación} sobre experiencias robot.
+    \item El dataset completo es enorme: si intentáis usarlo entero, el proyecto se come en infraestructura.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{10 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.3cm] (a) {Nueva receta\\que quiero hacer};
+    \node[box, text width=3.3cm, right=0.5cm of a] (b) {Biblioteca de\\vídeos de cocina};
+    \node[boxdark, text width=3.3cm, right=0.5cm of b] (c) {Top vídeos\\más útiles};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.35em}
+  No reentrenáis YouTube entero: elegís un canal (subset) y medís si el ranking tiene sentido.
+\end{frame}
+
+\begin{frame}{10 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Congelar 1--2 subsets concretos (nombres en la proposal).
+    \item Extraer descripciones numéricas de cada demostración.
+    \item Comparar ranking clásico vs embeddings aprendidos.
+    \item Métrica simple: de las K recomendaciones, ¿cuántas eran realmente útiles?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{10 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.6cm]
+    \item[OXE] Open X-Embodiment: colección enorme de demos de muchos robots.
+    \item[Subset] Solo una parte pequeña y nombrada del dataset.
+    \item[Recall@K] Entre las K primeras recomendaciones, cuántas eran correctas.
+  \end{description}
+\end{frame}
+
+\begin{frame}{10 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    En subsets concretos, ¿representaciones que mezclan lenguaje, estado del robot y acciones recuperan mejores demostraciones que solo visión o variables simples?
+  \end{block}
+\end{frame}
+
+\begin{frame}{10 · Cómo lo haríamos --- con freno de emergencia}
+  \PipelineFive{Fijar\\subsets}{Extraer\\variables}{Baselines\\ranking}{Embeddings\\ligeros}{Recall@K}
+  \vspace{0.35em}
+  \begin{block}{Regla de parada}
+    Si en 3 días no hay exploración usable por culpa de la infra, se cambia a un dataset de robótica más simple (ver brief largo: TrajAir, ALFA, etc.).
+  \end{block}
+\end{frame}
+
+\begin{frame}{10 · Datos}
+  \begin{itemize}
+    \item Nunca el corpus completo (terabytes).
+    \item Candidatos pequeños: Bridge, TOTO, etc.
+    \item Los identificadores del subset deben estar en la proposal.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{10 · Métodos del curso y más allá}
+  \MethodsSplit{PCA / clustering · Árboles / logística · Autoencoders · Métricas de ranking}{Codificadores NN · VAE · Fusión multimodal · Recomendador de skills}
+\end{frame}
+
+\begin{frame}{10 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Ambición visible (robótica moderna).
+        \item Recommenders = punto fuerte de Mario.
+        \item Solo funciona si el alcance se respeta.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{8}{ieblue}
+      \ScoreBar{Encaje equipo}{9}{good}
+      \ScoreBar{Factibilidad}{5}{bad}
+      \ScoreBar{Riesgo alcance}{9}{bad}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{10 · Por qué encaja con nosotros}
+  \FitDual{Robótica al máximo; historia cercana a labs de IE sin necesitar el lab.}{Recommenders + robótica. Necesita métricas y alcance férreos.}{9}{8}
+\end{frame}
+
+\begin{frame}{10 · Pros y contras}
+  \ProCon{Mucho atractivo robótica\\Encaja con los dos\\Historia IE/CyPhy\\Recommenders reales}{Infra peligrosa\\El alcance se infla fácil\\Reproducir es frágil\\Oral difícil si el pipeline es caos}
+\end{frame}
+
+\begin{frame}{10 · Impacto}
+  Reutilizar experiencia entre robots/tareas --- la idea grande de la robótica ``foundation'', en versión realista de curso.
+\end{frame}
+
+\begin{frame}{10 · Veredicto}
+  \Verdict{Condicional --- solo con alcance congelado el día 1}{Si queréis robótica con menos riesgo, mirad alternativas del brief (TrajAir / ALFA / verificación + recomendación).}
+\end{frame}

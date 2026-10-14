@@ -1,0 +1,104 @@
+\subsection{Opción 3 --- SCAN}
+
+\begin{frame}{3 · Portada --- ¿Los modelos ``entienden'' o solo memorizan?}
+  \OptionHeader{Recomendada nº 3}{Fundamentos / lenguaje}{%
+    Medimos si un modelo que ``conoce'' una instrucción suelta es capaz de recombinarla en frases nuevas --- el famoso fallo tipo ``can't jump''.
+  }
+\end{frame}
+
+\begin{frame}{3 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item A un niño le enseñas el verbo nuevo ``dax'' y entiende enseguida ``dax dos veces''.
+    \item Muchos modelos de IA, en cambio, fallan en esa recombinación.
+    \item No es un debate filosófico vacío: se puede \textbf{medir} con un examen diseñado para eso.
+    \item SCAN es ese examen: órdenes simples (``salta'', ``anda'', ``dos veces'') convertidas en acciones.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{3 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=2.6cm] (a) {Sabes\\``saltar''};
+    \node[box, text width=2.6cm, right=0.45cm of a] (b) {Sabes\\``dos veces''};
+    \node[boxdark, text width=3.0cm, right=0.45cm of b] (c) {¿Entiendes\\``salta 2 veces''?};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.45em}
+  Si solo memorizaste ejemplos raros del examen, puedes aprobar el tipo A y suspender el tipo B.\\
+  Eso es \textbf{generalización composicional}.
+\end{frame}
+
+\begin{frame}{3 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Entrenar modelos clásicos y redes en un trozo de SCAN.
+    \item Probarlos en el split donde ``jump'' casi no aparece compuesto.
+    \item Comparar: ¿quién falla y en qué tipo de órdenes?
+    \item Opcional: repetir la idea en un dataset más lingüístico (COGS) para responder ``¿SCAN ya está resuelto?''.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{3 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.5cm]
+    \item[Composición] Combinar piezas conocidas en algo nuevo.
+    \item[OOD] Fuera de lo visto en entrenamiento (el examen ``difícil'').
+    \item[SCAN] Banco de pruebas de órdenes $\rightarrow$ acciones (Lake \& Baroni).
+    \item[addprim\_jump] Split concreto donde ``jump'' solo se ve aislado en train.
+  \end{description}
+\end{frame}
+
+\begin{frame}{3 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    Cuando el modelo ve ``jump'' solo en aislamiento, ¿qué familias de métodos fallan al usarlo dentro de órdenes nuevas, y qué señales del input predicen ese fallo?
+  \end{block}
+\end{frame}
+
+\begin{frame}{3 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Splits\\oficiales}{Modelos\\clásicos}{Redes\\secuencia}{Análisis\\de errores}{COGS\\opcional}
+\end{frame}
+
+\begin{frame}{3 · Datos}
+  \begin{itemize}
+    \item SCAN: pequeño, limpio, se corre en un portátil.
+    \item Paper clásico (ICML 2018) = bibliografía fuerte.
+    \item Defensa ante ``¿es realista?'': es el banco de pruebas estándar de composición, como un test de conducción controlado.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{3 · Métodos del curso y más allá}
+  \MethodsSplit{N-gramas / TF-IDF · Logística / SVM · Árboles · Validación OOD}{LSTM/GRU · Transformer pequeño · Análisis de errores · Modelo de lenguaje abierto solo como contraste}
+\end{frame}
+
+\begin{frame}{3 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Muy original frente a Kaggle típico.
+        \item La comparación de métodos es el núcleo.
+        \item Oral memorable si se cuenta bien.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{9}{ieblue}
+      \ScoreBar{Factibilidad}{9}{good}
+      \ScoreBar{Diferenciación}{10}{accent}
+      \ScoreBar{Portfolio VC}{5}{bad}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{3 · Por qué encaja con nosotros}
+  \FitDual{Quiere profundidad tipo investigación y temas de abducción / límites de los LLM.}{Le gusta NLP y comparar modelos clásicos frente a redes con análisis claro.}{10}{8}
+\end{frame}
+
+\begin{frame}{3 · Pros y contras}
+  \ProCon{Muy diferenciador\\Muy factible\\Oral fuerte\\Encaja con los dos}{Datos sintéticos\\Crítica ``ya está estudiado''\\Menos portfolio espacial/VC\\Conviene añadir COGS o diagnóstico}
+\end{frame}
+
+\begin{frame}{3 · Impacto}
+  Aclarar cuándo un modelo parece inteligente pero no recombina reglas --- útil para diseñar evaluaciones honestas.
+\end{frame}
+
+\begin{frame}{3 · Veredicto}
+  \Verdict{Muy recomendada (prioridad alta)}{Ideal si la identidad es ``fundamentos / composición''. Alternativa cercana: SCAR (nº 8).}
+\end{frame}

@@ -1,0 +1,41 @@
+{
+  "protocol": "official Zenodo test; LRP=risk at min time_to_tca among CDMs with ttc>=2; y=true_risk from test_data_private; MSE_HR clips risk at -6.001 (paper)",
+  "doi": "10.5281/zenodo.4463683",
+  "counts": {
+    "train_events": 13154,
+    "train_cdms": 162634,
+    "test_events": 2167,
+    "test_cdms_public": 24484,
+    "test_hr": 150,
+    "test_hr_rate": 0.0692201199815413,
+    "train_hr_rate_approx": 0.02774821347118747
+  },
+  "baselines": {
+    "CRP": {
+      "name": "CRP",
+      "F2": 0.271052,
+      "MSE_HR": 0.678751,
+      "L": 2.50414,
+      "n_events": 2167,
+      "n_hr": 150
+    },
+    "LRP": {
+      "name": "LRP",
+      "F2": 0.739075,
+      "MSE_HR": 0.512889,
+      "L": 0.693961,
+      "n_events": 2167,
+      "n_hr": 150
+    }
+  },
+  "paper_lrp_reference": {
+    "L": 0.694,
+    "MSE_HR": 0.513,
+    "F2": 0.739
+  },
+  "figures": [
+    "figures/fig_risk_distribution.pdf",
+    "figures/fig_cdm_timeline.pdf",
+    "figures/fig_baseline_metrics.pdf"
+  ]
+}

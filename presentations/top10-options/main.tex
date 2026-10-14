@@ -1,0 +1,212 @@
+% !TEX program = pdflatex
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{enumitem}
+\setlist{leftmargin=*,itemsep=0.22em,topsep=0.15em}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{%
+  \hfill{\scriptsize\color{black!60}\insertsectionhead\ \textbar\ \insertframenumber/\inserttotalframenumber}\hspace{1em}\vspace{0.35em}%
+}
+
+\definecolor{ieblue}{RGB}{0,51,102}
+\definecolor{good}{RGB}{34,120,70}
+\definecolor{bad}{RGB}{160,40,40}
+\definecolor{soft}{RGB}{245,247,250}
+\definecolor{accent}{RGB}{0,120,160}
+\setbeamercolor{structure}{fg=ieblue}
+\setbeamercolor{frametitle}{fg=ieblue,bg=soft}
+\setbeamercolor{block title}{bg=ieblue,fg=white}
+\setbeamercolor{block body}{bg=soft}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+
+\input{tikz-helpers}
+
+\title{Top 10 opciones de proyecto ML}
+\subtitle{Pedro $\times$ Mario --- Decision deck visual y accesible}
+\author{Research brief deep $\cdot$ Octubre 2026}
+\date{Octubre 2026}
+\institute{BAM $\cdot$ Machine Learning \& Communication Skills $\cdot$ IE University}
+
+\begin{document}
+
+\begin{frame}{Portada}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Para qué sirve este deck}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Traduce el research técnico a una conversación de decisión.
+        \item 10 opciones: 5 recomendadas + 5 condicionales.
+        \item Cada opción se explica primero \textbf{para alguien de fuera del sector}.
+        \item Objetivo final: elegir \textbf{1 principal + 1 reserva}.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{tikzpicture}
+        \node[boxdark, text width=4.4cm] (a) {1. Entender el problema};
+        \node[box, text width=4.4cm, below=0.28cm of a] (b) {2. Ver pros y contras};
+        \node[box, text width=4.4cm, below=0.28cm of b] (c) {3. Marcar verde / ámbar / rojo};
+        \node[boxdark, text width=4.4cm, below=0.28cm of c] (d) {4. Elegir principal + reserva};
+        \draw[arr] (a)--(b); \draw[arr] (b)--(c); \draw[arr] (c)--(d);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Qué pedimos a cada idea (filtro del curso)}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[boxdark, text width=2.5cm] (d) {Datos reales\\manejables};
+    \node[boxdark, text width=2.5cm, right=0.45cm of d] (m) {Métodos del\\temario (+extra)};
+    \node[boxdark, text width=2.5cm, right=0.45cm of m] (a) {Ambición\\visible (25\%)};
+    \node[boxdark, text width=2.5cm, right=0.45cm of a] (o) {Defendible\\en oral};
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.5em}
+  \begin{block}{Marco práctico}
+    Python + scikit-learn + PyTorch \quad$\cdot$\quad $\sim$6 semanas \quad$\cdot$\quad informe 10--12 páginas + GitHub con historial real
+  \end{block}
+\end{frame}
+
+\begin{frame}{Qué pedimos a cada idea (filtro nuestro)}
+  \FitDual{Deeptech, física, robótica, espacio, quantum. Rechaza lo genérico. Quiere un proyecto que impresione. No busca el camino fácil.}{Finanzas y sistemas de recomendación. Quiere originalidad, buenos datos y comparación limpia. Dispuesto a leer papers y reproducir ideas.}{10}{8}
+  \vspace{0.45em}
+  \begin{block}{Vetos}
+    \textbf{Mario:} nada de salud / biomedicina / omics. \quad
+    \textbf{Pedro:} nada de proyecto genérico de estudiante.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Cómo leer cada bloque de opción}
+  \begin{center}
+  \begin{tikzpicture}
+    \foreach \i/\t [count=\n] in {
+      1/Portada,
+      2/Sin jerga,
+      3/Analogía,
+      4/Qué hace el ML,
+      5/Glosario,
+      6/Pregunta,
+      7/Pasos,
+      8/Datos,
+      9/Métodos,
+      10/Encajes + veredicto} {
+      \pgfmathsetmacro{\x}{mod(\n-1,5)}
+      \pgfmathsetmacro{\y}{-floor((\n-1)/5)}
+      \node[box, text width=2.15cm, minimum height=1.1cm] at ({2.35*\x},{1.35*\y}) {\scriptsize\textbf{\i}\\\t};
+    }
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.45em}
+  Si no entendéis el problema en las diapositivas ``sin jerga'' / ``analogía'', esa opción aún no está lista para decidir.
+\end{frame}
+
+\begin{frame}{El top 10 de un vistazo}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Recomendadas}
+        \scriptsize
+        1. Evitar choques entre satélites (ESA)\\
+        2. ¿Qué startups llegan a Series A?\\
+        3. ¿Los modelos entienden o memorizan?\\
+        4. Enseñar física a la red neuronal\\
+        5. Ver incendios aunque haya nubes
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Condicionales}
+        \scriptsize
+        6. Propiedades de materiales (Matbench)\\
+        7. Perfil del founder $\rightarrow$ gran éxito\\
+        8. ¿La IA entiende analogías de verdad?\\
+        9. Cambios urbanos en dos fotos satélite\\
+        10. Reutilizar experiencias de robots
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Recomendadas}
+\input{options/01-esa}
+\input{options/02-phbench}
+\input{options/03-scan}
+\input{options/04-orbital-hnn}
+\input{options/05-wildfire}
+
+\section{Condicionales}
+\input{options/06-matbench}
+\input{options/07-vcbench}
+\input{options/08-scar}
+\input{options/09-oscd}
+\input{options/10-oxe}
+
+\section{Decisión}
+\begin{frame}{Mapa de identidades: ¿qué historia queréis contar?}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[boxdark, text width=3.4cm] (a) {Espacio / ESA\\{\scriptsize $\to$ 1 (res. 4/5)}};
+    \node[boxdark, text width=3.4cm, right=0.4cm of a] (b) {Inversión / VC\\{\scriptsize $\to$ 2 (res. 7)}};
+    \node[boxdark, text width=3.4cm, right=0.4cm of b] (c) {Fundamentos IA\\{\scriptsize $\to$ 3 (res. 8)}};
+    \node[box, text width=3.4cm, below=0.4cm of a] (d) {Materiales sólidos\\{\scriptsize $\to$ 6}};
+    \node[box, text width=3.4cm, below=0.4cm of b] (e) {Clima / satélites\\{\scriptsize $\to$ 5 (res. 9)}};
+    \node[box, text width=3.4cm, below=0.4cm of c] (f) {Robótica\\{\scriptsize $\to$ 10 solo si alcance fijo}};
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Scorecard para rellenar juntos (1--5)}
+  \tiny
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}clcccc@{}}
+    \toprule
+    \# & Opción & Afinidad Pedro & Afinidad Mario & Factib. 6 sem. & Curso \\
+    \midrule
+    1 & Satélites ESA & & & & \\
+    2 & Series A / PHBench & & & & \\
+    3 & Composición / SCAN & & & & \\
+    4 & Física en la red & & & & \\
+    5 & Incendios satélite & & & & \\
+    6 & Matbench & & & & \\
+    7 & VCBench founders & & & & \\
+    8 & Analogías SCAR & & & & \\
+    9 & Cambio urbano OSCD & & & & \\
+    10 & Robots OXE (subset) & & & & \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.45em}
+  \normalsize Descartad cualquier fila con factibilidad $<$ 3.
+\end{frame}
+
+\begin{frame}{Reglas de decisión}
+  \begin{itemize}
+    \item Pedro puede vetar lo \textbf{genérico}.
+    \item Mario puede vetar lo \textbf{mal definido} o salud.
+    \item Ambición alta, pero ejecutable en 6 semanas.
+    \item Solo \textbf{un} gancho de novedad (no inventar método + datos + framing a la vez).
+    \item En el oral: Mario abre con datos/métricas; Pedro cierra con el porqué científico.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Siguiente paso concreto}
+  \PipelineFive{Elegir\\principal}{Elegir\\reserva}{Bajar\\datos}{Explorar\\2--3 gráficos}{Escribir\\proposal}
+  \vspace{0.5em}
+  \begin{block}{La proposal (2 páginas) debe incluir}
+    Pregunta precisa · motivación · dataset justificado · exploración preliminar · método inicial · plan realista.
+  \end{block}
+  \begin{center}\Large\textbf{¿Con cuál os quedáis?}\end{center}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,105 @@
+\subsection{Opción 5 --- Wildfire}
+
+\begin{frame}{5 · Portada --- Ver incendios desde el satélite (aunque haya nubes)}
+  \OptionHeader{Recomendada nº 5}{Clima / satélites}{%
+    Combinamos fotos ópticas y radar de satélites europeos para detectar o mapear fuego, y medimos cuánto aporta cada sensor.
+  }
+\end{frame}
+
+\begin{frame}{5 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Desde el espacio se ve la Tierra en ``fotos'' (luz visible e infrarroja).
+    \item Si hay nubes, esas fotos no sirven: el fuego queda tapado.
+    \item Hay otro tipo de satélite que usa \textbf{radar}: no ``ve'' como una cámara, pero atraviesa nubes.
+    \item Pregunta humana: ¿juntar cámara + radar ayuda de verdad a no perder incendios?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{5 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.3cm] (a) {Cámara\\(día despejado)};
+    \node[box, text width=3.3cm, right=0.45cm of a] (b) {Radar\\(niebla/nubes)};
+    \node[boxdark, text width=3.3cm, right=0.45cm of b] (c) {Decisión\\mejor informada};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.4em}
+  Como conducir con faros normales \emph{y} sensores de aparcamiento: cada uno falla en sitios distintos.
+\end{frame}
+
+\begin{frame}{5 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Calcular índices de vegetación/quemado a partir de bandas espectrales.
+    \item Añadir señales de radar.
+    \item Entrenar clasificadores (árboles, redes) para ``quemado / no quemado'' o fuego activo.
+    \item Hacer ablaciones: quitar el radar y medir cuánto empeora, sobre todo con nubes.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{5 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.8cm]
+    \item[Sentinel-2] Satélite óptico europeo (``cámara'' multiespectral).
+    \item[Sentinel-1] Satélite radar europeo (funciona con nubes).
+    \item[Burnt area] Zona ya quemada.
+    \item[Fusión] Usar varias fuentes a la vez, de forma transparente.
+  \end{description}
+\end{frame}
+
+\begin{frame}{5 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    ¿Cuánto mejora la detección al fusionar óptico + radar frente a usar solo uno, y qué variables importan más bajo nubes?
+  \end{block}
+\end{frame}
+
+\begin{frame}{5 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Dataset\\listo}{Variables\\S2/S1}{Árboles /\\boosting}{Red\\opcional}{Ablación\\sensores}
+  \vspace{0.3em}
+  Empezar con datasets empaquetados (p.\ ej.\ Sen2Fire), no con descargas masivas día 1.
+\end{frame}
+
+\begin{frame}{5 · Datos}
+  \begin{itemize}
+    \item Sen2Fire y similares: recortes ya preparados.
+    \item Alternativas: productos europeos de área quemada.
+    \item Riesgo: si escaláis a cubos enormes, el almacenamiento se come el tiempo.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{5 · Métodos del curso y más allá}
+  \MethodsSplit{Árboles / boosting · Logística · Ingeniería de variables · Validación espacial}{CNN / U-Net · Fusión de sensores · Desbalance de clases · Mapas de incertidumbre}
+\end{frame}
+
+\begin{frame}{5 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Multi-fuente (valorado en el enunciado).
+        \item Impacto fácil de explicar.
+        \item Figuras muy útiles para Communication Skills.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{8}{ieblue}
+      \ScoreBar{Impacto}{9}{good}
+      \ScoreBar{Factibilidad}{6}{accent}
+      \ScoreBar{Visuales}{9}{good}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{5 · Por qué encaja con nosotros}
+  \FitDual{Satélites y visión le motivan; busca impacto real.}{Clima le interesa; puede llevar comparación de modelos y métricas.}{8}{7}
+\end{frame}
+
+\begin{frame}{5 · Pros y contras}
+  \ProCon{Impacto claro\\Historia multi-sensor\\Buenas figuras\\Encaje razonable de ambos}{El pipeline satelital come tiempo\\Menos ``misión espacial'' que ESA\\Etiquetas ruidosas\\Cuidado con el tamaño de datos}
+\end{frame}
+
+\begin{frame}{5 · Impacto}
+  Mejor mapa de fuego en mal tiempo --- con humildad: detectar no es lo mismo que explicar causas climáticas.
+\end{frame}
+
+\begin{frame}{5 · Veredicto}
+  \Verdict{Recomendada}{Buena opción ``clima/satélite''. Si el volumen asusta: OSCD (nº 9) solo con un giro propio.}
+\end{frame}

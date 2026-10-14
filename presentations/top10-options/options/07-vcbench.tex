@@ -1,0 +1,101 @@
+\subsection{Opción 7 --- VCBench}
+
+\begin{frame}{7 · Portada --- ¿El perfil del founder anticipa un gran éxito?}
+  \OptionHeader{Condicional nº 7}{Inversión / founders}{%
+    Con perfiles anonimizados de fundadores (antes de fundar), intentamos estimar la probabilidad de un éxito empresarial muy grande.
+  }
+\end{frame}
+
+\begin{frame}{7 · Imagina esto (sin jerga)}
+  \begin{itemize}
+    \item Un inversor early-stage ve currículums y trayectorias, no el futuro.
+    \item Algunas personas tienen historial (estudios, empresas previas, sector\ldots).
+    \item VCBench pregunta: con \textbf{solo} lo que se sabía antes de fundar, ¿se puede anticipar un éxito enorme?
+    \item ``Éxito enorme'' aquí está definido de forma dura (muy alto funding o exit).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{7 · Analogía cotidiana}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[box, text width=3.4cm] (a) {Historial\\antes del partido};
+    \node[box, text width=3.4cm, right=0.5cm of a] (b) {Modelo\\de probabilidad};
+    \node[boxdark, text width=3.4cm, right=0.5cm of b] (c) {¿Alto\\rendimiento?};
+    \draw[arr] (a)--(b)--(c);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.35em}
+  Importante: no mirar el marcador final para ``predecir'' el marcador final (fuga de información).
+\end{frame}
+
+\begin{frame}{7 · ¿Qué haría aquí el machine learning?}
+  \begin{itemize}
+    \item Mezclar variables estructuradas + texto del perfil.
+    \item Comparar modelos y mirar precisión en los positivos (porque un falso ``sí'' es caro).
+    \item Analizar sesgos: ¿el modelo premia proxies injustos?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{7 · Glosario rápido}
+  \begin{description}[font=\bfseries\scriptsize,style=nextline,leftmargin=1.6cm]
+    \item[Founder] Persona fundadora de la startup.
+    \item[Major success] Etiqueta del benchmark (umbral muy alto de funding/exit).
+    \item[F0.5] Métrica que castiga más los falsos positivos que el recall puro.
+  \end{description}
+\end{frame}
+
+\begin{frame}{7 · Pregunta de investigación}
+  \begin{block}{Pregunta}
+    ¿Qué modelos maximizan precisión / F0.5 en éxitos mayores, y qué partes del historial importan sin usar información futura?
+  \end{block}
+\end{frame}
+
+\begin{frame}{7 · Cómo lo haríamos, paso a paso}
+  \PipelineFive{Kit de\\datos}{Tabla\\+ texto}{Comparar\\modelos}{Precisión\\/ F0.5}{Sesgos y\\errores}
+\end{frame}
+
+\begin{frame}{7 · Datos}
+  \begin{itemize}
+    \item $\sim$4\,500 perfiles públicos de entrenamiento.
+    \item $\sim$9\% positivos (más manejable que PHBench).
+    \item Hay kit de inicio en GitHub.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{7 · Métodos del curso y más allá}
+  \MethodsSplit{Logística / árboles · Regularización · Desbalance · Validación}{Embeddings de texto · Modelo híbrido · Calibración · Revisión de sesgos}
+\end{frame}
+
+\begin{frame}{7 · Por qué encaja con el curso}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Original frente a crédito genérico.
+        \item Buena data + comparación.
+        \item Ética y limitaciones naturales.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \ScoreBar{Ambición}{8}{ieblue}
+      \ScoreBar{Datos}{8}{accent}
+      \ScoreBar{Factibilidad}{8}{good}
+      \ScoreBar{Solapa nº 2}{9}{bad}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{7 · Por qué encaja con nosotros}
+  \FitDual{VC innovador OK; útil si PHBench no es accesible a tiempo.}{Finanzas + texto. Quiere análisis limpio.}{8}{10}
+\end{frame}
+
+\begin{frame}{7 · Pros y contras}
+  \ProCon{CSV usable enseguida\\Menos extremo que PHBench\\Historia VC clara}{Solapa con la opción 2\\Menos datos\\Test privado\\Hay que hablar de sesgos}
+\end{frame}
+
+\begin{frame}{7 · Impacto}
+  Entender límites de ``predecir éxito'' de personas/empresas: ranking con humildad, no oráculo.
+\end{frame}
+
+\begin{frame}{7 · Veredicto}
+  \Verdict{Condicional --- respaldo de PHBench}{Si falla el acceso a PHBench, pivotad aquí. No dos núcleos VC a la vez.}
+\end{frame}
