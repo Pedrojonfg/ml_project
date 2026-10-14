@@ -70,8 +70,6 @@ Tipos: **Decisión** (se sale con algo escrito en `docs/decisions/`), **Sync** (
 | R8 | dom 22 nov | Revisión cruzada | 60 min | entrega W3 |
 | R9 / R10 | 2 ensayos antes de la sesión 27 | Ensayo oral | 60 min c/u | W4 |
 
-Si el mid-term cae en alguna de estas fechas, se mueve la reunión, no el freeze.
-
 ---
 
 ## 3. Qué se decide en cada reunión
@@ -83,7 +81,7 @@ Formato por decisión: **quién trae la propuesta** (preparada antes, no se impr
 |---|---|---|
 | Quién coge paquete A y quién B | ambos | tirar una moneda |
 | Horas reales/semana por persona | ambos | 7 h |
-| Fechas del mid-term y del oral | quien las encuentre en Blackboard | bloquear 3 días antes del mid-term |
+| Fecha del oral (sesión 27 o 28) | quien la encuentre en Blackboard | asumir sesión 27 |
 | Días/hora fijos de la sync | ambos | lun y jue, 15 min, después de clase |
 | Dónde vive el hill chart | ambos | tabla en un issue fijado de GitHub |
 | Entorno: Python + versiones (`requirements.txt`) | A | Python 3.11, versiones actuales instaladas, pinneadas |

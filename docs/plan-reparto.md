@@ -11,7 +11,6 @@ Etiquetas: **[Book]** = Shape Up dice esto. **[Inference]** = adaptación mía (
 
 - **[Material]** Disponibilidad ≈ **7 h/semana por persona** para el proyecto (no lo dice nada del repo). Si es otra cifra, se reescala la sección 2 y el cut list, no las fechas.
 - **[Material]** El repo **todavía no es git**. El enunciado exige GitHub público con "meaningful history" → se crea hoy (Fase 0). Sin esto se pierde nota de *Quality of Implementation*.
-- **[Material]** El **mid-term** (sesión 13) cae en esta ventana; fecha no está en el repo. Bloquear esos 2–3 días: nadie planifica scope ahí.
 - **[Material]** La **plantilla BAM Project LaTeX** del final ("supplied with the assignment") no está en el repo (solo `bam-proposal.cls`). Conseguirla antes del 16 nov.
 - Fecha exacta del oral sin confirmar (sesiones 27–28; probablemente finales nov / principios dic).
 - Estimaciones en horas con etiqueta de confianza; las desconocidas son **appetite** (tope), no estimación **[Book ch02, ch12]**.
