@@ -50,7 +50,7 @@ Etiquetas: **[Book]** = Shape Up dice esto. **[Inference]** = adaptación mía (
 | Validación que se parezca al test | Train/test no i.i.d., mezcla de misiones distinta | **Spike**: GroupKFold por `event_id` + chequear que LRP en val da L parecido al test (~0.69). Si no, documentarlo como limitación, no perseguirlo | dueño de S1 | 2 h |
 | Two-stage "funciona" | Nadie lo ha hecho; puede no ganar a LRP | **Cut back**: el éxito es caracterizar, no ganar (ADR 009). Empezar con logística + isotonic; GBDT se enchufa después | dueño de S6 | appetite 9 h |
 | Métodos post-PCA no vistos aún | Trees (ses. 16–18), NN (22–26) llegan tarde | **Patch**: adelantarse con docs de sklearn; NN queda `~` | dueños S5/S8 | — |
-| HR = 150 eventos en test | Métricas ruidosas, rankings inestables | **Patch**: reportar bootstrap / varianza entre folds, no un número solo | dueño de S4 (lo publica en `metrics`) | 1 h |
+| HR = 150 eventos en test | Métricas ruidosas, rankings inestables | **Patch**: reportar bootstrap / varianza entre folds, no un número solo | dueño de S4 (en `src/evaluation.py`, no en `metrics.py`) | 1 h |
 
 ## 5. Scopes (rebanadas verticales: datos → modelo → métrica → figura → párrafo)
 
@@ -66,7 +66,7 @@ Etiquetas: **[Book]** = Shape Up dice esto. **[Inference]** = adaptación mía (
 | S8 | ~ **Ablación PyTorch** (MLP/secuencia) | misma tabla, mismos folds | ~ | 6 | unknown | S3 |
 | S9 | ~ **Lead-time / leave-mission-out** | curva skill vs días a TCA o L por misión | ~ | 4 | partial | S1, S5 |
 | S10 | ~ **Kernel ridge** (temario ses. 19–21) | fila extra en la tabla | ~ | 3 | known | S3 |
-| S11 | **Repo reproducible** | README, env pinneado, `make`/script que regenera tablas+figs, MLA bib, Declaración IA | Must | 3 | known | — |
+| S11 | **Repo reproducible** | README, script que regenera tablas+figs, MLA bib, Declaración IA (el entorno pinneado lo hace A en Fase 0) | Must | 3 | known | — |
 
 Escritura (cada dueño escribe la parte de lo que construyó; integrador une):
 
@@ -91,8 +91,9 @@ Escritura (cada dueño escribe la parte de lo que construyó; integrador une):
 ## 7. Fases y timeline
 
 - **Fase 0 (mié 14 → sáb 17 oct)**, en paralelo **[Book ch10]**:
-  - A: `git init` + GitHub público + estructura + S1 (protocolo, folds, spike validación) + contratos (sección 9).
-  - B: S2 EDA profunda + esqueleto LaTeX del Progress Report.
+  - A: `requirements.txt` + estructura `src/` + S1 (protocolo, folds, spike validación, regla de etiquetado) + propuesta de contratos (sección 9). (`git init` + GitHub: hecho el 14 oct.)
+  - B: S2 EDA profunda + propuesta de definición de jump + esqueleto LaTeX del Progress Report.
+  - Decisiones y reuniones (R0 kickoff, R1 contratos): ver [`dependencias-y-reuniones.md`](./dependencias-y-reuniones.md).
   - **Exit (sáb 17)**: primera rebanada integrada en `main`: logística sobre features stub, evaluada en folds vs LRP, números en `results/`. *Core, small, novel* **[Book ch10]**.
 - **C1 build (dom 18 → jue 22 oct)**: A → S3 + empieza S5. B → S4 (+ bootstrap). Merge continuo.
 - **C1 final (vie 23 → dom 25)**: congelar tabla LRP vs logística/ridge vs RF/GBDT preliminar; escribir y entregar Progress Report.
@@ -121,10 +122,10 @@ Ruta crítica: S1 → S3 → S5/S6 → S7 → Results del Final Report.
 |---|---|---|
 | `src/protocol.py`, `src/metrics.py` (hoy `scripts/esa_kelvins_metrics.py`), folds | A | leer; cambios vía PR pequeño |
 | `src/features.py` | A | pedir columnas |
-| `src/eda/`, `src/taxonomy.py` | B | leer |
+| `src/eda/`, `src/taxonomy.py`, `src/evaluation.py` (bootstrap) | B | leer |
 | `src/models/linear.py`, `src/models/two_stage.py` | B | leer |
 | `src/models/trees.py`, `src/atlas/` | A | leer |
-| `requirements.txt` / env, `.gitignore` | B (S11) | pedir dependencias |
+| `requirements.txt` / env, `.gitignore` | A | pedir dependencias |
 | `report/<entrega>/main.tex` | integrador de esa entrega | editar solo su `sections/*.tex` |
 | `data/` | nadie la commitea (`.gitignore`) | — |
 
