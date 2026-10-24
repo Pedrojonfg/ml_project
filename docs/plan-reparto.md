@@ -1,7 +1,7 @@
 # ESA Early Collision Risk — Plan de trabajo (Shape Up)
 
 Ventana: mié 14 oct → mié 25 nov 2026 (Final Report) + oral (sesiones ML 27–28, fecha por confirmar)
-Personas: **Persona 1** y **Persona 2** (cada uno elige paquete) | Tipo: software + LaTeX, git (por crear)
+Personas: **Pedro** y **Mario** (cada uno elige paquete) | Tipo: software + LaTeX, git (por crear)
 
 Etiquetas: **[Book]** = Shape Up dice esto. **[Inference]** = adaptación mía (el libro no da fórmula de reparto para N personas ni habla de git).
 
@@ -65,15 +65,15 @@ Etiquetas: **[Book]** = Shape Up dice esto. **[Inference]** = adaptación mía (
 | S8 | ~ **Ablación PyTorch** (MLP/secuencia) | misma tabla, mismos folds | ~ | 6 | unknown | S3 |
 | S9 | ~ **Lead-time / leave-mission-out** | curva skill vs días a TCA o L por misión | ~ | 4 | partial | S1, S5 |
 | S10 | ~ **Kernel ridge** (temario ses. 19–21) | fila extra en la tabla | ~ | 3 | known | S3 |
-| S11 | **Repo reproducible** | README, script que regenera tablas+figs, MLA bib, Declaración IA (el entorno pinneado lo hace A en Fase 0) | Must | 3 | known | — |
+| S11 | **Repo reproducible** | README, script que regenera tablas+figs, MLA bib, Declaración IA (el entorno pinneado lo hace Pedro en Fase 0) | Must | 3 | known | — |
 
 Escritura (cada dueño escribe la parte de lo que construyó; integrador une):
 
 | ID | Entrega | Integrador (main.tex, formato) | Secciones |
 |---|---|---|---|
-| W1 | Progress Report (25 oct) | Paquete B | resultados S1/S3/S5 → A; S2/S4 → B |
-| W2 | Sentence Outline (15 nov) | Paquete A | intro+data → B; method+results → A; discusión → ambos |
-| W3 | Final Report (25 nov) | Paquete B | cada scope = su subsección de Methods/Results; intro/conclusiones a medias |
+| W1 | Progress Report (25 oct) | Mario | resultados S1/S3/S5 → Pedro; S2/S4 → Mario |
+| W2 | Sentence Outline (15 nov) | Pedro | intro+data → Mario; method+results → Pedro; discusión → ambos |
+| W3 | Final Report (25 nov) | Mario | cada scope = su subsección de Methods/Results; intro/conclusiones a medias |
 | W4 | Oral | ambos | **cada uno presenta y defiende scopes del otro** en ensayos |
 
 ## 6. Dependencias
@@ -90,13 +90,13 @@ Escritura (cada dueño escribe la parte de lo que construyó; integrador une):
 ## 7. Fases y timeline
 
 - **Fase 0 (mié 14 → sáb 17 oct)**, en paralelo **[Book ch10]**:
-  - A: `requirements.txt` + estructura `src/` + S1 (protocolo, folds, spike validación, regla de etiquetado) + propuesta de contratos (sección 9). (`git init` + GitHub: hecho el 14 oct.)
-  - B: S2 EDA profunda + propuesta de definición de jump + esqueleto LaTeX del Progress Report.
+  - Pedro: `requirements.txt` + estructura `src/` + S1 (protocolo, folds, spike validación, regla de etiquetado) + propuesta de contratos (sección 9). (`git init` + GitHub: hecho el 14 oct.)
+  - Mario: S2 EDA profunda + propuesta de definición de jump + esqueleto LaTeX del Progress Report.
   - Decisiones y reuniones (R0 kickoff, R1 contratos): ver [`dependencias-y-reuniones.md`](./dependencias-y-reuniones.md).
   - **Exit (sáb 17)**: primera rebanada integrada en `main`: logística sobre features stub, evaluada en folds vs LRP, números en `results/`. *Core, small, novel* **[Book ch10]**.
-- **C1 build (dom 18 → jue 22 oct)**: A → S3 + empieza S5. B → S4 (+ bootstrap). Merge continuo.
+- **C1 build (dom 18 → jue 22 oct)**: Pedro → S3 + empieza S5. Mario → S4 (+ bootstrap). Merge continuo.
 - **C1 final (vie 23 → dom 25)**: congelar tabla LRP vs logística/ridge vs RF/GBDT preliminar; escribir y entregar Progress Report.
-- **C2 build (lun 26 oct → mar 10 nov)**: A → S5 tuning + S7 atlas. B → S6 two-stage. `~` S8/S9/S10 solo si el dueño tiene su must cuesta abajo.
+- **C2 build (lun 26 oct → mar 10 nov)**: Pedro → S5 tuning + S7 atlas. Mario → S6 two-stage. `~` S8/S9/S10 solo si el dueño tiene su must cuesta abajo.
 - **C2 final (mié 11 → dom 15 nov)**: resultados "casi finales" congelados; Sentence Outline.
 - **C3 (lun 16 → mié 25 nov)**: 16–21 redacción por secciones; 22–25 integración, twocolumn, MLA, Declaración, link GitHub. **Desde el 18 nov: cero experimentos nuevos**, solo arreglar figuras.
 - **Oral**: slides 26–28 nov; 2 ensayos con preguntas hostiles cruzadas.
@@ -107,24 +107,24 @@ Ruta crítica: S1 → S3 → S5/S6 → S7 → Results del Final Report.
 
 | Paquete | Scopes | Carga (h, solo must) | Variedad | Buddy |
 |---|---|---|---|---|
-| **A** | S1 Protocolo, S3 Features, S5 Árboles, S7 Atlas; integra W2 | 6+5+7+6 = **24** + escritura ~13 | infra de datos + modelo fuerte + narrativa oral | revisa S6 |
-| **B** | S2 EDA/taxonomía, S4 Temario, S6 Two-stage, S11 Repo/bib; integra W1 y W3 | 6+6+9+3 = **24** + escritura ~13 | EDA + modelos del curso + la apuesta arriesgada (RQ secundaria) | revisa S1 |
+| **Pedro** | S1 Protocolo, S3 Features, S5 Árboles, S7 Atlas; integra W2 | 6+5+7+6 = **24** + escritura ~13 | infra de datos + modelo fuerte + narrativa oral | revisa S6 |
+| **Mario** | S2 EDA/taxonomía, S4 Temario, S6 Two-stage, S11 Repo/bib; integra W1 y W3 | 6+6+9+3 = **24** + escritura ~13 | EDA + modelos del curso + la apuesta arriesgada (RQ secundaria) | revisa S1 |
 
 - `~` S8/S9/S10 fuera de la carga: los coge quien tenga sus must cuesta abajo primero.
-- B tiene el unknown principal (S6) → slack explícito (appetite 9 h) y A como buddy **[Inference]**.
+- Mario tiene el unknown principal (S6) → slack explícito (appetite 9 h) y Pedro como buddy **[Inference]**.
 - Cada uno se reparte sus tareas dentro del scope; nadie hace de taskmaster **[Book ch09]**.
-- Nadie espera al otro para empezar: A arranca en S1, B en S2 (independiente).
+- Nadie espera al otro para empezar: Pedro arranca en S1, Mario en S2 (independiente).
 
 ## 9. Ownership map y reglas anti-colisión
 
 | Área | Dueño | El otro puede |
 |---|---|---|
-| `src/protocol.py`, `src/metrics.py` (hoy `scripts/esa_kelvins_metrics.py`), folds | A | leer; cambios vía PR pequeño |
-| `src/features.py` | A | pedir columnas |
-| `src/eda/`, `src/taxonomy.py`, `src/evaluation.py` (bootstrap) | B | leer |
-| `src/models/linear.py`, `src/models/two_stage.py` | B | leer |
-| `src/models/trees.py`, `src/atlas/` | A | leer |
-| `requirements.txt` / env, `.gitignore` | A | pedir dependencias |
+| `src/protocol.py`, `src/metrics.py` (hoy `scripts/esa_kelvins_metrics.py`), folds | Pedro | leer; cambios vía PR pequeño |
+| `src/features.py` | Pedro | pedir columnas |
+| `src/eda/`, `src/taxonomy.py`, `src/evaluation.py` (bootstrap) | Mario | leer |
+| `src/models/linear.py`, `src/models/two_stage.py` | Mario | leer |
+| `src/models/trees.py`, `src/atlas/` | Pedro | leer |
+| `requirements.txt` / env, `.gitignore` | Pedro | pedir dependencias |
 | `report/<entrega>/main.tex` | integrador de esa entrega | editar solo su `sections/*.tex` |
 | `data/` | nadie la commitea (`.gitignore`) | — |
 
@@ -136,7 +136,7 @@ Ruta crítica: S1 → S3 → S5/S6 → S7 → Results del Final Report.
 
 | Fecha | Check | Pasa si | Si falla |
 |---|---|---|---|
-| sáb 17 oct | Fin Fase 0 | repo público + 1ª rebanada en `main` | A y B en pareja hasta que salga; recortar features stub |
+| sáb 17 oct | Fin Fase 0 | repo público + 1ª rebanada en `main` | Pedro y Mario en pareja hasta que salga; recortar features stub |
 | jue 22 oct | Freeze C1 | tabla preliminar ≥3 modelos vs LRP | PR con lo que haya (logística + RF), no extender |
 | mié 4 nov | Midpoint C2 | S6 y S5 **cuesta abajo** en el hill | S6 → cut back: solo logística calibrada + reliability; matar `~` |
 | mar 10 nov | Freeze resultados | tablas/figuras finales regenerables con un comando | lo que no esté, va a *Future Work* |
