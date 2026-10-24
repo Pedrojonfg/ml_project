@@ -53,6 +53,13 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | 022 | Next steps granularity | accepted | 4–5 phase bullets (not full W1–W6 table) | [022-next-steps-proposal.md](./022-next-steps-proposal.md) |
 | 023 | Formato de entrega | accepted | LaTeX in-repo under `presentations/proposal/` | [023-formato-entrega-proposal.md](./023-formato-entrega-proposal.md) |
 | 024 | Limitations / ethics | accepted | Subsección propia corta (risk labels, no deploy, manoeuvre bias, CC BY) | [024-limitations-ethics-proposal.md](./024-limitations-ethics-proposal.md) |
+| pj-001 | Event label (S1) | accepted | Both targets from last CDM: `risk_final` (log10, stored unclipped) + `y_hr = risk_final >= -6.0` | [pj-001-event-label.md](./pj-001-event-label.md) |
+| pj-002 | Events without CDM >= 2 d (S1) | accepted | Excluded from train, validation and `event_table` (1212 events, 42 HR); S2 decides its own EDA use | [pj-002-events-without-usable-cdm.md](./pj-002-events-without-usable-cdm.md) |
+| pj-003 | Event filter (S1) | accepted | Keep events with >=1 CDM ttc>=2 and last CDM ttc<2 (8892 events, 93 HR); Z excluded (modeling Z = fog); Y kept in train and validation | [pj-003-event-filter.md](./pj-003-event-filter.md) |
+| pj-004 | CV scheme (S1) | accepted | 5-fold, stratified on `y_hr`, shuffled, event-level | [pj-004-cv-scheme.md](./pj-004-cv-scheme.md) |
+| pj-005 | Repetition and seeds (S1) | accepted | Repeated CV, R=5, seeds 42-46 | [pj-005-repetition-seeds.md](./pj-005-repetition-seeds.md) |
+| pj-006 | Uncertainty reporting (S1) | accepted | Event bootstrap, B=10000, 95 % BCa, joint resampling (no bounds), per-repetition metrics averaged, paired diff vs LRP and CRP, repetition spread supplementary | [pj-006-uncertainty-reporting.md](./pj-006-uncertainty-reporting.md) |
+| pj-007 | Metrics reporting (S1) | accepted | F2, MSE_HR, L; MSE_HR and L both clipped (-6.001) and unclipped | [pj-007-metrics-reporting.md](./pj-007-metrics-reporting.md) |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
 | — | Authors line | auto-trivial | Pedro + Mario (expand full names at write time if required by IE) | — |
@@ -65,11 +72,33 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | — | Ética / limitaciones base | auto-trivial | Anonimizado; no mando en vivo; sesgo por maniobras excluidas | — |
 | — | Idioma del formulario (histórico) | auto-trivial | Español + términos técnicos en inglés cuando haga falta | — |
 
+## Parameter registry
+
+Every modeling parameter the implementation needs. Library defaults must be listed explicitly; an unlisted default is an undecided parameter.
+
+| Parameter | Value | ADR |
+|-----------|-------|-----|
+| HR threshold (log10 risk) | -6.0 | pj-001 |
+| Event label | `risk_final` = `risk` of CDM with min `time_to_tca` | pj-001 |
+| Stored continuous target | unclipped | pj-001 |
+| Metric reporting | F2, MSE_HR, L; MSE_HR and L clipped (-6.001) and unclipped | pj-007 |
+| Number of folds K | 5, stratified on `y_hr`, shuffled | pj-004 |
+| Random seeds (fold assignment) | 42, 43, 44, 45, 46 (R = 5 repetitions) | pj-005 |
+| Train/validation event filter | >=1 CDM ttc>=2 and last CDM ttc<2 (Y included) | pj-003 |
+| Events with no CDM >= 2 d | excluded from train/val/`event_table` | pj-002 |
+| Bootstrap resamples B | 10000 | pj-006 |
+| Interval level / method | 95 %, BCa | pj-006 |
+| Bootstrap resampling | events jointly, with replacement, no bounds on HR count | pj-006 |
+| Aggregation over repetitions | average per-repetition metrics | pj-006 |
+| Paired baselines | LRP and CRP | pj-006 |
+
 ## Fog (not yet sharp)
 
 - Rúbrica interna exacta del profe para el project (syllabus describe entregables, no desglose de puntos).
 - Papel empírico final de cada familia de modelos (lineal / trees / NN) — se resolverá al implementar; el proposal no lo congela (011).
 - Nombres legales / affiliation exactos en el header del PDF (IE formatting).
+
+- Modeling events whose last CDM has `time_to_tca >= 2` (type Z; label CDM is also an input) — needs a different task definition (pj-003).
 
 ## Out of scope
 
