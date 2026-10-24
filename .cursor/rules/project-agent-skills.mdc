@@ -1,0 +1,16 @@
+---
+description: Prefer project Agent Skills in .agents/skills over global copies with the same name
+alwaysApply: true
+---
+
+# Project Agent Skills (this repo)
+
+Team skills live under `.agents/skills/`. While working in this repository:
+
+1. When you invoke `/skill-name` or load a skill by name, **read and follow** `.agents/skills/<skill-name>/SKILL.md` in this workspace.
+2. **Ignore** global or third-party copies of the same skill name (`~/.cursor/skills/`, `~/.agents/skills/`, `~/.claude/skills/`, plugin caches, etc.), even if they appear in the skills list.
+3. If both a project and a global skill are listed, treat the project copy as authoritative for instructions, templates, and scripts.
+
+Bundled skills: `decision-ledger`, `deep-research`, `dispatching-parallel-agents`, `executing-plans`, `find-skills`, `implementa`, `ml-decision-ledger`, `ml-flow`, `ml-understanding`, `ponytail`, `test-driven-development`.
+
+For ML work, start from `ml-flow` when orchestrating understanding → decisions → implementation.
