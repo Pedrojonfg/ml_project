@@ -21,6 +21,7 @@ python -m pytest scripts                # metric tests
 ## Layout
 
 - `scripts/` — metrics, baselines, figure generation
+- `.agents/skills/` — project Agent Skills (override global skills with the same name in Cursor)
 - `overleaf-esa-proposal/`, `presentations/` — LaTeX deliverables
 - `docs/decisions/` — decision records (ADRs); `docs/plan-reparto.md` — work plan
 - `research/briefs/` — background research notes
