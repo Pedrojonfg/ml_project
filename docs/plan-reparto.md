@@ -22,8 +22,8 @@ Etiquetas: **[Book]** = Shape Up dice esto. **[Inference]** = adaptación mía (
 
 | Ciclo | Ventana | Entrega | Build | Ventana final (sin scope nuevo) |
 |---|---|---|---|---|
-| C1 | 14 → 25 oct | Progress Report (2 pág., 5% ML) | 14–22 oct | 23–25 oct |
-| C2 | 26 oct → 15 nov | Sentence Outline + resultados casi finales (20% ML / 40% CS) | 26 oct–10 nov | 11–15 nov |
+| C1 | 14 oct → 1 nov | Progress Report (2 pág., 5% ML) | 14–29 oct | 30 oct–1 nov |
+| C2 | 2 → 15 nov | Sentence Outline + resultados casi finales (20% ML / 40% CS) | 2–10 nov | 11–15 nov |
 | C3 | 16 → 25 nov | Final Report 10–12 pág. (20% ML / 40% CS) | 16–21 nov | 22–25 nov |
 | Oral | 26 nov → sesión 27/28 | 10 min + 10 min Q&A (**50% ML**) | slides | 2 ensayos |
 
@@ -71,7 +71,7 @@ Escritura (cada dueño escribe la parte de lo que construyó; integrador une):
 
 | ID | Entrega | Integrador (main.tex, formato) | Secciones |
 |---|---|---|---|
-| W1 | Progress Report (25 oct) | Mario | resultados S1/S3/S5 → Pedro; S2/S4 → Mario |
+| W1 | Progress Report (1 nov) | Mario | resultados S1/S3/S5 → Pedro; S2/S4 → Mario |
 | W2 | Sentence Outline (15 nov) | Pedro | intro+data → Mario; method+results → Pedro; discusión → ambos |
 | W3 | Final Report (25 nov) | Mario | cada scope = su subsección de Methods/Results; intro/conclusiones a medias |
 | W4 | Oral | ambos | **cada uno presenta y defiende scopes del otro** en ensayos |
@@ -94,9 +94,9 @@ Escritura (cada dueño escribe la parte de lo que construyó; integrador une):
   - Mario: S2 EDA profunda + propuesta de definición de jump + esqueleto LaTeX del Progress Report.
   - Decisiones y reuniones (R0 kickoff, R1 contratos): ver [`dependencias-y-reuniones.md`](./dependencias-y-reuniones.md).
   - **Exit (sáb 17)**: primera rebanada integrada en `main`: logística sobre features stub, evaluada en folds vs LRP, números en `results/`. *Core, small, novel* **[Book ch10]**.
-- **C1 build (dom 18 → jue 22 oct)**: Pedro → S3 + empieza S5. Mario → S4 (+ bootstrap). Merge continuo.
-- **C1 final (vie 23 → dom 25)**: congelar tabla LRP vs logística/ridge vs RF/GBDT preliminar; escribir y entregar Progress Report.
-- **C2 build (lun 26 oct → mar 10 nov)**: Pedro → S5 tuning + S7 atlas. Mario → S6 two-stage. `~` S8/S9/S10 solo si el dueño tiene su must cuesta abajo.
+- **C1 build (dom 18 oct → mié 29 oct)**: Pedro → S3 + empieza S5. Mario → S4 (+ bootstrap). Merge continuo.
+- **C1 final (jue 30 oct → sáb 1 nov)**: congelar tabla LRP vs logística/ridge vs RF/GBDT preliminar; escribir y entregar Progress Report.
+- **C2 build (dom 2 nov → mar 10 nov)**: Pedro → S5 tuning + S7 atlas. Mario → S6 two-stage. `~` S8/S9/S10 solo si el dueño tiene su must cuesta abajo.
 - **C2 final (mié 11 → dom 15 nov)**: resultados "casi finales" congelados; Sentence Outline.
 - **C3 (lun 16 → mié 25 nov)**: 16–21 redacción por secciones; 22–25 integración, twocolumn, MLA, Declaración, link GitHub. **Desde el 18 nov: cero experimentos nuevos**, solo arreglar figuras.
 - **Oral**: slides 26–28 nov; 2 ensayos con preguntas hostiles cruzadas.
@@ -137,7 +137,7 @@ Ruta crítica: S1 → S3 → S5/S6 → S7 → Results del Final Report.
 | Fecha | Check | Pasa si | Si falla |
 |---|---|---|---|
 | sáb 17 oct | Fin Fase 0 | repo público + 1ª rebanada en `main` | Pedro y Mario en pareja hasta que salga; recortar features stub |
-| jue 22 oct | Freeze C1 | tabla preliminar ≥3 modelos vs LRP | PR con lo que haya (logística + RF), no extender |
+| jue 30 oct | Freeze C1 | tabla preliminar ≥3 modelos vs LRP | PR con lo que haya (logística + RF), no extender |
 | mié 4 nov | Midpoint C2 | S6 y S5 **cuesta abajo** en el hill | S6 → cut back: solo logística calibrada + reliability; matar `~` |
 | mar 10 nov | Freeze resultados | tablas/figuras finales regenerables con un comando | lo que no esté, va a *Future Work* |
 | mié 18 nov | Freeze experimentos | — | ninguno nuevo |

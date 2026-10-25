@@ -61,8 +61,8 @@ Tipos: **Decisión** (se sale con algo escrito en `docs/decisions/`), **Sync** (
 | R0 | jue 15 oct | Decisión — kickoff | 45 min | S1, S2 |
 | R1 | sáb 17 oct | Decisión — contratos | 60 min | S3–S7 en paralelo |
 | — | **lun y jue**, desde 19 oct | Sync hill chart | 15 min | detectar bloqueos |
-| R2 | jue 22 oct | Freeze C1 | 30 min | W1 |
-| R3 | lun 26 oct | Decisión — kickoff C2 | 45 min | S6 diseño final, `~` a intentar |
+| R2 | jue 30 oct | Freeze C1 | 30 min | W1 |
+| R3 | dom 2 nov | Decisión — kickoff C2 | 45 min | S6 diseño final, `~` a intentar |
 | R4 | mié 4 nov | Decisión — midpoint | 30 min | cut back o seguir |
 | R5 | mar 10 nov | **Freeze resultados** | 45 min | W2, W3 |
 | R6 | jue 12 nov | Decisión — argumento del outline | 45 min | W2 |
@@ -101,14 +101,14 @@ Sale con `docs/contracts.md` + ADRs 025–028.
 | Dónde va el bootstrap/varianza | Mario | `src/evaluation.py` (de Mario); `metrics.py` (de Pedro) no se toca |
 | Uso del test oficial | ambos | **solo una vez**, en R5, con los modelos congelados |
 
-### R2 — Freeze C1 (jue 22 oct)
+### R2 — Freeze C1 (jue 30 oct)
 | Decisión | Propone | Default |
 |---|---|---|
 | Qué modelos entran en el Progress Report | dueños S4/S5 | lo que esté en `main` el jueves |
 | Problemas encontrados + decisiones a contar (lo pide el enunciado) | ambos | lista de ADRs 025+ |
 | Reparto de párrafos del W1 | integrador (Mario) | cada uno escribe lo que construyó |
 
-### R3 — Kickoff C2 (lun 26 oct)
+### R3 — Kickoff C2 (dom 2 nov)
 | Decisión | Propone | Default |
 |---|---|---|
 | Diseño final del two-stage: calibrador, regresor de magnitud, cómo se combinan | Mario | isotonic + GBDT regresor sobre eventos con P(HR) > umbral |
