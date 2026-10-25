@@ -1,6 +1,6 @@
 """Tests for Kelvins Collision Avoidance metrics (Uriot et al.).
 
-Production implementations live in ``esa_kelvins_metrics.py`` (same directory).
+Production implementations live in ``src/metrics.py``.
 Assumed public API (implementer may add helpers; these names are the contract
 under test):
 
@@ -21,17 +21,11 @@ under test):
 from __future__ import annotations
 
 import math
-import sys
-from pathlib import Path
 
 import numpy as np
 import pytest
 
-_SCRIPTS = Path(__file__).resolve().parent
-if str(_SCRIPTS) not in sys.path:
-    sys.path.insert(0, str(_SCRIPTS))
-
-from esa_kelvins_metrics import (  # noqa: E402
+from src.metrics import (
     HR_THRESHOLD_LOG10,
     crp_constant_risk,
     crp_predictions,

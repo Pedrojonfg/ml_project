@@ -12,9 +12,9 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(ROOT))
 
-from esa_kelvins_metrics import (  # noqa: E402
+from src.metrics import (  # noqa: E402
     HR_THRESHOLD_LOG10,
     crp_predictions,
     f2_score,

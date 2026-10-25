@@ -15,12 +15,13 @@ data/esa/Collision Avoidance Challenge - Dataset/kelvins_competition_data/{train
 
 ```
 python scripts/run_esa_prelim.py        # CRP/LRP metrics + proposal figures
-python -m pytest scripts                # metric tests
+python -m pytest tests                  # metric + protocol tests
 ```
 
 ## Layout
 
-- `scripts/` — metrics, baselines, figure generation
+- `src/` — metrics and S1 event protocol; `tests/` — pytest suite
+- `scripts/` — baselines, figure generation
 - `.agents/skills/` — project Agent Skills (override global skills with the same name in Cursor)
 - `overleaf-esa-proposal/`, `presentations/` — LaTeX deliverables
 - `docs/decisions/` — decision records (ADRs); `docs/plan-reparto.md` — work plan

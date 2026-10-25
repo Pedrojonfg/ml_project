@@ -1,0 +1,47 @@
+{
+  "n_events": 8892,
+  "n_hr": 93,
+  "reference_test_LRP_L": 0.694,
+  "baselines": {
+    "all": {
+      "n_events": 8892,
+      "n_hr": 93,
+      "LRP": {
+        "F2": 0.492264,
+        "MSE_HR_clipped": 0.269793,
+        "L_clipped": 0.548064,
+        "MSE_HR_unclipped": 12.164659,
+        "L_unclipped": 24.711635
+      },
+      "CRP": {
+        "F2": 0.050194,
+        "MSE_HR_clipped": 0.474776,
+        "L_clipped": 9.458754,
+        "MSE_HR_unclipped": 0.474776,
+        "L_unclipped": 9.458754
+      }
+    },
+    "last_ttc<1 (X only)": {
+      "n_events": 8293,
+      "n_hr": 66,
+      "LRP": {
+        "F2": 0.410839,
+        "MSE_HR_clipped": 0.330213,
+        "L_clipped": 0.803753,
+        "MSE_HR_unclipped": 8.00566,
+        "L_unclipped": 19.486118
+      },
+      "CRP": {
+        "F2": 0.038565,
+        "MSE_HR_clipped": 0.504648,
+        "L_clipped": 13.085684,
+        "MSE_HR_unclipped": 0.504648,
+        "L_unclipped": 13.085684
+      }
+    }
+  },
+  "hr_per_fold_min_max": [
+    18,
+    19
+  ]
+}
