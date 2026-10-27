@@ -29,3 +29,19 @@ Verdict: **READY**.
 | Deltas on usable CDMs (no leakage) | core | solid | pj-003 | Misread `risk_last` as y; confirmed delta between usable CDMs is not leakage |
 | Leakage via global scaler before CV | hazard | shaky | outside-notes: ESL §7.10 | Named leakage; taught val-fold stats in scaler fit |
 | Feature contract stub vs v1 | core | solid | plan-reparto §6 | Retry: stub few cols for Mario; v1 full engineering from CSV |
+
+## S5 trees vs LRP — 2026-10-27
+
+Verdict: **READY**.
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| Continuous `risk_final` → F₂ / MSE_HR / L (same as LRP) | prerequisite | solid | S1 / metrics.py | Confirmed solid without re-exam |
+| Repeated event-level CV (R=5, seeds 42–46) | prerequisite | solid | pj-004, pj-005 | Confirmed solid without re-exam |
+| Regression tree leaves (mean) and split objective (SSE reduction) | core | shaky | notes ch. 8, ~p. 85–90 | Leaf mean −6 correct; once confused parent SSE (2) with post-split child SSE (0.5); retaught |
+| Bagging / Random Forest (bootstrap, mean prediction, `max_features` per split) | core | solid | notes §8.4 | Bootstrap + subset per split; forest mean −6 from (−6,−5,−7); why RF vs one greedy tree |
+| Gradient boosting (residuals, η, sequential trees) | core | solid | notes §8.5 | Ordered C→B→A→D; numeric residual chain; event 1 second-round residual −0.5 |
+| Feature importance (impurity decrease summed over splits) | core | solid | notes §8 + sklearn docs | Summed over splits/trees, not first tree only |
+| Imputation fit on train fold only | hazard | solid | pj-010, ESL §7.10 | Stated train-only per fold explicitly |
+| HR rarity with direct risk regression | hazard | shaky | pj-001, class imbalance | Risk stated: ~1% HR; model predicts continuous risk; F₂ still threshold-based; may under-predict extremes unless trees capture tails |
+| Tuning on same folds as final table | hazard | shaky | outside-notes: nested CV | Not examined; decision in ledger — optimistic bias if same folds used for pick and report |
