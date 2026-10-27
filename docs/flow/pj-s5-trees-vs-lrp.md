@@ -4,4 +4,4 @@
 - Decisions: complete (2026-10-27) — pj-014..020; ledger: docs/decisions/LEDGER.md
 - Implementation: done (2026-10-27) — src/models/trees.py, scripts/run_s5_trees.py, tests/test_trees.py
 - Audit: pending
-- Detours: none
+- Detours: run 0 (2026-10-27) — weak vs LRP; pj-021 findings; ledger fog for iteration 2

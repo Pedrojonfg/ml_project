@@ -73,6 +73,7 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | pj-018 | S5 RF `n_estimators` search | accepted | Grid {100,300,500}; pick lowest mean unclipped L over OOF CV | [pj-018-s5-rf-n-estimators-search.md](./pj-018-s5-rf-n-estimators-search.md) |
 | pj-019 | S5 feature importances | accepted | Both models; impurity; mean over 25 folds; top 10 plot; mandatory B1/B3 gates | [pj-019-s5-feature-importances.md](./pj-019-s5-feature-importances.md) |
 | pj-020 | S5 artifacts and `p_hr` | accepted | slugs `rf`/`gbdt`; `p_hr` = hard threshold on `r_hat`; imputer flags | [pj-020-s5-artifacts-and-p-hr.md](./pj-020-s5-artifacts-and-p-hr.md) |
+| pj-021 | S5 run 0 retrospective | accepted | Fast runtime; RF F₂=0; GBDT weak vs LRP; B1 reopen; findings only | [pj-021-s5-run0-retrospective.md](./pj-021-s5-run0-retrospective.md) |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
 | — | Authors line | auto-trivial | Pedro + Mario (expand full names at write time if required by IE) | — |
@@ -157,6 +158,11 @@ Every modeling parameter the implementation needs. Library defaults must be list
 
 ## Fog (not yet sharp)
 
+- **S5 iteration 2 — objective for tuning:** optimize F₂, L clipped, or composite when F₂≈0? (run 0: pj-018 picked `n_estimators` via L unclipped while RF F₂=0 for all grid values — pj-021).
+- **S5 iteration 2 — imbalance / tail:** sample weights on `y_hr`, asymmetric loss, deeper/weaker regularization, or separate HR detector + magnitude (overlap with S6).
+- **S5 iteration 2 — RF hyperparameter grid expansion** now that compute ≈3.5 min/run (pj-021): depth, `min_samples_*`, larger `n_estimators` grid, optional `criterion`.
+- **S5 pj-019 reopen:** permutation importances or grouped risk features after B1 RF fail (pj-021).
+- **S5 pj-006 bootstrap:** wire trees into `evaluation.py` when it exists (quality-first per pj-021).
 - Rúbrica interna exacta del profe para el project (syllabus describe entregables, no desglose de puntos).
 - Papel empírico final de cada familia de modelos (lineal / trees / NN) — se resolverá al implementar; el proposal no lo congela (011).
 - Nombres legales / affiliation exactos en el header del PDF (IE formatting).
