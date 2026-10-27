@@ -66,6 +66,13 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | pj-011 | Categorical features v1 | accepted | No `mission_id`; one-hot `c_object_type` (5 levels) in S3, last usable CDM | [pj-011-categorical-features.md](./pj-011-categorical-features.md) |
 | pj-012 | Explicit delta columns | accepted | None in v1 (first/last snapshots only) | [pj-012-explicit-deltas.md](./pj-012-explicit-deltas.md) |
 | pj-013 | Feature contract doc | accepted | `FEATURE_COLUMNS` in code + `docs/contracts.md`, kept in sync; tests enforce match | [pj-013-feature-contract-doc.md](./pj-013-feature-contract-doc.md) |
+| pj-014 | S5 tree regression target | accepted | Regress `risk_final`; continuous log10 `predict`; metrics as LRP | [pj-014-s5-tree-regression-target.md](./pj-014-s5-tree-regression-target.md) |
+| pj-015 | S5 missing-value handling | accepted | Per-fold median `SimpleImputer`; shared pipeline for RF and GBDT | [pj-015-s5-missing-imputation.md](./pj-015-s5-missing-imputation.md) |
+| pj-016 | S5 RF fixed hyperparameters | accepted | depth 4, min_samples_split 4, leaf 2, sqrt features, bootstrap, state 42+rep | [pj-016-s5-rf-hyperparameters.md](./pj-016-s5-rf-hyperparameters.md) |
+| pj-017 | S5 GBDT (`GradientBoostingRegressor`) | accepted | n_estimators 200, lr 0.1, parallel constraints; no n_estimators grid at launch | [pj-017-s5-gbdt-hyperparameters.md](./pj-017-s5-gbdt-hyperparameters.md) |
+| pj-018 | S5 RF `n_estimators` search | accepted | Grid {100,300,500}; pick lowest mean unclipped L over OOF CV | [pj-018-s5-rf-n-estimators-search.md](./pj-018-s5-rf-n-estimators-search.md) |
+| pj-019 | S5 feature importances | accepted | Both models; impurity; mean over 25 folds; top 10 plot; mandatory B1/B3 gates | [pj-019-s5-feature-importances.md](./pj-019-s5-feature-importances.md) |
+| pj-020 | S5 artifacts and `p_hr` | accepted | slugs `rf`/`gbdt`; `p_hr` = hard threshold on `r_hat`; imputer flags | [pj-020-s5-artifacts-and-p-hr.md](./pj-020-s5-artifacts-and-p-hr.md) |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
 | — | Authors line | auto-trivial | Pedro + Mario (expand full names at write time if required by IE) | — |
@@ -108,6 +115,45 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | `c_object_type` encoding | one-hot in S3: DEBRIS, UNKNOWN, PAYLOAD, ROCKET BODY, TBA | pj-011 |
 | `c_object_type` source row | last usable CDM per event | pj-011 |
 | Unseen `c_object_type` at inference | all type dummies 0 | pj-011 |
+| S5 training target | `risk_final` (unclipped log10) | pj-014 |
+| S5 model output (`predict`) | continuous log10 risk per event | pj-014 |
+| S5 Kelvins metrics | F2, MSE_HR, L from continuous predictions via `metrics.py` (same as LRP) | pj-014, pj-007 |
+| S5 imputation | `SimpleImputer`, strategy `median`, fit on train fold only | pj-015 |
+| S5 imputation scope | applied to all `FEATURE_COLUMNS` before both tree models | pj-015 |
+| S5 imputation / booster revisit | material NaNs or GBR too slow → reopen pj-015 **with** pj-017 (HGBT + optional split pipeline) | pj-015 |
+| S5 RF `max_depth` | 4 | pj-016 |
+| S5 RF `min_samples_split` | 4 | pj-016 |
+| S5 RF `min_samples_leaf` | 2 | pj-016 |
+| S5 RF `max_features` | sqrt | pj-016 |
+| S5 RF `bootstrap` | True | pj-016 |
+| S5 RF `max_samples` | None | pj-016 |
+| S5 RF `criterion` | squared_error | pj-016 |
+| S5 RF `random_state` | 42 + repetition_index (0…4) | pj-016 |
+| S5 RF `n_jobs` | -1 | pj-016 |
+| S5 RF `n_estimators` | search {100, 300, 500}; select min mean unclipped L (OOF); tie → smaller | pj-018 |
+| S5 GBDT estimator | GradientBoostingRegressor | pj-017 |
+| S5 GBDT `n_estimators` | 200 (fixed at launch) | pj-017 |
+| S5 GBDT `learning_rate` | 0.1 | pj-017 |
+| S5 GBDT `max_depth` | 4 | pj-017 |
+| S5 GBDT `min_samples_split` | 4 | pj-017 |
+| S5 GBDT `min_samples_leaf` | 2 | pj-017 |
+| S5 GBDT `subsample` | 1.0 | pj-017 |
+| S5 GBDT `max_features` | sqrt | pj-017 |
+| S5 GBDT `loss` | squared_error | pj-017 |
+| S5 GBDT `random_state` | 42 + repetition_index (0…4) | pj-017 |
+| S5 importance method | impurity `feature_importances_` (not permutation at launch) | pj-019 |
+| S5 importance aggregation | mean over 25 CV train fits (5 folds × 5 reps) | pj-019 |
+| S5 importance models | RF (pj-018 `n_estimators`) + GBDT | pj-019 |
+| S5 importance plot default | top 10; ranks 11–15 if mean importance ≥ 0.95 × rank-10 | pj-019 |
+| S5 dimensionality reduction | none (no PCA on v1 `X` for trees) | pj-019 |
+| S5 importance mandatory checks | B1 permutation vs impurity top-5 (fold 0, rep 0); B3 RF vs GBDT rank-1 family; auto `reopen_required` | pj-019 |
+| S5 importance manual revisit | B2 geometry invisible; B4 remove-feature / causal claims | pj-019 |
+| S5 results paths | `results/rf.json`, `results/gbdt.json` | pj-020 |
+| S5 preds paths | `preds/rf.parquet`, `preds/gbdt.parquet` | pj-020 |
+| S5 `r_hat` | continuous log10 `predict` | pj-020, pj-014 |
+| S5 `p_hr` | 1.0 if `r_hat >= -6.0` else 0.0 (not calibrated) | pj-020, pj-001 |
+| S5 `SimpleImputer` `add_indicator` | False | pj-020 |
+| S5 `SimpleImputer` `keep_empty_features` | False | pj-020 |
 
 ## Fog (not yet sharp)
 
