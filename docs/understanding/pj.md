@@ -16,3 +16,16 @@ Verdict: READY.
 | Bias of K-fold CV vs K | core | solid | ESL §7.10.1 | Pessimistic bias for small K; bias vs variance reasoning mixed up once; miscounted HR per fold once |
 
 Mistakes made (useful for the oral): recall denominator (true HR events), counting HR per fold (1/K, not (K-1)/K), believing `risk` was on a linear scale.
+
+## S3 event features — 2026-10-27
+
+Verdict: **READY**.
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| Temporal rule (inputs only ttc ≥ 2 d) | prerequisite | solid | S1 / pj-002, pj-003 | Q1; Q4 |
+| Target vs inputs (`risk_final`, `y_hr` vs `lrp`) | core | solid | pj-001, protocol | Retry: `lrp` in X; target = risk at min `time_to_tca` |
+| CDM column examples for X | core | shaky | Kelvins CSV | Retry named location/temperature (not in schema); knows `lrp`; real fields e.g. `miss_distance`, `relative_position_*` exist in data |
+| Deltas on usable CDMs (no leakage) | core | solid | pj-003 | Misread `risk_last` as y; confirmed delta between usable CDMs is not leakage |
+| Leakage via global scaler before CV | hazard | shaky | outside-notes: ESL §7.10 | Named leakage; taught val-fold stats in scaler fit |
+| Feature contract stub vs v1 | core | solid | plan-reparto §6 | Retry: stub few cols for Mario; v1 full engineering from CSV |

@@ -60,6 +60,12 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | pj-005 | Repetition and seeds (S1) | accepted | Repeated CV, R=5, seeds 42-46 | [pj-005-repetition-seeds.md](./pj-005-repetition-seeds.md) |
 | pj-006 | Uncertainty reporting (S1) | accepted | Event bootstrap, B=10000, 95 % BCa, joint resampling (no bounds), per-repetition metrics averaged, paired diff vs LRP and CRP, repetition spread supplementary | [pj-006-uncertainty-reporting.md](./pj-006-uncertainty-reporting.md) |
 | pj-007 | Metrics reporting (S1) | accepted | F2, MSE_HR, L; MSE_HR and L both clipped (-6.001) and unclipped | [pj-007-metrics-reporting.md](./pj-007-metrics-reporting.md) |
+| pj-008 | Feature set delivery | accepted | v1 only; no separate stub phase for S4/S6 | [pj-008-feature-set-no-stub.md](./pj-008-feature-set-no-stub.md) |
+| pj-009 | Event features v1 | accepted | Quantile + first/last snapshots; A1–A3 on risk; 3 geometry fields; event_table metadata | [pj-009-event-features-v1.md](./pj-009-event-features-v1.md) |
+| pj-010 | Missing values (S3) | accepted | `std(risk)` = 0 if one usable CDM; else NaNs left to S4 per-fold imputation | [pj-010-missing-feature-values.md](./pj-010-missing-feature-values.md) |
+| pj-011 | Categorical features v1 | accepted | No `mission_id`; one-hot `c_object_type` (5 levels) in S3, last usable CDM | [pj-011-categorical-features.md](./pj-011-categorical-features.md) |
+| pj-012 | Explicit delta columns | accepted | None in v1 (first/last snapshots only) | [pj-012-explicit-deltas.md](./pj-012-explicit-deltas.md) |
+| pj-013 | Feature contract doc | accepted | `FEATURE_COLUMNS` in code + `docs/contracts.md`, kept in sync; tests enforce match | [pj-013-feature-contract-doc.md](./pj-013-feature-contract-doc.md) |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
 | — | Authors line | auto-trivial | Pedro + Mario (expand full names at write time if required by IE) | — |
@@ -91,6 +97,17 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | Bootstrap resampling | events jointly, with replacement, no bounds on HR count | pj-006 |
 | Aggregation over repetitions | average per-repetition metrics | pj-006 |
 | Paired baselines | LRP and CRP | pj-006 |
+| Usable CDM cutoff (features) | `time_to_tca >= 2` | pj-002, pj-003 |
+| Snapshot quantiles (`time_to_tca` within usable) | 25, 50, 75 | pj-009 |
+| Snapshot + aggregate variables | `risk`, `miss_distance`, `relative_speed`, `t_weighted_rms`; A1–A3 on `risk`; `n_cdm`, `first_ttc`, `last_ttc` | pj-009 |
+| Single usable CDM (snapshots) | repeat same row value per variable | pj-009 |
+| Explicit `lrp` feature column | omitted (last usable `risk` snapshot only) | pj-009 |
+| `std(risk)` when `n_usable_cdms == 1` | 0 | pj-010 |
+| Other feature NaNs in S3 | pass through; imputation in S4+ per fold | pj-010 |
+| `mission_id` in v1 `X` | excluded | pj-011 |
+| `c_object_type` encoding | one-hot in S3: DEBRIS, UNKNOWN, PAYLOAD, ROCKET BODY, TBA | pj-011 |
+| `c_object_type` source row | last usable CDM per event | pj-011 |
+| Unseen `c_object_type` at inference | all type dummies 0 | pj-011 |
 
 ## Fog (not yet sharp)
 
