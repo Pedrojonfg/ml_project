@@ -16,6 +16,7 @@ from src.features import FEATURE_COLUMNS, build_features  # noqa: E402
 from src.models.trees import (  # noqa: E402
     importance_diagnostics,
     make_gbdt,
+    make_rf,
     run_oof_cv,
     select_rf_n_estimators,
 )
