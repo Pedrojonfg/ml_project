@@ -1,4 +1,4 @@
-"""S5: RF + GBDT repeated CV, importances, diagnostics (pj-014..020)."""
+"""S5: RF + GBDT repeated CV, importances, diagnostics (pj-014..020, pj-026)."""
 # ponytail: one-shot CLI; bootstrap per pj-006 deferred to evaluation.py
 
 import json
@@ -14,10 +14,12 @@ sys.path.insert(0, str(ROOT))
 
 from src.features import FEATURE_COLUMNS, build_features  # noqa: E402
 from src.models.trees import (  # noqa: E402
+    floor_c_diagnostics,
     importance_diagnostics,
     make_gbdt,
     make_rf,
     run_oof_cv,
+    select_gbdt_n_estimators,
     select_rf_n_estimators,
 )
 from src.protocol import build_event_table, make_folds  # noqa: E402
@@ -50,19 +52,28 @@ def main() -> None:
     table = build_event_table(cdm)
     folds = make_folds(table)
     feats = build_features(table, cdm)
-    merged = feats.merge(table[["event_id", "risk_final"]], on="event_id")
+    merged = feats.merge(table[["event_id", "risk_final", "lrp"]], on="event_id")
     X = merged[list(FEATURE_COLUMNS)].to_numpy(dtype=np.float64)
     y = merged.risk_final.to_numpy(dtype=np.float64)
+    lrp = merged.lrp.to_numpy(dtype=np.float64)
     eid = merged.event_id.to_numpy(dtype=np.int64)
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     PRED.mkdir(parents=True, exist_ok=True)
 
-    rf_n = select_rf_n_estimators(X, y, eid, folds)
-    rf_res = run_oof_cv(lambda rs: make_rf(rf_n, rs), X, y, eid, folds)
-    gbdt_res = run_oof_cv(make_gbdt, X, y, eid, folds)
+    rf_n = select_rf_n_estimators(X, y, eid, folds, lrp=lrp)
+    gbdt_n = select_gbdt_n_estimators(X, y, eid, folds, lrp=lrp)
+    rf_res = run_oof_cv(lambda rs: make_rf(rf_n, rs), X, y, eid, folds, lrp=lrp)
+    gbdt_res = run_oof_cv(lambda rs: make_gbdt(gbdt_n, rs), X, y, eid, folds, lrp=lrp)
 
-    diag = importance_diagnostics(rf_res.importances, gbdt_res.importances, X, y, folds, rf_n)
+    diag = importance_diagnostics(
+        rf_res.importances, gbdt_res.importances, X, y, folds, rf_n, gbdt_n, lrp=lrp,
+    )
+    floor_diag = {
+        "rf": {**floor_c_diagnostics(y, rf_res, folds), "floors": rf_res.floors},
+        "gbdt": {**floor_c_diagnostics(y, gbdt_res, folds), "floors": gbdt_res.floors},
+    }
+    (RESULTS / "floor_c_diagnostics.json").write_text(json.dumps(floor_diag, indent=2) + "\n")
     imp_table = pd.DataFrame({
         "feature": list(FEATURE_COLUMNS),
         "rf_mean": rf_res.importances,
@@ -71,18 +82,27 @@ def main() -> None:
     imp_table.to_csv(RESULTS / "importance_means.csv", index=False)
 
     _plot_importance(rf_res.importances, RESULTS / "importance_rf.png", f"RF (n_estimators={rf_n})")
-    _plot_importance(gbdt_res.importances, RESULTS / "importance_gbdt.png", "GBDT")
+    _plot_importance(
+        gbdt_res.importances, RESULTS / "importance_gbdt.png", f"GBDT (n_estimators={gbdt_n})",
+    )
 
+    grid = [300, 500, 1000]
     for slug, res, extra in (
-        ("rf", rf_res, {"n_estimators": rf_n, "n_estimators_grid": list((100, 300, 500))}),
-        ("gbdt", gbdt_res, {"n_estimators": 200, "learning_rate": 0.1}),
+        ("rf", rf_res, {"n_estimators": rf_n, "n_estimators_grid": grid}),
+        ("gbdt", gbdt_res, {"n_estimators": gbdt_n, "n_estimators_grid": grid, "learning_rate": 0.1}),
     ):
-        out = {"model": slug, "metrics": res.metrics, **extra}
+        out = {"model": slug, "metrics": res.metrics, "metrics_per_rep": res.metrics_per_rep, **extra}
         (RESULTS / f"{slug}.json").write_text(json.dumps(out, indent=2) + "\n")
         pd.concat(res.fold_frames, ignore_index=True).to_parquet(PRED / f"{slug}.parquet", index=False)
 
     (RESULTS / "importance_diagnostics.json").write_text(json.dumps(diag, indent=2) + "\n")
-    print(json.dumps({"rf_n_estimators": rf_n, "reopen_required": diag["reopen_required"]}, indent=2))
+    print(json.dumps({
+        "rf_n_estimators": rf_n,
+        "gbdt_n_estimators": gbdt_n,
+        "reopen_required": diag["reopen_required"],
+        "reopen_floor_c_rf": floor_diag["rf"]["reopen_required"],
+        "reopen_floor_c_gbdt": floor_diag["gbdt"]["reopen_required"],
+    }, indent=2))
 
 
 if __name__ == "__main__":
