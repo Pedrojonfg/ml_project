@@ -1,0 +1,51 @@
+{
+  "b1_rf": {
+    "model": "rf",
+    "impurity_top5": [
+      "risk_snap_last",
+      "risk_agg_min",
+      "risk_snap_p25",
+      "last_ttc",
+      "risk_agg_mean"
+    ],
+    "permutation_top5": [
+      "risk_agg_min",
+      "risk_agg_mean",
+      "risk_agg_max",
+      "risk_snap_p75",
+      "risk_snap_last"
+    ],
+    "overlap": 3,
+    "rank1_match": false,
+    "fail": true
+  },
+  "b1_gbdt": {
+    "model": "gbdt",
+    "impurity_top5": [
+      "risk_snap_last",
+      "last_ttc",
+      "risk_snap_p25",
+      "risk_agg_min",
+      "risk_agg_mean"
+    ],
+    "permutation_top5": [
+      "risk_agg_max",
+      "risk_snap_p75",
+      "risk_agg_mean",
+      "risk_snap_p25",
+      "relative_speed_snap_p25"
+    ],
+    "overlap": 2,
+    "rank1_match": false,
+    "fail": true
+  },
+  "b3": {
+    "rf_rank1": "risk_snap_last",
+    "gbdt_rank1": "risk_snap_last",
+    "rf_family": "risk",
+    "gbdt_family": "risk",
+    "fail": false
+  },
+  "max_pairwise_abs_r_top10_rf": 0.9099522582116963,
+  "reopen_required": true
+}
