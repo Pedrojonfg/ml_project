@@ -45,3 +45,12 @@ Verdict: **READY**.
 | Imputation fit on train fold only | hazard | solid | pj-010, ESL §7.10 | Stated train-only per fold explicitly |
 | HR rarity with direct risk regression | hazard | shaky | pj-001, class imbalance | Risk stated: ~1% HR; model predicts continuous risk; F₂ still threshold-based; may under-predict extremes unless trees capture tails |
 | Tuning on same folds as final table | hazard | shaky | outside-notes: nested CV | Not examined; decision in ledger — optimistic bias if same folds used for pick and report |
+
+### Addendum — floor c (2026-10-28)
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| Metric clipping vs training-target transform | core | solid | pj-007, pj-026 | Asked the difference; then argued unclipped selection on his own (missed HR should weigh more once a floor exists) |
+| Floor c ↔ implied HR-fraction alarm threshold p*(c) | core | solid | derivation in pj-026 | Followed derivation; chose theory-based c over CV for compute |
+| F_β-optimal threshold p* = F*/(1+β²) | core | shaky | outside-notes: Lipton et al. 2014 | Taught, not derived by him; asked whether using LRP F₂ as F* is cheating (good leakage instinct) |
+| Revocation checks R2–R4 (threshold sweep, calibration ratio, Cohen's d) | hazard | solid | pj-026 | Needed re-explanation; then answered two applied cases correctly (R3 band 12.5–50 % for 25 %; R2 gain 0.03 < 0.05) |

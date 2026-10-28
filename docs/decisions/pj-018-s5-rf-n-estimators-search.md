@@ -1,6 +1,6 @@
 # pj-018. S5 Random Forest — `n_estimators` search
 
-- **Status:** accepted
+- **Status:** accepted (selection rule superseded by pj-022; grid unchanged)
 - **Date:** 2026-10-27
 - **Tags:** modeling | evaluation
 - **Decided by:** Pedro

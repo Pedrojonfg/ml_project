@@ -70,10 +70,13 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | pj-015 | S5 missing-value handling | accepted | Per-fold median `SimpleImputer`; shared pipeline for RF and GBDT | [pj-015-s5-missing-imputation.md](./pj-015-s5-missing-imputation.md) |
 | pj-016 | S5 RF fixed hyperparameters | accepted | depth 4, min_samples_split 4, leaf 2, sqrt features, bootstrap, state 42+rep | [pj-016-s5-rf-hyperparameters.md](./pj-016-s5-rf-hyperparameters.md) |
 | pj-017 | S5 GBDT (`GradientBoostingRegressor`) | accepted | n_estimators 200, lr 0.1, parallel constraints; no n_estimators grid at launch | [pj-017-s5-gbdt-hyperparameters.md](./pj-017-s5-gbdt-hyperparameters.md) |
-| pj-018 | S5 RF `n_estimators` search | accepted | Grid {100,300,500}; pick lowest mean unclipped L over OOF CV | [pj-018-s5-rf-n-estimators-search.md](./pj-018-s5-rf-n-estimators-search.md) |
+| pj-018 | S5 RF `n_estimators` search | accepted | Grid {100,300,500}; selection rule → pj-022 | [pj-018-s5-rf-n-estimators-search.md](./pj-018-s5-rf-n-estimators-search.md) |
+| pj-022 | S5 tuning selection metric | superseded by pj-025 | Hyperparameter pick: lowest mean **L clipped** OOF (pj-007 clip); report both L still | [pj-022-s5-tuning-select-l-clipped.md](./pj-022-s5-tuning-select-l-clipped.md) |
+| pj-025 | S5 tuning selection metric (v2) | accepted | Supersedes pj-022: select by lowest pooled OOF **unclipped** L; report both (pj-007) | [pj-025-s5-tuning-select-l-unclipped.md](./pj-025-s5-tuning-select-l-unclipped.md) |
+| pj-026 | S5 training-target floor c | accepted | Fit on max(risk_final, c); c per training fold from F₂-optimal threshold p* = F*/5, F* = LRP F₂; revoke via R0–R4 | [pj-026-s5-training-target-floor-c.md](./pj-026-s5-training-target-floor-c.md) |
+| pj-024 | S5 relaxed trees + estimator grids | accepted | depth 8, split 2, leaf 1; n_estimators {300,500,1000} RF+GBDT; select L clipped | [pj-024-s5-relaxed-tree-hyperparameters.md](./pj-024-s5-relaxed-tree-hyperparameters.md) |
 | pj-019 | S5 feature importances | accepted | Both models; impurity; mean over 25 folds; top 10 plot; mandatory B1/B3 gates | [pj-019-s5-feature-importances.md](./pj-019-s5-feature-importances.md) |
 | pj-020 | S5 artifacts and `p_hr` | accepted | slugs `rf`/`gbdt`; `p_hr` = hard threshold on `r_hat`; imputer flags | [pj-020-s5-artifacts-and-p-hr.md](./pj-020-s5-artifacts-and-p-hr.md) |
-| pj-021 | S5 run 0 retrospective | accepted | Fast runtime; RF F₂=0; GBDT weak vs LRP; B1 reopen; findings only | [pj-021-s5-run0-retrospective.md](./pj-021-s5-run0-retrospective.md) |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
 | — | Authors line | auto-trivial | Pedro + Mario (expand full names at write time if required by IE) | — |
@@ -122,22 +125,28 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S5 imputation | `SimpleImputer`, strategy `median`, fit on train fold only | pj-015 |
 | S5 imputation scope | applied to all `FEATURE_COLUMNS` before both tree models | pj-015 |
 | S5 imputation / booster revisit | material NaNs or GBR too slow → reopen pj-015 **with** pj-017 (HGBT + optional split pipeline) | pj-015 |
-| S5 RF `max_depth` | 4 | pj-016 |
-| S5 RF `min_samples_split` | 4 | pj-016 |
-| S5 RF `min_samples_leaf` | 2 | pj-016 |
+| S5 RF `max_depth` | 8 | pj-024 |
+| S5 RF `min_samples_split` | 2 | pj-024 |
+| S5 RF `min_samples_leaf` | 1 | pj-024 |
 | S5 RF `max_features` | sqrt | pj-016 |
 | S5 RF `bootstrap` | True | pj-016 |
 | S5 RF `max_samples` | None | pj-016 |
 | S5 RF `criterion` | squared_error | pj-016 |
 | S5 RF `random_state` | 42 + repetition_index (0…4) | pj-016 |
 | S5 RF `n_jobs` | -1 | pj-016 |
-| S5 RF `n_estimators` | search {100, 300, 500}; select min mean unclipped L (OOF); tie → smaller | pj-018 |
+| S5 hyperparameter selection metric | lowest **unclipped** L on pooled OOF (all folds × reps); tie → smaller value | pj-025 (supersedes pj-022) |
+| S5 training target transform | y_fit = max(`risk_final`, c_fold); evaluation uses unclipped `risk_final` | pj-026 |
+| S5 floor c | per training fold: solve p*(c) = F*/5 (β = 2), Brent on [−29.99, −6.0005]; ≈ −6.09 on full train | pj-026 |
+| S5 F* for c | F₂ of LRP on the training fold | pj-026 |
+| S5 μ_HR for c | mean `risk_final` of HR events in the training fold | pj-026 |
+| S5 floor-c revocation | R0 F₂=0; R1 F₂ outside [F*/2, 2F*]; R2 threshold-sweep gain > 0.05 (t ∈ [−7, −5], step 0.01); R3 alarm-zone HR rate / mean p̂ outside [0.5, 2] (≥10 HR); R4 \|detected − missed HR mean\| > 0.8·SD_HR (≥10 HR per group) → nested-CV c | pj-026 |
+| S5 RF `n_estimators` | search {300, 500, 1000}; select per pj-025; tie → smaller n | pj-024, pj-025 |
 | S5 GBDT estimator | GradientBoostingRegressor | pj-017 |
-| S5 GBDT `n_estimators` | 200 (fixed at launch) | pj-017 |
+| S5 GBDT `n_estimators` | search {300, 500, 1000}; select per pj-025; tie → smaller n | pj-024, pj-025 |
 | S5 GBDT `learning_rate` | 0.1 | pj-017 |
-| S5 GBDT `max_depth` | 4 | pj-017 |
-| S5 GBDT `min_samples_split` | 4 | pj-017 |
-| S5 GBDT `min_samples_leaf` | 2 | pj-017 |
+| S5 GBDT `max_depth` | 8 | pj-024 |
+| S5 GBDT `min_samples_split` | 2 | pj-024 |
+| S5 GBDT `min_samples_leaf` | 1 | pj-024 |
 | S5 GBDT `subsample` | 1.0 | pj-017 |
 | S5 GBDT `max_features` | sqrt | pj-017 |
 | S5 GBDT `loss` | squared_error | pj-017 |
@@ -158,11 +167,8 @@ Every modeling parameter the implementation needs. Library defaults must be list
 
 ## Fog (not yet sharp)
 
-- **S5 iteration 2 — objective for tuning:** optimize F₂, L clipped, or composite when F₂≈0? (run 0: pj-018 picked `n_estimators` via L unclipped while RF F₂=0 for all grid values — pj-021).
-- **S5 iteration 2 — imbalance / tail:** sample weights on `y_hr`, asymmetric loss, deeper/weaker regularization, or separate HR detector + magnitude (overlap with S6).
-- **S5 iteration 2 — RF hyperparameter grid expansion** now that compute ≈3.5 min/run (pj-021): depth, `min_samples_*`, larger `n_estimators` grid, optional `criterion`.
-- **S5 pj-019 reopen:** permutation importances or grouped risk features after B1 RF fail (pj-021).
-- **S5 pj-006 bootstrap:** wire trees into `evaluation.py` when it exists (quality-first per pj-021).
+- S5 tuning when all candidates have F₂ = 0 (L = ∞): tie-break still undefined; R0 in pj-026 reopens c in that case.
+- S5 iteration 2 levers still to decide (in order): loss / statistic (e.g. quantile), sample weights on HR, residual on LRP, alarm threshold ≠ −6, classification + magnitude (overlaps S6).
 - Rúbrica interna exacta del profe para el project (syllabus describe entregables, no desglose de puntos).
 - Papel empírico final de cada familia de modelos (lineal / trees / NN) — se resolverá al implementar; el proposal no lo congela (011).
 - Nombres legales / affiliation exactos en el header del PDF (IE formatting).
