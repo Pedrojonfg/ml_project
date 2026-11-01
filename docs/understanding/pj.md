@@ -54,3 +54,17 @@ Verdict: **READY**.
 | Floor c ↔ implied HR-fraction alarm threshold p*(c) | core | solid | derivation in pj-026 | Followed derivation; chose theory-based c over CV for compute |
 | F_β-optimal threshold p* = F*/(1+β²) | core | shaky | outside-notes: Lipton et al. 2014 | Taught, not derived by him; asked whether using LRP F₂ as F* is cheating (good leakage instinct) |
 | Revocation checks R2–R4 (threshold sweep, calibration ratio, Cohen's d) | hazard | solid | pj-026 | Needed re-explanation; then answered two applied cases correctly (R3 band 12.5–50 % for 25 %; R2 gain 0.03 < 0.05) |
+
+## S7 failure atlas — 2026-10-28
+
+Verdict: **READY**.
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| F₂ FN/TP from continuous `r_hat` vs truth (threshold −6, inclusive) | prerequisite | solid | S1 / pj-001, pj-020 | Q1: LRP FN, tree TP; B: identified FNs; corrected −6.0 is predicted HR |
+| LRP baseline and when it fails vs when risk jumps | core | solid | protocol + domain | Jump series −8,−6,−5 with LRP=−5: HR and TP; contrasted with late-rise FN story |
+| Out-of-fold (OOF) prediction per event in CV | core | solid | pj-004, pj-006 | 3-event 3-fold toy; confirmed each event OOF in its validation fold |
+| Table metrics (mean over repetitions) vs per-event story | core | shaky | pj-006, pj-review-notes | Taught via exam-grade vs answer-sheet analogy; not re-quizzed with a new numeric item |
+| Jump taxonomy (stable vs jump-up/down) | core | shaky | plan S2 | Informal “risk rises sharply”; formal labels from Mario not in repo yet |
+| Cherry-picking case studies | hazard | solid | interpretation best practice | Rejected atlas built only from wins; insisted on pre-specified objective criteria |
+| Atlas on train/OOF only, not test-driven selection | hazard | shaky | Kelvins rules, pj-004 | Stated in teaching; not examined with a break-the-assumption question |
