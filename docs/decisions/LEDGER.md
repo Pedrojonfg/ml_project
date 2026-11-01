@@ -83,6 +83,12 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | mf-004 | stable-low / stable-high rule | accepted | For non-jump events (−1 < Δ < 1): stable-high iff y_final ≥ −6, else stable-low (−6 exact is stable-high). Decided by Mario | [mf-004-stable-rule.md](./mf-004-stable-rule.md) |
 | mf-005 | Lead time of the last valid CDM | accepted | Single cut kept (mf-003); lead time recorded as an analysis-only column for grouping tables; bin edges deferred to EDA. Decided by Mario | [mf-005-lead-time.md](./mf-005-lead-time.md) |
 | mf-006 | Regression to the mean | accepted | Label unchanged; latest_risk binned for grouping tables (note and look, not a correction); bin edges deferred to EDA. Decided by Mario | [mf-006-regression-to-mean.md](./mf-006-regression-to-mean.md) |
+| pj-027 | S7 atlas case structure | accepted | Option C: 6 core slots (2 LRP/model contrasts, 3 jumps, 1 multi-fail) + 4 optional (cut order O3,O1,O4,O2) | [pj-027-s7-atlas-case-structure.md](./pj-027-s7-atlas-case-structure.md) |
+| pj-028 | S7 atlas OOF source + C1/C2 pick | accepted | Cases from train/val OOF only, not official test; C1/C2 = argmax `risk_final` among qualifiers | [pj-028-s7-atlas-oof-and-c1-c2-selection.md](./pj-028-s7-atlas-oof-and-c1-c2-selection.md) |
+| pj-029 | S7 OOF repetition policy | accepted | Slot qualifies if contrast in ≥3/5 reps; caption: k/5 + mean `r_hat` on qualifying reps | [pj-029-s7-oof-repetition-policy.md](./pj-029-s7-oof-repetition-policy.md) |
+| pj-030 | S7 C6 + jump defer | accepted | C6: ≥2 of {LRP,rf,gbdt} FN in ≥3/5 reps; argmax `risk_final`; C3–C5/O4 blocked on S2 | [pj-030-s7-c6-and-jump-defer.md](./pj-030-s7-c6-and-jump-defer.md) |
+| pj-031 | S7 O1 difficult TP | accepted | ≥3/5 triple TP; argmax `range_risk`; exclude used `event_id` only | [pj-031-s7-o1-difficult-tp.md](./pj-031-s7-o1-difficult-tp.md) |
+| pj-032 | S7 O2–O4 deferred | accepted | Rules wait for S6 preds and S2 jump taxonomy | [pj-032-s7-o2-o4-deferred.md](./pj-032-s7-o2-o4-deferred.md) |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
@@ -185,6 +191,23 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | Lead-time bin edges for grouping tables | deferred-fog (decide after EDA shows the distribution; does not block the label or the column) | [mf-005](./mf-005-lead-time.md) |
 | Regression-to-the-mean handling | no correction; group tables by latest_risk bins | [mf-006](./mf-006-regression-to-mean.md) |
 | latest_risk bin edges for grouping tables | deferred-fog (decide after EDA; does not block the label) | [mf-006](./mf-006-regression-to-mean.md) |
+| S7 atlas layout | option C: 6 core case categories + up to 4 optional; cut order O3, O1, O4, O2 | pj-027 |
+| S7 core contrast models | LRP vs rf and/or gbdt (S5); S4/S6 preds added to panels when available | pj-027 |
+| S7 jump slots (core) | 3 distinct-outcome jump cases (C3–C5) | pj-027 |
+| S7 multi-fail slot | ≥2 of {LRP, rf, gbdt} F₂-fail on same true HR (C6) | pj-027 |
+| S7 atlas prediction source | OOF on S1 `event_table` / train-val only; not official test for case selection | pj-028 |
+| S7 C1/C2 selection among qualifiers | argmax `risk_final` (most severe true HR) | pj-028 |
+| S7 OOF row per event (repetition policy) | contrast must hold in ≥3 of 5 seeds (42–46); evaluate each rep separately | pj-029 |
+| S7 atlas caption (C1/C2) | report k/5 and mean `r_hat` on qualifying reps for LRP and shown tree | pj-029 |
+| S7 jump slots C3–C5, O4 | selection rules deferred until S2 taxonomy ADR | pj-030 |
+| S7 C6 qualification | true HR; ≥2 of {LRP, rf, gbdt} F₂-FN in ≥3/5 OOF reps | pj-030 |
+| S7 C6 selection among qualifiers | argmax `risk_final`; tie → smallest `event_id` | pj-030 |
+| S7 C6 caption | k/5 multi-fail reps; per-model fail count 0–5; mean preds on qualifying reps | pj-030 |
+| S7 O1 qualification | ≥3/5 reps: HR + LRP, rf, gbdt all TP; exclude atlas `event_id`s already used | pj-031 |
+| S7 O1 selection | argmax `range_risk` on usable CDMs; tie → smallest `event_id` | pj-031 |
+| S7 O1 caption | k/5 triple TP; mean preds on k reps; report `range_risk` | pj-031 |
+| S7 O2–O4 selection rules | deferred-fog until S6 preds + S2 taxonomy ADRs | pj-032 |
+| S7 tie-break equal `risk_final` | deferred-fog (smallest `event_id` suggested in pj-029 for tree tie) | — |
 
 ## Fog (not yet sharp)
 
