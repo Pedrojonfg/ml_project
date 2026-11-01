@@ -97,6 +97,9 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | — | S4 `p_hr` column (S4) | auto-trivial | AI (engineering) | `p_hr` = 1.0 if `r_hat >= t` (mf-012) else 0.0, as for S5 (pj-020). Reason: column filled from a decided rule; Mario may reclassify | — |
 | mf-016 | Seed of the bootstrap generator (S4) | accepted | Seed 2026, `numpy.random.default_rng(2026)`, index matrix drawn once and reused for all models and repetitions. Decided by Mario | [mf-016-bootstrap-seed.md](./mf-016-bootstrap-seed.md) |
 | mf-017 | L when F2 = 0 in a bootstrap resample (S4) | accepted | Per repetition, before averaging, L = inf is replaced by 10 x the largest finite per-repetition L of the same model (clipped and unclipped apart); count of resamples with F2 = 0 reported; > 2.5 % marks the L interval and paired L differences not reliable. Decided by Mario | [mf-017-bootstrap-infinite-l.md](./mf-017-bootstrap-infinite-l.md) |
+| mf-018 | BCa interval when the bias correction is infinite (S4) | accepted | z0 infinite (share 0 or 1): BCa marked not computable, point estimate without interval, no fallback; same for paired differences; all-equal bootstrap values give [v, v]. Decided by Mario | [mf-018-bca-infinite-bias-correction.md](./mf-018-bca-infinite-bias-correction.md) |
+| mf-019 | L cap when no finite L exists (S4) | accepted | No finite L in any resample: no cap, L interval and paired differences marked not computable and not reliable. Decided by Mario | [mf-019-l-cap-no-finite-l.md](./mf-019-l-cap-no-finite-l.md) |
+| mf-020 | Bootstrap implementation details and inert library defaults (S4) | accepted | `np.quantile(method="linear")` for BCa endpoints; mf-017 cap also applied to the original-sample estimate and the jackknife; inert library defaults of OLS, Ridge, imputer and scaler recorded. Decided by Mario | [mf-020-bootstrap-implementation-details.md](./mf-020-bootstrap-implementation-details.md) |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
@@ -247,6 +250,12 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S4 bootstrap L cap | 10 x the largest finite per-repetition L of the same model over all resamples and repetitions; L clipped and unclipped apart | [mf-017](./mf-017-bootstrap-infinite-l.md) |
 | S4 bootstrap F2 = 0 count | resamples with F2 = 0 in at least one repetition, reported next to each L interval and paired L difference | [mf-017](./mf-017-bootstrap-infinite-l.md) |
 | S4 bootstrap L reliability threshold | > 2.5 % of resamples with F2 = 0 marks the model's L interval and its paired L differences vs LRP and CRP not reliable | [mf-017](./mf-017-bootstrap-infinite-l.md) |
+| S4 BCa when z0 is infinite | not computable: null interval, point estimate kept, flag stored; no clipping, no percentile fallback; also for paired differences | [mf-018](./mf-018-bca-infinite-bias-correction.md) |
+| S4 BCa when all bootstrap values equal the estimate | interval [v, v] | [mf-018](./mf-018-bca-infinite-bias-correction.md) |
+| S4 L cap when no finite L exists | no cap; L interval and paired differences not computable and not reliable | [mf-019](./mf-019-l-cap-no-finite-l.md) |
+| S4 BCa percentile interpolation | `np.quantile(..., method="linear")` | [mf-020](./mf-020-bootstrap-implementation-details.md) |
+| S4 L cap scope | per model and repetition: resamples, original-sample estimate and jackknife values | [mf-020](./mf-020-bootstrap-implementation-details.md) |
+| S4 inert library defaults | `LinearRegression(n_jobs=None, tol=1e-06)`; `Ridge(max_iter=None, random_state=None, tol=1e-04)` (unused with cholesky); `SimpleImputer(missing_values=nan, fill_value=None, copy=True)`; `StandardScaler(copy=True)` | [mf-020](./mf-020-bootstrap-implementation-details.md) |
 
 ## Fog (not yet sharp)
 
