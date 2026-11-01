@@ -77,12 +77,19 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | pj-024 | S5 relaxed trees + estimator grids | accepted | depth 8, split 2, leaf 1; n_estimators {300,500,1000} RF+GBDT; select L clipped | [pj-024-s5-relaxed-tree-hyperparameters.md](./pj-024-s5-relaxed-tree-hyperparameters.md) |
 | pj-019 | S5 feature importances | accepted | Both models; impurity; mean over 25 folds; top 10 plot; mandatory B1/B3 gates | [pj-019-s5-feature-importances.md](./pj-019-s5-feature-importances.md) |
 | pj-020 | S5 artifacts and `p_hr` | accepted | slugs `rf`/`gbdt`; `p_hr` = hard threshold on `r_hat`; imputer flags | [pj-020-s5-artifacts-and-p-hr.md](./pj-020-s5-artifacts-and-p-hr.md) |
+| mf-001 | Purpose and scope of jump taxonomy | accepted | Analysis/reporting only (never X, target or weights); computed on train and official test; test labels only inspected, not used for modeling before R5. Decided by Mario | [mf-001-purpose-scope.md](./mf-001-purpose-scope.md) |
+| mf-002 | What defines a jump | accepted | Size of Δ only; crossing of −6 kept as a separate analysis-only column (up/down/none). Decided by Mario | [mf-002-jump-by-size.md](./mf-002-jump-by-size.md) |
+| mf-003 | Jump cut | accepted | c = 1, symmetric (Δ ≥ 1 up, Δ ≤ −1 down), limit included. Decided by Mario | [mf-003-jump-cut.md](./mf-003-jump-cut.md) |
+| mf-004 | stable-low / stable-high rule | accepted | For non-jump events (−1 < Δ < 1): stable-high iff y_final ≥ −6, else stable-low (−6 exact is stable-high). Decided by Mario | [mf-004-stable-rule.md](./mf-004-stable-rule.md) |
+| mf-005 | Lead time of the last valid CDM | accepted | Single cut kept (mf-003); lead time recorded as an analysis-only column for grouping tables; bin edges deferred to EDA. Decided by Mario | [mf-005-lead-time.md](./mf-005-lead-time.md) |
+| mf-006 | Regression to the mean | accepted | Label unchanged; latest_risk binned for grouping tables (note and look, not a correction); bin edges deferred to EDA. Decided by Mario | [mf-006-regression-to-mean.md](./mf-006-regression-to-mean.md) |
 | pj-027 | S7 atlas case structure | accepted | Option C: 6 core slots (2 LRP/model contrasts, 3 jumps, 1 multi-fail) + 4 optional (cut order O3,O1,O4,O2) | [pj-027-s7-atlas-case-structure.md](./pj-027-s7-atlas-case-structure.md) |
 | pj-028 | S7 atlas OOF source + C1/C2 pick | accepted | Cases from train/val OOF only, not official test; C1/C2 = argmax `risk_final` among qualifiers | [pj-028-s7-atlas-oof-and-c1-c2-selection.md](./pj-028-s7-atlas-oof-and-c1-c2-selection.md) |
 | pj-029 | S7 OOF repetition policy | accepted | Slot qualifies if contrast in ≥3/5 reps; caption: k/5 + mean `r_hat` on qualifying reps | [pj-029-s7-oof-repetition-policy.md](./pj-029-s7-oof-repetition-policy.md) |
 | pj-030 | S7 C6 + jump defer | accepted | C6: ≥2 of {LRP,rf,gbdt} FN in ≥3/5 reps; argmax `risk_final`; C3–C5/O4 blocked on S2 | [pj-030-s7-c6-and-jump-defer.md](./pj-030-s7-c6-and-jump-defer.md) |
 | pj-031 | S7 O1 difficult TP | accepted | ≥3/5 triple TP; argmax `range_risk`; exclude used `event_id` only | [pj-031-s7-o1-difficult-tp.md](./pj-031-s7-o1-difficult-tp.md) |
 | pj-032 | S7 O2–O4 deferred | accepted | Rules wait for S6 preds and S2 jump taxonomy | [pj-032-s7-o2-o4-deferred.md](./pj-032-s7-o2-o4-deferred.md) |
+| — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
 | — | Authors line | auto-trivial | Pedro + Mario (expand full names at write time if required by IE) | — |
@@ -170,6 +177,20 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S5 `p_hr` | 1.0 if `r_hat >= -6.0` else 0.0 (not calibrated) | pj-020, pj-001 |
 | S5 `SimpleImputer` `add_indicator` | False | pj-020 |
 | S5 `SimpleImputer` `keep_empty_features` | False | pj-020 |
+| Jump label usage | analysis and reporting only; never feature, target or weight | [mf-001](./mf-001-purpose-scope.md) |
+| Jump label scope | train and official test (test inspected only at R5) | [mf-001](./mf-001-purpose-scope.md) |
+| Jump cut c | 1 (log10 units) | [mf-003](./mf-003-jump-cut.md) |
+| Jump cut sensitivity values (EDA only) | 0.5, 1.0, 2.0; comparison of class shares only, they do not change the cut c = 1 | [mf-003](./mf-003-jump-cut.md) |
+| Jump cut symmetry | symmetric (up: Δ ≥ c; down: Δ ≤ −c) | [mf-003](./mf-003-jump-cut.md) |
+| Jump cut operator | ≥ / ≤ (limit included) | [mf-003](./mf-003-jump-cut.md) |
+| Jump label depends on HR crossing | no (size of Δ only) | [mf-002](./mf-002-jump-by-size.md) |
+| HR-crossing analysis column (up/down/none) | yes, analysis-only, never in X | [mf-002](./mf-002-jump-by-size.md) |
+| stable-low / stable-high rule | by y_final vs −6 (non-jump events only) | [mf-004](./mf-004-stable-rule.md) |
+| Boundary y_final = −6 | stable-high | [mf-004](./mf-004-stable-rule.md) |
+| Lead-time handling | single cut; lead time as analysis-only column (time_to_tca of last valid CDM) | [mf-005](./mf-005-lead-time.md) |
+| Lead-time bin edges for grouping tables | deferred-fog (decide after EDA shows the distribution; does not block the label or the column) | [mf-005](./mf-005-lead-time.md) |
+| Regression-to-the-mean handling | no correction; group tables by latest_risk bins | [mf-006](./mf-006-regression-to-mean.md) |
+| latest_risk bin edges for grouping tables | deferred-fog (decide after EDA; does not block the label) | [mf-006](./mf-006-regression-to-mean.md) |
 | S7 atlas layout | option C: 6 core case categories + up to 4 optional; cut order O3, O1, O4, O2 | pj-027 |
 | S7 core contrast models | LRP vs rf and/or gbdt (S5); S4/S6 preds added to panels when available | pj-027 |
 | S7 jump slots (core) | 3 distinct-outcome jump cases (C3–C5) | pj-027 |
@@ -197,6 +218,10 @@ Every modeling parameter the implementation needs. Library defaults must be list
 - Nombres legales / affiliation exactos en el header del PDF (IE formatting).
 
 - Modeling events whose last CDM has `time_to_tca >= 2` (type Z; label CDM is also an input) — needs a different task definition (pj-003).
+## Fog addendum (S2)
+
+- Validate c = 1 and the class shares against the real distribution of Δ (mf-003).
+- Lead-time and latest_risk bin edges for grouped tables (mf-005, mf-006).
 
 ## Out of scope
 
