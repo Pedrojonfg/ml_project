@@ -77,6 +77,13 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | pj-024 | S5 relaxed trees + estimator grids | accepted | depth 8, split 2, leaf 1; n_estimators {300,500,1000} RF+GBDT; select L clipped | [pj-024-s5-relaxed-tree-hyperparameters.md](./pj-024-s5-relaxed-tree-hyperparameters.md) |
 | pj-019 | S5 feature importances | accepted | Both models; impurity; mean over 25 folds; top 10 plot; mandatory B1/B3 gates | [pj-019-s5-feature-importances.md](./pj-019-s5-feature-importances.md) |
 | pj-020 | S5 artifacts and `p_hr` | accepted | slugs `rf`/`gbdt`; `p_hr` = hard threshold on `r_hat`; imputer flags | [pj-020-s5-artifacts-and-p-hr.md](./pj-020-s5-artifacts-and-p-hr.md) |
+| mf-001 | Purpose and scope of jump taxonomy | accepted | Analysis/reporting only (never X, target or weights); computed on train and official test; test labels only inspected, not used for modeling before R5. Decided by Mario | [mf-001-purpose-scope.md](./mf-001-purpose-scope.md) |
+| mf-002 | What defines a jump | accepted | Size of Δ only; crossing of −6 kept as a separate analysis-only column (up/down/none). Decided by Mario | [mf-002-jump-by-size.md](./mf-002-jump-by-size.md) |
+| mf-003 | Jump cut | accepted | c = 1, symmetric (Δ ≥ 1 up, Δ ≤ −1 down), limit included. Decided by Mario | [mf-003-jump-cut.md](./mf-003-jump-cut.md) |
+| mf-004 | stable-low / stable-high rule | accepted | For non-jump events (−1 < Δ < 1): stable-high iff y_final ≥ −6, else stable-low (−6 exact is stable-high). Decided by Mario | [mf-004-stable-rule.md](./mf-004-stable-rule.md) |
+| mf-005 | Lead time of the last valid CDM | accepted | Single cut kept (mf-003); lead time recorded as an analysis-only column for grouping tables; bin edges deferred to EDA. Decided by Mario | [mf-005-lead-time.md](./mf-005-lead-time.md) |
+| mf-006 | Regression to the mean | accepted | Label unchanged; latest_risk binned for grouping tables (note and look, not a correction); bin edges deferred to EDA. Decided by Mario | [mf-006-regression-to-mean.md](./mf-006-regression-to-mean.md) |
+| — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
 | — | Authors line | auto-trivial | Pedro + Mario (expand full names at write time if required by IE) | — |
@@ -164,6 +171,20 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S5 `p_hr` | 1.0 if `r_hat >= -6.0` else 0.0 (not calibrated) | pj-020, pj-001 |
 | S5 `SimpleImputer` `add_indicator` | False | pj-020 |
 | S5 `SimpleImputer` `keep_empty_features` | False | pj-020 |
+| Jump label usage | analysis and reporting only; never feature, target or weight | [mf-001](./mf-001-purpose-scope.md) |
+| Jump label scope | train and official test (test inspected only at R5) | [mf-001](./mf-001-purpose-scope.md) |
+| Jump cut c | 1 (log10 units) | [mf-003](./mf-003-jump-cut.md) |
+| Jump cut sensitivity values (EDA only) | 0.5, 1.0, 2.0; comparison of class shares only, they do not change the cut c = 1 | [mf-003](./mf-003-jump-cut.md) |
+| Jump cut symmetry | symmetric (up: Δ ≥ c; down: Δ ≤ −c) | [mf-003](./mf-003-jump-cut.md) |
+| Jump cut operator | ≥ / ≤ (limit included) | [mf-003](./mf-003-jump-cut.md) |
+| Jump label depends on HR crossing | no (size of Δ only) | [mf-002](./mf-002-jump-by-size.md) |
+| HR-crossing analysis column (up/down/none) | yes, analysis-only, never in X | [mf-002](./mf-002-jump-by-size.md) |
+| stable-low / stable-high rule | by y_final vs −6 (non-jump events only) | [mf-004](./mf-004-stable-rule.md) |
+| Boundary y_final = −6 | stable-high | [mf-004](./mf-004-stable-rule.md) |
+| Lead-time handling | single cut; lead time as analysis-only column (time_to_tca of last valid CDM) | [mf-005](./mf-005-lead-time.md) |
+| Lead-time bin edges for grouping tables | deferred-fog (decide after EDA shows the distribution; does not block the label or the column) | [mf-005](./mf-005-lead-time.md) |
+| Regression-to-the-mean handling | no correction; group tables by latest_risk bins | [mf-006](./mf-006-regression-to-mean.md) |
+| latest_risk bin edges for grouping tables | deferred-fog (decide after EDA; does not block the label) | [mf-006](./mf-006-regression-to-mean.md) |
 
 ## Fog (not yet sharp)
 
@@ -174,6 +195,10 @@ Every modeling parameter the implementation needs. Library defaults must be list
 - Nombres legales / affiliation exactos en el header del PDF (IE formatting).
 
 - Modeling events whose last CDM has `time_to_tca >= 2` (type Z; label CDM is also an input) — needs a different task definition (pj-003).
+## Fog addendum (S2)
+
+- Validate c = 1 and the class shares against the real distribution of Δ (mf-003).
+- Lead-time and latest_risk bin edges for grouped tables (mf-005, mf-006).
 
 ## Out of scope
 
