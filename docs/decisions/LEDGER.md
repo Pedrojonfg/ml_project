@@ -83,6 +83,20 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | mf-004 | stable-low / stable-high rule | accepted | For non-jump events (−1 < Δ < 1): stable-high iff y_final ≥ −6, else stable-low (−6 exact is stable-high). Decided by Mario | [mf-004-stable-rule.md](./mf-004-stable-rule.md) |
 | mf-005 | Lead time of the last valid CDM | accepted | Single cut kept (mf-003); lead time recorded as an analysis-only column for grouping tables; bin edges deferred to EDA. Decided by Mario | [mf-005-lead-time.md](./mf-005-lead-time.md) |
 | mf-006 | Regression to the mean | accepted | Label unchanged; latest_risk binned for grouping tables (note and look, not a correction); bin edges deferred to EDA. Decided by Mario | [mf-006-regression-to-mean.md](./mf-006-regression-to-mean.md) |
+| mf-007 | Logistic task and target (S4) | accepted | Logistic trained on all 8892 events, target `y_hr`, outputs `predict_proba`. Decided by Mario | [mf-007-logistic-task-target.md](./mf-007-logistic-task-target.md) |
+| mf-008 | Magnitude regressor task and target (S4) | accepted | Ridge/lasso trained on all 8892 events, target `risk_final` untransformed, outputs continuous `r_hat`; reopened 2026-11-01 after HR-zone check (r_hat never reaches -6), confirmed without floor; alarm line moves to mf-012. Decided by Mario | [mf-008-magnitude-regressor-target.md](./mf-008-magnitude-regressor-target.md) |
+| mf-009 | Model families and penalties (S4) | accepted | Logistic and regressor each in three variants: unpenalized, L2, L1 (six models); elastic net and KNN out. Decided by Mario | [mf-009-model-families-penalties.md](./mf-009-model-families-penalties.md) |
+| mf-010 | Preprocessing for S4 linear models | accepted | Median imputer (safeguard, 0 NaN observed) on 35 cols; StandardScaler on the 30 numeric cols, one-hot unscaled; no transformations; fit on train fold. Decided by Mario | [mf-010-preprocessing-linear-models.md](./mf-010-preprocessing-linear-models.md) |
+| mf-011 | Class imbalance in the logistic model (S4) | accepted | `class_weight='balanced'` on the logistic only, weights from the training fold; `predict_proba` becomes an inflated score, exception to mf-007. Decided by Mario | [mf-011-class-imbalance-logistic.md](./mf-011-class-imbalance-logistic.md) |
+| mf-012 | Alarm line for the S4 regressors | accepted | Alarm if r_hat >= t; t maximizes F2 (beta 2) on the training-fold predictions, candidates = r_hat of training HR, ties by median; recomputed per model, fold and repetition; t stored as a diagnostic. Changes F2 vs the -6 protocol line. Decided by Mario | [mf-012-alarm-line-regressors.md](./mf-012-alarm-line-regressors.md) |
+| mf-013 | Regularization strength selection (S4) | accepted | Nested stratified inner 5-fold; criterion = mean inner AP of r_hat vs y_hr, ties to highest alpha; ridge 25 log-points 1e0..1e6, lasso 25 log-points 1e-4..1e2; fixed grids; refit on the outer train fold. Decided by Mario | [mf-013-regularization-selection.md](./mf-013-regularization-selection.md) |
+| mf-014 | Solver and library parameters, S4 regressors | accepted | Explicit sklearn parameters: OLS and Ridge(cholesky) with intercept; Lasso max_iter 10000, tol 1e-4, cyclic, warm start along descending alpha, new object per inner fold, cold final fit; non-converged alphas flagged, not dropped. Decided by Mario | [mf-014-solver-library-parameters.md](./mf-014-solver-library-parameters.md) |
+| mf-015 | Seed of the inner split (S4) | accepted | `StratifiedKFold(5, shuffle=True, random_state=0)` for every inner split, all outer folds and repetitions. Decided by Mario | [mf-015-inner-split-seed.md](./mf-015-inner-split-seed.md) |
+| — | S4 module location (S4) | auto-trivial | AI (engineering) | `src/models/linear.py`, bootstrap in `src/evaluation.py` per ownership map in `docs/plan-reparto.md`. Reason: repo layout only | — |
+| — | S4 result slugs (S4) | auto-trivial | AI (engineering) | `ols`, `ridge`, `lasso`; `results/<slug>.json`, `preds/<slug>.parquet` as in pj-020. Reason: naming only | — |
+| — | S4 `p_hr` column (S4) | auto-trivial | AI (engineering) | `p_hr` = 1.0 if `r_hat >= t` (mf-012) else 0.0, as for S5 (pj-020). Reason: column filled from a decided rule; Mario may reclassify | — |
+| mf-016 | Seed of the bootstrap generator (S4) | accepted | Seed 2026, `numpy.random.default_rng(2026)`, index matrix drawn once and reused for all models and repetitions. Decided by Mario | [mf-016-bootstrap-seed.md](./mf-016-bootstrap-seed.md) |
+| mf-017 | L when F2 = 0 in a bootstrap resample (S4) | accepted | Per repetition, before averaging, L = inf is replaced by 10 x the largest finite per-repetition L of the same model (clipped and unclipped apart); count of resamples with F2 = 0 reported; > 2.5 % marks the L interval and paired L differences not reliable. Decided by Mario | [mf-017-bootstrap-infinite-l.md](./mf-017-bootstrap-infinite-l.md) |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
@@ -185,6 +199,54 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | Lead-time bin edges for grouping tables | deferred-fog (decide after EDA shows the distribution; does not block the label or the column) | [mf-005](./mf-005-lead-time.md) |
 | Regression-to-the-mean handling | no correction; group tables by latest_risk bins | [mf-006](./mf-006-regression-to-mean.md) |
 | latest_risk bin edges for grouping tables | deferred-fog (decide after EDA; does not block the label) | [mf-006](./mf-006-regression-to-mean.md) |
+| S4 logistic training population | all 8892 events of `event_table` | [mf-007](./mf-007-logistic-task-target.md) |
+| S4 logistic target | `y_hr` (`risk_final >= -6.0`) | [mf-007](./mf-007-logistic-task-target.md) |
+| S4 logistic output | `predict_proba` per event; with mf-011 weights it is an inflated score, not P(HR \| x) (exception) | [mf-007](./mf-007-logistic-task-target.md), [mf-011](./mf-011-class-imbalance-logistic.md) |
+| S4 magnitude regressor training population | all 8892 events of `event_table` | [mf-008](./mf-008-magnitude-regressor-target.md) |
+| S4 magnitude regressor target | `risk_final` (log10, unclipped, no floor) | [mf-008](./mf-008-magnitude-regressor-target.md) |
+| S4 magnitude regressor output | continuous `r_hat` (log10 risk) per event | [mf-008](./mf-008-magnitude-regressor-target.md) |
+| S4 HR-zone bias review criterion | triggered 2026-11-01; mf-008 confirmed without floor (no target floor for linear models) | [mf-008](./mf-008-magnitude-regressor-target.md) |
+| S4 logistic penalty variants | none, L2, L1 | [mf-009](./mf-009-model-families-penalties.md) |
+| S4 magnitude regressor penalty variants | none (OLS), L2 (ridge), L1 (lasso) | [mf-009](./mf-009-model-families-penalties.md) |
+| S4 elastic net / KNN | not included (fog / deferred) | [mf-009](./mf-009-model-families-penalties.md) |
+| S4 imputation | `SimpleImputer`, strategy `median`, fit on train fold, all 35 columns | [mf-010](./mf-010-preprocessing-linear-models.md) |
+| S4 `SimpleImputer` `add_indicator` | False | [mf-010](./mf-010-preprocessing-linear-models.md) |
+| S4 `SimpleImputer` `keep_empty_features` | False | [mf-010](./mf-010-preprocessing-linear-models.md) |
+| S4 scaling | `StandardScaler` fit on train fold, 30 numeric columns only; 5 one-hot columns unscaled | [mf-010](./mf-010-preprocessing-linear-models.md) |
+| S4 `StandardScaler` `with_mean` / `with_std` | True / True | [mf-010](./mf-010-preprocessing-linear-models.md) |
+| S4 feature transformations | none | [mf-010](./mf-010-preprocessing-linear-models.md) |
+| S4 logistic `class_weight` | `'balanced'` (w_k = n / (2 n_k)), computed on the training fold | [mf-011](./mf-011-class-imbalance-logistic.md) |
+| S4 regressor sample weights | none | [mf-011](./mf-011-class-imbalance-logistic.md) |
+| S4 regressor alarm rule | alarm iff `r_hat >= t` (not -6) | [mf-012](./mf-012-alarm-line-regressors.md) |
+| S4 alarm line t: criterion | maximize F2 (beta = 2) on the training-fold predictions | [mf-012](./mf-012-alarm-line-regressors.md) |
+| S4 alarm line t: candidates | `r_hat` values of the HR events of the training fold | [mf-012](./mf-012-alarm-line-regressors.md) |
+| S4 alarm line t: ties | median of the tied candidates (even count: mean of the two central) | [mf-012](./mf-012-alarm-line-regressors.md) |
+| S4 alarm line t: granularity | recomputed per model, fold and repetition; t and its variability stored in results | [mf-012](./mf-012-alarm-line-regressors.md) |
+| S4 MSE_HR / L | MSE_HR on true HR events with `r_hat` (independent of t); L = MSE_HR / F2 with the F2 of t | [mf-012](./mf-012-alarm-line-regressors.md) |
+| S4 alpha selection scheme | nested: stratified (`y_hr`) inner 5-fold within each outer training fold; seed and shuffle of the inner split per mf-015 | [mf-013](./mf-013-regularization-selection.md) |
+| S4 alpha selection criterion | mean over the 5 inner folds of AP of `r_hat` vs `y_hr`; ties to the highest alpha | [mf-013](./mf-013-regularization-selection.md) |
+| S4 ridge alpha grid | 25 log-spaced values, 1e0 to 1e6 (`Ridge` parametrisation) | [mf-013](./mf-013-regularization-selection.md) |
+| S4 lasso alpha grid | 25 log-spaced values, 1e-4 to 1e2 (`Lasso` parametrisation) | [mf-013](./mf-013-regularization-selection.md) |
+| S4 alpha grid extension | none (fixed grids; an edge optimum is reported, not corrected) | [mf-013](./mf-013-regularization-selection.md) |
+| S4 final fit after selection | refit with selected alpha on the whole outer training fold; preprocessing refit on it | [mf-013](./mf-013-regularization-selection.md) |
+| S4 selected alpha storage | per outer fold, repetition and penalty, in results | [mf-013](./mf-013-regularization-selection.md) |
+| S4 `fit_intercept` (OLS, Ridge, Lasso) | True | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `LinearRegression` `positive` / `copy_X` | False / True | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `Ridge` solver / `positive` / `copy_X` | `cholesky` / False / True (`tol` not set: unused with cholesky) | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `Lasso` `max_iter` / `tol` | 10000 / 1e-4 | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `Lasso` `selection` | `cyclic` (deterministic, no seed) | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `Lasso` `warm_start` / `precompute` / `positive` / `copy_X` | True / False / False / True | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `Lasso` alpha sweep order | descending, one object per inner fold, nothing carried across folds | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `Lasso` final fit after selection | new object, selected alpha only, cold start | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 `Lasso` non-convergence | record alpha as not converged, use partial solution, flag in results; do not drop | [mf-014](./mf-014-solver-library-parameters.md) |
+| S4 inner split seed / shuffle | `random_state=0`, `shuffle=True`, same for all outer folds and repetitions | [mf-015](./mf-015-inner-split-seed.md) |
+| S4 inner split | `StratifiedKFold(n_splits=5)` on `y_hr` | [mf-015](./mf-015-inner-split-seed.md) |
+| S4 bootstrap generator / seed | `numpy.random.default_rng(2026)`, fixed, same for all models | [mf-016](./mf-016-bootstrap-seed.md) |
+| S4 bootstrap indices | drawn once (B = 10000 x 8892 events) and reused for all models, repetitions and paired comparisons | [mf-016](./mf-016-bootstrap-seed.md) |
+| S4 bootstrap L when F2 = 0 (per repetition) | L replaced before averaging the 5 repetitions | [mf-017](./mf-017-bootstrap-infinite-l.md) |
+| S4 bootstrap L cap | 10 x the largest finite per-repetition L of the same model over all resamples and repetitions; L clipped and unclipped apart | [mf-017](./mf-017-bootstrap-infinite-l.md) |
+| S4 bootstrap F2 = 0 count | resamples with F2 = 0 in at least one repetition, reported next to each L interval and paired L difference | [mf-017](./mf-017-bootstrap-infinite-l.md) |
+| S4 bootstrap L reliability threshold | > 2.5 % of resamples with F2 = 0 marks the model's L interval and its paired L differences vs LRP and CRP not reliable | [mf-017](./mf-017-bootstrap-infinite-l.md) |
 
 ## Fog (not yet sharp)
 
@@ -195,6 +257,13 @@ Every modeling parameter the implementation needs. Library defaults must be list
 - Nombres legales / affiliation exactos en el header del PDF (IE formatting).
 
 - Modeling events whose last CDM has `time_to_tca >= 2` (type Z; label CDM is also an input) — needs a different task definition (pj-003).
+## Fog addendum (S4)
+
+- Elastic net and KNN: not included in S4 (mf-009; deferred by Mario).
+- S4 logistic models (mf-007, mf-009, mf-011): kept for S6, not in the S4 table.
+- Source of the ~0.16 F2 gap between training-fold alarm line and an oracle line (mf-012): hypothesis (step-function noise vs scale shift across folds), to contrast with stored t per fold.
+- Effect of lasso start point / sweep order on `r_hat` under collinearity (mf-014): not measured.
+
 ## Fog addendum (S2)
 
 - Validate c = 1 and the class shares against the real distribution of Δ (mf-003).
