@@ -15,3 +15,17 @@ Verdict: READY
 | Variable lead time of the last valid CDM | hazard | solid | docs/plan-reparto.md (S9) | Argued equal Δ is more surprising with less time; named time_to_tca of last valid CDM as the data to check |
 
 Notes: all concepts rated outside-notes; course-notes.pdf pages could not be opened (poppler missing), so no notes page citations. Several external references are from memory and unverified. Open design questions surfaced for Stage 2: symmetric vs asymmetric cuts; jump by Δ only vs also by HR crossing (event B: crosses -6 with Δ=0.2, labeled stable-high); lead-time dependence of Δ.
+
+## S4: syllabus models vs LRP (logistic, ridge, lasso, bootstrap) — 2026-11-01
+
+Verdict: skipped by Mario (2026-11-01). Mario stated he had covered logistic, lasso and ridge in class; KNN deferred out of this pass.
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| Gaussian noise => MSE (MLE) | prerequisite | shaky | notes ch.2 (not opened; no PDF tooling) | Derived log-likelihood structure after teaching; computed per-point weights 1/(2 sigma_i^2) correctly; initially claimed plain MSE still maximizes likelihood under heteroscedastic noise |
+| Bernoulli likelihood / cross-entropy | prerequisite | shaky | notes ch.3 (not opened) | Wrote log L = sum[y log p + (1-y) log(1-p)] after a hint on log rules; first attempt omitted the log; numeric comparison (p=0.9 vs 0.01) not answered |
+| Logistic regression, ridge, lasso, regularization / bias-variance | core | not examined | notes ch.2, 3, 5; outside-notes: ESL 3.4 (lasso) | Skipped |
+| Feature scaling for L1/L2, scaler fit on train only, nested CV for lambda/C | hazard | not examined | outside-notes: ESL 3.4, 7.10 | Skipped |
+| Class imbalance in logistic loss, decision threshold vs F2 | hazard/core | not examined | outside-notes: Murphy PML ch.5 | Skipped (imbalance metrics were solid in S2 record, different regime) |
+| Bootstrap over events | core | not examined | outside-notes: ESL 7.11 | Skipped |
+| KNN | core if included | deferred | outside-notes: ESL ch.13 | Out of this pass by Mario |
