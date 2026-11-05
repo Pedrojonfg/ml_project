@@ -29,3 +29,20 @@ Verdict: skipped by Mario (2026-11-01). Mario stated he had covered logistic, la
 | Class imbalance in logistic loss, decision threshold vs F2 | hazard/core | not examined | outside-notes: Murphy PML ch.5 | Skipped (imbalance metrics were solid in S2 record, different regime) |
 | Bootstrap over events | core | not examined | outside-notes: ESL 7.11 | Skipped |
 | KNN | core if included | deferred | outside-notes: ESL ch.13 | Out of this pass by Mario |
+
+## S6: calibrated two-stage (calibration, Platt, isotonic, stage combination) — 2026-11-04
+
+Verdict: READY
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| Calibrated probability = observed frequency; calibration vs discrimination | prerequisite | solid | outside-notes: Niculescu-Mizil & Caruana 2005 (from memory, unverified) | Expected n*p HR (4 of 5); judged 0.8 vs 2/5 as overestimate; stated a constant 0.5 model is calibrated but useless for ranking |
+| Bernoulli likelihood, log-likelihood, cross-entropy | prerequisite | solid | notes ch.3 (not opened; no PDF tooling) | Confused independence with exclusivity and dropped 1-p for y=0 until corrected; then derived y log p + (1-y) log(1-p) unaided and its y=1 / y=0 cases |
+| Reliability diagram (bins, diagonal, over/under side) | core | solid | outside-notes: Niculescu-Mizil & Caruana 2005 | Computed bin coordinates; first read points above the diagonal as overestimate, then placed (0.9, 0.6) below the diagonal as overestimate; knew the diagram shows calibration, not discrimination |
+| Platt scaling, p = sigma(a*s + b), monotone for a>0 | core | solid | outside-notes: Platt 1999 (from memory, unverified); notes ch.3 for sigmoid | Computed p for given a, b, s; needed the monotonicity argument taught; with a<0 saw the order reverse and stated a must be positive |
+| Isotonic regression (pool adjacent violators, ties) | core | solid | outside-notes: Zadrozny & Elkan 2002 (from memory, unverified) | First attempt pooled a non-violating pair; second attempt pooled blocks with original labels correctly ([0,1/3,1/3,1/3,1]); stated tied events cannot be ranked |
+| Combining stages: E[r] = p*m_HR + (1-p)*m_low | core | solid | outside-notes: law of total expectation (Murphy PML) | Wrote the formula unaided; computed -7.4 and -6.5 for a miscalibrated p; the error scaling (p_hat - p)*(m_HR - m_low) was supplied by the AI |
+| Calibrating on the data the model trained on, and with few HR | hazard | solid | outside-notes: Niculescu-Mizil & Caruana 2005 (unverified) | After teaching: saw memorized training scores give p=1.0 vs 0.6 on new events (overestimate); explained that few events per step make estimates unstable via 1/3 vs 1/30 shift and 6 vs 600 events. Earlier rated shaky: first answers computed the shifts wrongly and called the estimate with the higher value "more reliable" |
+| Stage-2 regressor trained on HR events only (selection effect) | hazard | solid | outside-notes: selection bias (ESL ch.7 context) | Predicted the output for a true risk of -9 lands above -9 because training risks were all >= -6; extrapolation behavior of the chosen model family not examined |
+
+Notes: calibration is not in the course notes by the index (not grepped; poppler/pypdf missing, notes pages not opened). All external references are from memory and unverified. Open for Stage 2: calibration method (Platt vs isotonic vs other), data used to calibrate, how the two stages combine (the formula above is one option, not chosen), what the stage-2 regressor is trained on, number of bins for the reliability diagram, calibration metrics (not examined).
