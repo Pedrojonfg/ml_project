@@ -2,7 +2,7 @@
 
 ## Destination
 
-Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–024 + diseño 007–015). Siguiente = ejecución (Zenodo + figs CRP/LRP + LaTeX PDF).
+Project Proposal: **cerradas** (016–024). Ejecución S1–S5 + S4 code en `main`. **W1 Progress Report:** decisiones pj-033..pj-043 **accepted**; borrador en `presentations/progress-report/`. Pendiente C2: reabrir pj-019 (B1) y pj-026 (R4, RF).
 
 ## Notes
 
@@ -131,6 +131,17 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | pj-030 | S7 C6 + jump defer | accepted | C6: ≥2 of {LRP,rf,gbdt} FN in ≥3/5 reps; argmax `risk_final`; C3–C5/O4 blocked on S2 | [pj-030-s7-c6-and-jump-defer.md](./pj-030-s7-c6-and-jump-defer.md) |
 | pj-031 | S7 O1 difficult TP | accepted | ≥3/5 triple TP; argmax `range_risk`; exclude used `event_id` only | [pj-031-s7-o1-difficult-tp.md](./pj-031-s7-o1-difficult-tp.md) |
 | pj-032 | S7 O2–O4 deferred | accepted | Rules wait for S6 preds and S2 jump taxonomy | [pj-032-s7-o2-o4-deferred.md](./pj-032-s7-o2-o4-deferred.md) |
+| pj-033 | Progress Report thesis (W1) | accepted | C+A: protocol/data rigor spine + models-in-progress; not bake-off-as-win | [pj-033-progress-report-thesis.md](./pj-033-progress-report-thesis.md) |
+| pj-034 | Progress Report outline (W1) | accepted | Problem → solution → impact; bake-off under Impact; AI declaration at end | [pj-034-progress-report-outline.md](./pj-034-progress-report-outline.md) |
+| pj-035 | Progress Report evaluation splits (W1) | accepted | Two tables: official test CRP/LRP; internal OOF bake-off for learned models | [pj-035-progress-report-two-tables.md](./pj-035-progress-report-two-tables.md) |
+| pj-036 | Progress Report tables + EDA weight (W1) | accepted | Tab2: LRP+ols/ridge/lasso+rf/gbdt; F2+L; BCa on linears; mf-012 footnote; minimal EDA prose | [pj-036-progress-report-tables.md](./pj-036-progress-report-tables.md) |
+| pj-037 | Progress Report figures (W1) | accepted | 2–3 figs: RF importances, jumps; minimal EDA; integrator discretion | [pj-037-progress-report-figures.md](./pj-037-progress-report-figures.md) |
+| pj-038 | Progress Report protocol prose (W1) | accepted | 3–5 sentences + pointer to pj-001..007 | [pj-038-progress-report-protocol-prose.md](./pj-038-progress-report-protocol-prose.md) |
+| pj-039 | Progress Report S4 prose ownership (W1) | accepted | Mario 2–4 sentences; Pedro table footnote only; mf-007..020 reference | [pj-039-progress-report-s4-prose-ownership.md](./pj-039-progress-report-s4-prose-ownership.md) |
+| pj-040 | Progress Report contributions + AI (W1) | accepted | Equal plan framing; Pedro Cursor / Mario Claude; detail deferred | [pj-040-progress-report-contributions-ai.md](./pj-040-progress-report-contributions-ai.md) |
+| pj-041 | Progress Report next steps (W1) | accepted | Four bullets: S6, S7, harden uncertainty, Sentence Outline | [pj-041-progress-report-next-steps.md](./pj-041-progress-report-next-steps.md) |
+| pj-042 | W1 importance figure despite B1 | accepted | Amends pj-019 for W1 only: RF impurity figure with permutation-disagreement caveat; pj-019 reopened for final report | [pj-042-w1-importance-figure-override.md](./pj-042-w1-importance-figure-override.md) |
+| pj-043 | W1 RF row with R4 note | accepted | RF kept in Table 2 with footnote; pj-026 R4 fired for RF, reopen in C2 | [pj-043-w1-rf-row-r4-caveat.md](./pj-043-w1-rf-row-r4-caveat.md) |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
