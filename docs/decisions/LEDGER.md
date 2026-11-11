@@ -100,6 +100,7 @@ Decisiones para **redactar/entregar** el Project Proposal: **cerradas** (016–0
 | mf-018 | BCa interval when the bias correction is infinite (S4) | accepted | z0 infinite (share 0 or 1): BCa marked not computable, point estimate without interval, no fallback; same for paired differences; all-equal bootstrap values give [v, v]. Decided by Mario | [mf-018-bca-infinite-bias-correction.md](./mf-018-bca-infinite-bias-correction.md) |
 | mf-019 | L cap when no finite L exists (S4) | accepted | No finite L in any resample: no cap, L interval and paired differences marked not computable and not reliable. Decided by Mario | [mf-019-l-cap-no-finite-l.md](./mf-019-l-cap-no-finite-l.md) |
 | mf-020 | Bootstrap implementation details and inert library defaults (S4) | accepted | `np.quantile(method="linear")` for BCa endpoints; mf-017 cap also applied to the original-sample estimate and the jackknife; inert library defaults of OLS, Ridge, imputer and scaler recorded. Decided by Mario | [mf-020-bootstrap-implementation-details.md](./mf-020-bootstrap-implementation-details.md) |
+| mf-021 | KNN magnitude regressor (S4) | accepted | Reopens KNN from mf-009: `risk_final` regressor, K by inner 5-fold AP over a fixed grid, mf-010 preprocessing, Euclidean, mf-012 alarm line with the event excluded from its own neighbours. Decided by Mario | [mf-021-knn-regressor.md](./mf-021-knn-regressor.md) |
 | pj-027 | S7 atlas case structure | accepted | Option C: 6 core slots (2 LRP/model contrasts, 3 jumps, 1 multi-fail) + 4 optional (cut order O3,O1,O4,O2) | [pj-027-s7-atlas-case-structure.md](./pj-027-s7-atlas-case-structure.md) |
 | pj-028 | S7 atlas OOF source + C1/C2 pick | accepted | Cases from train/val OOF only, not official test; C1/C2 = argmax `risk_final` among qualifiers | [pj-028-s7-atlas-oof-and-c1-c2-selection.md](./pj-028-s7-atlas-oof-and-c1-c2-selection.md) |
 | pj-029 | S7 OOF repetition policy | accepted | Slot qualifies if contrast in ≥3/5 reps; caption: k/5 + mean `r_hat` on qualifying reps | [pj-029-s7-oof-repetition-policy.md](./pj-029-s7-oof-repetition-policy.md) |
@@ -217,7 +218,11 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S4 HR-zone bias review criterion | triggered 2026-11-01; mf-008 confirmed without floor (no target floor for linear models) | [mf-008](./mf-008-magnitude-regressor-target.md) |
 | S4 logistic penalty variants | none, L2, L1 | [mf-009](./mf-009-model-families-penalties.md) |
 | S4 magnitude regressor penalty variants | none (OLS), L2 (ridge), L1 (lasso) | [mf-009](./mf-009-model-families-penalties.md) |
-| S4 elastic net / KNN | not included (fog / deferred) | [mf-009](./mf-009-model-families-penalties.md) |
+| S4 elastic net | not included (fog) | [mf-009](./mf-009-model-families-penalties.md) |
+| S4 KNN | included, magnitude regressor (reopened 2026-11-12) | [mf-021](./mf-021-knn-regressor.md) |
+| S4 KNN K selection | stratified inner 5-fold, mean inner AP of `r_hat` vs `y_hr`; grid {5,10,20,50,100,200,400}; ties to largest K | [mf-021](./mf-021-knn-regressor.md) |
+| S4 KNN preprocessing and distance | mf-010 preprocessing; Euclidean on 35 columns; equal weights | [mf-021](./mf-021-knn-regressor.md) |
+| S4 KNN alarm line | mf-012 option 1 with the event excluded from its own neighbours | [mf-021](./mf-021-knn-regressor.md) |
 | S4 imputation | `SimpleImputer`, strategy `median`, fit on train fold, all 35 columns | [mf-010](./mf-010-preprocessing-linear-models.md) |
 | S4 `SimpleImputer` `add_indicator` | False | [mf-010](./mf-010-preprocessing-linear-models.md) |
 | S4 `SimpleImputer` `keep_empty_features` | False | [mf-010](./mf-010-preprocessing-linear-models.md) |
@@ -291,7 +296,7 @@ Every modeling parameter the implementation needs. Library defaults must be list
 - Modeling events whose last CDM has `time_to_tca >= 2` (type Z; label CDM is also an input) — needs a different task definition (pj-003).
 ## Fog addendum (S4)
 
-- Elastic net and KNN: not included in S4 (mf-009; deferred by Mario).
+- Elastic net: not included in S4 (mf-009). KNN reopened 2026-11-12 (mf-021).
 - S4 logistic models (mf-007, mf-009, mf-011): kept for S6, not in the S4 table.
 - Source of the ~0.16 F2 gap between training-fold alarm line and an oracle line (mf-012): hypothesis (step-function noise vs scale shift across folds), to contrast with stored t per fold.
 - Effect of lasso start point / sweep order on `r_hat` under collinearity (mf-014): not measured.

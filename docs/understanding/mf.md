@@ -28,4 +28,18 @@ Verdict: skipped by Mario (2026-11-01). Mario stated he had covered logistic, la
 | Feature scaling for L1/L2, scaler fit on train only, nested CV for lambda/C | hazard | not examined | outside-notes: ESL 3.4, 7.10 | Skipped |
 | Class imbalance in logistic loss, decision threshold vs F2 | hazard/core | not examined | outside-notes: Murphy PML ch.5 | Skipped (imbalance metrics were solid in S2 record, different regime) |
 | Bootstrap over events | core | not examined | outside-notes: ESL 7.11 | Skipped |
-| KNN | core if included | deferred | outside-notes: ESL ch.13 | Out of this pass by Mario |
+| KNN (superseded 2026-11-12: examined below) | core if included | see KNN rows | outside-notes: ESL ch.13 | Mario reopened KNN on 2026-11-12 (mf-009 to be reopened); only the KNN part of this record was done |
+
+### S4 addendum: KNN — 2026-11-12
+
+Verdict: READY for the KNN decisions. The rest of the S4 record stays skipped. 5-point examples with small numbers; all sources are outside-notes (ESL ch.13 and Murphy PML ch.5, from memory, unverified; no notes page opened).
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| KNN prediction: K nearest neighbours, vote | core | solid | outside-notes: ESL ch.13 | Found the 3 nearest of 5 points for x=3.4 (C, D, B); predicted HR for K=3 and K=1 |
+| Choice of K (variance vs bias) | core | solid | outside-notes: ESL ch.13 | x=7: K=1 no HR, K=3 HR; K=5 (all points) predicts the majority class for any x |
+| Class imbalance and the vote threshold | hazard | solid | outside-notes: Murphy PML ch.5 | Majority vote with K=5 needs 3 HR neighbours (answered 3); said "at least 1 of 5" raises alarms. Needed a question first about whether lowering the threshold "touches the results"; accepted that it is a decision rule fixed on training data, not on test (cf. mf-012, mf-013) |
+| Feature scaling for distance | hazard | solid | outside-notes: ESL ch.13 | Chose Q (unscaled) then P (after dividing by std): the large-unit feature dominates raw distance |
+| Scaler fit on train only inside each fold | hazard | solid | outside-notes: ESL 7.10 | Answered "training data only" |
+
+Not examined for KNN: distance metric choice, curse of dimensionality with the S3 feature count, regression variant (average of neighbours' risk_final), ties. Carry to the KNN ADR as open questions.

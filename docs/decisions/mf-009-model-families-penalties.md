@@ -48,3 +48,7 @@ Six models produce predictions for every event under the S1 protocol (pj-004, pj
 ## Scope note — 2026-11-01
 
 After the alarm-rule decision (mf-012), the developer decided that the three logistic models are kept for S6 and do not enter the S4 table. The S4 table has three rows, one per regressor (unpenalized, ridge, lasso). This decision stays accepted but is not implemented in S4; solver and selection decisions of S4 (mf-013, mf-014, mf-015) cover the regressors only.
+
+## Scope note — 2026-11-12
+
+KNN is no longer deferred: mf-021 adds it to the S4 table as a magnitude regressor. The rest of this decision is unchanged.
