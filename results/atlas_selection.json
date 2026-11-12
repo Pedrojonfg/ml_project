@@ -1,0 +1,86 @@
+{
+  "order": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "O1",
+    "O2",
+    "O3"
+  ],
+  "empty": [
+    "O2"
+  ],
+  "assignments": {
+    "C1": {
+      "event_id": 8661,
+      "k": 3,
+      "caption": "C1: event_id=8661, k=3/5, risk_final=-4.8435, y_hr=True, lrp=-11.1927, jump=jump-up, delta=6.3492",
+      "meta": {}
+    },
+    "C2": {
+      "event_id": 168,
+      "k": 5,
+      "caption": "C2: event_id=168, k=5/5, risk_final=-5.0200, y_hr=True, lrp=-4.9370, jump=stable-high, delta=-0.0830",
+      "meta": {}
+    },
+    "C3": {
+      "event_id": 12175,
+      "k": 4,
+      "caption": "C3: event_id=12175, k=4/5, risk_final=-4.6021, y_hr=True, lrp=-6.2480, jump=jump-up, delta=1.6460",
+      "meta": {}
+    },
+    "C4": {
+      "event_id": 8767,
+      "k": 3,
+      "caption": "C4: event_id=8767, k=3/5, risk_final=-2.6880, y_hr=True, lrp=-3.5722, jump=stable-high, delta=0.8842",
+      "meta": {}
+    },
+    "C5": {
+      "event_id": 5343,
+      "k": 5,
+      "caption": "C5: event_id=5343, k=5/5, risk_final=-5.7496, y_hr=True, lrp=-30.0000, jump=jump-up, delta=24.2504",
+      "meta": {}
+    },
+    "C6": {
+      "event_id": 7465,
+      "k": 5,
+      "caption": "C6: event_id=7465, k=5/5, risk_final=-30.0000, y_hr=False, lrp=-1.8292, jump=jump-down, delta=-28.1708",
+      "meta": {}
+    },
+    "C7": {
+      "event_id": 7404,
+      "k": 3,
+      "caption": "C7: event_id=7404, k=3/5, risk_final=-30.0000, y_hr=False, lrp=-4.6668, jump=jump-down, delta=-25.3332",
+      "meta": {}
+    },
+    "C8": {
+      "event_id": 2563,
+      "k": 5,
+      "caption": "C8: event_id=2563, k=5/5, risk_final=-4.1880, y_hr=True, lrp=-6.3229, jump=jump-up, delta=2.1350",
+      "meta": {}
+    },
+    "O1": {
+      "event_id": 9051,
+      "k": 5,
+      "caption": "O1: event_id=9051, k=5/5, risk_final=-3.7540, y_hr=True, lrp=-4.4566, jump=stable-high, delta=0.7026",
+      "meta": {}
+    },
+    "O2": {
+      "event_id": null,
+      "k": 0,
+      "caption": "O2: empty pool (pj-052).",
+      "meta": {}
+    },
+    "O3": {
+      "event_id": 12049,
+      "k": 5,
+      "caption": "O3: event_id=12049, k=5/5, risk_final=-6.0889, y_hr=False, lrp=-30.0000, jump=jump-up, delta=23.9111",
+      "meta": {}
+    }
+  }
+}

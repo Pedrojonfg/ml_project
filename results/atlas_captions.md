@@ -1,0 +1,11 @@
+- C1: event_id=8661, k=3/5, risk_final=-4.8435, y_hr=True, lrp=-11.1927, jump=jump-up, delta=6.3492
+- C2: event_id=168, k=5/5, risk_final=-5.0200, y_hr=True, lrp=-4.9370, jump=stable-high, delta=-0.0830
+- C3: event_id=12175, k=4/5, risk_final=-4.6021, y_hr=True, lrp=-6.2480, jump=jump-up, delta=1.6460
+- C4: event_id=8767, k=3/5, risk_final=-2.6880, y_hr=True, lrp=-3.5722, jump=stable-high, delta=0.8842
+- C5: event_id=5343, k=5/5, risk_final=-5.7496, y_hr=True, lrp=-30.0000, jump=jump-up, delta=24.2504
+- C6: event_id=7465, k=5/5, risk_final=-30.0000, y_hr=False, lrp=-1.8292, jump=jump-down, delta=-28.1708
+- C7: event_id=7404, k=3/5, risk_final=-30.0000, y_hr=False, lrp=-4.6668, jump=jump-down, delta=-25.3332
+- C8: event_id=2563, k=5/5, risk_final=-4.1880, y_hr=True, lrp=-6.3229, jump=jump-up, delta=2.1350
+- O1: event_id=9051, k=5/5, risk_final=-3.7540, y_hr=True, lrp=-4.4566, jump=stable-high, delta=0.7026
+- O2: empty pool (pj-052).
+- O3: event_id=12049, k=5/5, risk_final=-6.0889, y_hr=False, lrp=-30.0000, jump=jump-up, delta=23.9111

@@ -2,7 +2,7 @@
 - Owner: Pedro
 - Understanding: READY (2026-10-28)
 - Decisions: pj-027..032, pj-045..052 — **ready to implement**; ledger: docs/decisions/LEDGER.md
-- Implementation: pending
+- Implementation: code landed (`src/atlas/`, `scripts/run_s7_atlas.py`); O2 empty pool recorded (pj-052) — remediation ADR if panel required
 - Audit: pending
 - Detours:
   - 2026-10-28: jumps blocked on S2 → pj-045; renumber + S4 C3/C4 pj-051
