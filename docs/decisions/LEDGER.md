@@ -2,7 +2,7 @@
 
 ## Destination
 
-Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**.
+Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**. S7: **decisiones C2 listas** (pj-045..052): 8 core + O1/O2/O3; empty-pool record; next = implement `src/atlas/`.
 
 ## Notes
 
@@ -129,9 +129,9 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisi
 | pj-027 | S7 atlas case structure | accepted | Option C: 6 core slots (2 LRP/model contrasts, 3 jumps, 1 multi-fail) + 4 optional (cut order O3,O1,O4,O2) | [pj-027-s7-atlas-case-structure.md](./pj-027-s7-atlas-case-structure.md) |
 | pj-028 | S7 atlas OOF source + C1/C2 pick | accepted | Cases from train/val OOF only, not official test; C1/C2 = argmax `risk_final` among qualifiers | [pj-028-s7-atlas-oof-and-c1-c2-selection.md](./pj-028-s7-atlas-oof-and-c1-c2-selection.md) |
 | pj-029 | S7 OOF repetition policy | accepted | Slot qualifies if contrast in ≥3/5 reps; caption: k/5 + mean `r_hat` on qualifying reps | [pj-029-s7-oof-repetition-policy.md](./pj-029-s7-oof-repetition-policy.md) |
-| pj-030 | S7 C6 + jump defer | accepted | C6: ≥2 of {LRP,rf,gbdt} FN in ≥3/5 reps; argmax `risk_final`; C3–C5/O4 blocked on S2 | [pj-030-s7-c6-and-jump-defer.md](./pj-030-s7-c6-and-jump-defer.md) |
+| pj-030 | S7 C6 + jump defer | accepted | C6: ≥2 of {LRP,rf,gbdt} FN in ≥3/5 reps; argmax `risk_final`; C3–C5 defer superseded by pj-045; O4 still via pj-032 | [pj-030-s7-c6-and-jump-defer.md](./pj-030-s7-c6-and-jump-defer.md) |
 | pj-031 | S7 O1 difficult TP | accepted | ≥3/5 triple TP; argmax `range_risk`; exclude used `event_id` only | [pj-031-s7-o1-difficult-tp.md](./pj-031-s7-o1-difficult-tp.md) |
-| pj-032 | S7 O2–O4 deferred | accepted | Rules wait for S6 preds and S2 jump taxonomy | [pj-032-s7-o2-o4-deferred.md](./pj-032-s7-o2-o4-deferred.md) |
+| pj-032 | S7 O2–O4 deferred | accepted | O2→pj-049; calib-O3→pj-050; jump-O3←O4 pj-048/051 | [pj-032-s7-o2-o4-deferred.md](./pj-032-s7-o2-o4-deferred.md) |
 | pj-033 | Progress Report thesis (W1) | accepted | C+A: protocol/data rigor spine + models-in-progress; not bake-off-as-win | [pj-033-progress-report-thesis.md](./pj-033-progress-report-thesis.md) |
 | pj-034 | Progress Report outline (W1) | accepted | Problem → solution → impact; bake-off under Impact; AI declaration at end | [pj-034-progress-report-outline.md](./pj-034-progress-report-outline.md) |
 | pj-035 | Progress Report evaluation splits (W1) | accepted | Two tables: official test CRP/LRP; internal OOF bake-off for learned models | [pj-035-progress-report-two-tables.md](./pj-035-progress-report-two-tables.md) |
@@ -144,6 +144,15 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisi
 | pj-042 | W1 importance figure despite B1 | accepted | Amends pj-019 for W1 only: RF impurity figure with permutation-disagreement caveat; pj-019 reopened for final report | [pj-042-w1-importance-figure-override.md](./pj-042-w1-importance-figure-override.md) |
 | pj-043 | W1 RF row with R4 note | accepted | RF kept in Table 2 with footnote; pj-026 R4 fired for RF, reopen in C2 | [pj-043-w1-rf-row-r4-caveat.md](./pj-043-w1-rf-row-r4-caveat.md) |
 | pj-044 | C2 stretch in scope + ownership | accepted | S8/S9/S10 not cut; Pedro S7/S5-reopen/S9/S8+W2; Mario S10+S11; freeze Sun 15 Nov | [pj-044-c2-stretch-in-scope.md](./pj-044-c2-stretch-in-scope.md) |
+| pj-045 | S7 C3–C5 jump selection | accepted | C3 jump-up majority FN; C4 jump-down majority FP; C5 jump majority correct; argmax \|Δ\| | [pj-045-s7-c3-c5-jump-selection.md](./pj-045-s7-c3-c5-jump-selection.md) |
+| pj-046 | S7 C1/C2 tie-break | accepted | After argmax risk_final: argmax (e_wrong−e_right) on k-rep means; then smallest event_id | [pj-046-s7-c1-c2-tie-break.md](./pj-046-s7-c1-c2-tie-break.md) |
+| pj-047 | S7 slot assignment order | accepted | Superseded order → pj-051 (C1…C8→O1→O2→O3) | [pj-047-s7-slot-assignment-order.md](./pj-047-s7-slot-assignment-order.md) |
+| pj-048 | S7 O4 complement to C5 | accepted | O4 = C5 catch rule on opposite jump_class; argmax \|Δ\|; skip if no C5 | [pj-048-s7-o4-complement-c5.md](./pj-048-s7-o4-complement-c5.md) |
+| pj-049 | S7 O2 calibration flip | accepted | ≥5/9 S6 combos raw→cal fail→success (≥3/5 reps); separate t_raw; argmax mean flip count | [pj-049-s7-o2-calibration-flip.md](./pj-049-s7-o2-calibration-flip.md) |
+| pj-050 | S7 O3 deferred C2 | accepted | Skip **calibration** O3; ID O3 reused by jump complement (pj-051) | [pj-050-s7-o3-deferred-c2.md](./pj-050-s7-o3-deferred-c2.md) |
+| pj-051 | S7 S4 slots + renumber | accepted | 8 core: C3/C4 S4 majority w/ t; jumps C5–C7; multi-fail C8; ex-O4→O3; no S4 in jumps | [pj-051-s7-s4-slots-and-renumber.md](./pj-051-s7-s4-slots-and-renumber.md) |
+| pj-052 | S7 empty pool policy | accepted | Record empty pools for all slots; no silent relax; remediate via later ADR | [pj-052-s7-empty-pool-policy.md](./pj-052-s7-empty-pool-policy.md) |
+| — | S7 atlas module paths | auto-trivial | AI (engineering) | `src/atlas/`, `scripts/run_s7_atlas.py`, case list + empty-pool record under `results/atlas_*`. Reason: layout only | — |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |
@@ -333,23 +342,28 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S6 bootstrap procedure | same as S4 (mf-016..mf-020) for the 9 rows, nothing changed | [mf-037](./mf-037-s6-comparisons-bootstrap.md) |
 | S6 paired comparisons | every S6 row vs LRP, CRP and its S4 regressor; plus the 18 pairs among S6 rows that change one stage only; no multiple-comparison correction | [mf-037](./mf-037-s6-comparisons-bootstrap.md) |
 | S6 paired L reliability between two rows | not reliable if more than 2.5% of the resamples have F2 = 0 in at least one repetition for A or B; vs LRP and CRP as S4 | [mf-040](./mf-040-s6-paired-l-reliability.md) |
-| S7 atlas layout | option C: 6 core case categories + up to 4 optional; cut order O3, O1, O4, O2 | pj-027 |
+| S7 atlas layout | **8 core** (C1–C8) + optionals O1/O2/O3 (calib-O3 skipped); cut order historical O3,O1,O4,O2 in pj-027 | pj-027, pj-051 |
 | S7 core contrast models | LRP vs rf and/or gbdt (S5); S4/S6 preds added to panels when available | pj-027 |
-| S7 jump slots (core) | 3 distinct-outcome jump cases (C3–C5) | pj-027 |
-| S7 multi-fail slot | ≥2 of {LRP, rf, gbdt} F₂-fail on same true HR (C6) | pj-027 |
+| S7 jump slots (core) | C5–C7 (ex-C3–C5); 3 distinct-outcome jumps | pj-027, pj-051 |
+| S7 multi-fail slot | **C8** (ex-C6); ≥2 of {LRP, rf, gbdt} F₂-FN | pj-030, pj-051 |
 | S7 atlas prediction source | OOF on S1 `event_table` / train-val only; not official test for case selection | pj-028 |
-| S7 C1/C2 selection among qualifiers | argmax `risk_final` (most severe true HR) | pj-028 |
+| S7 C1/C2 selection among qualifiers | argmax `risk_final`; tie → argmax (e_wrong−e_right) with mean preds on k reps; then smallest `event_id` | pj-028, pj-046 |
 | S7 OOF row per event (repetition policy) | contrast must hold in ≥3 of 5 seeds (42–46); evaluate each rep separately | pj-029 |
 | S7 atlas caption (C1/C2) | report k/5 and mean `r_hat` on qualifying reps for LRP and shown tree | pj-029 |
-| S7 jump slots C3–C5, O4 | selection rules deferred until S2 taxonomy ADR | pj-030 |
-| S7 C6 qualification | true HR; ≥2 of {LRP, rf, gbdt} F₂-FN in ≥3/5 OOF reps | pj-030 |
-| S7 C6 selection among qualifiers | argmax `risk_final`; tie → smallest `event_id` | pj-030 |
-| S7 C6 caption | k/5 multi-fail reps; per-model fail count 0–5; mean preds on qualifying reps | pj-030 |
+| S7 C3/C4 (S4 contrasts) | C3: LRP FN + ≥3/4 S4 TP (`t`); C4: LRP TP + ≥3/4 S4 FN; ≥3/5; argmax risk_final (+ pj-046-style tie) | pj-051 |
+| S7 jump slots C5–C7 | ex-C3–C5 (pj-045); majority {LRP,rf,gbdt} only — **no S4** | pj-045, pj-051 |
+| S7 jump optional O3 | ex-O4: catch on opposite class vs **C7**; argmax \|Δ\|; omit if no C7 | pj-048, pj-051 |
+| S7 C8 qualification | true HR; ≥2 of {LRP, rf, gbdt} F₂-FN in ≥3/5 OOF reps | pj-030, pj-051 |
+| S7 C8 selection among qualifiers | argmax `risk_final`; tie → smallest `event_id` | pj-030 |
+| S7 C8 caption | k/5 multi-fail reps; per-model fail count 0–5; mean preds on qualifying reps | pj-030 |
 | S7 O1 qualification | ≥3/5 reps: HR + LRP, rf, gbdt all TP; exclude atlas `event_id`s already used | pj-031 |
 | S7 O1 selection | argmax `range_risk` on usable CDMs; tie → smallest `event_id` | pj-031 |
 | S7 O1 caption | k/5 triple TP; mean preds on k reps; report `range_risk` | pj-031 |
-| S7 O2–O4 selection rules | deferred-fog until S6 preds + S2 taxonomy ADRs | pj-032 |
-| S7 tie-break equal `risk_final` | deferred-fog (smallest `event_id` suggested in pj-029 for tree tie) | — |
+| S7 slot assignment / exclusion order | C1→C2→C3→C4→C5→C6→C7→C8→O1→O2→O3 | pj-051 |
+| S7 O2 selection | ≥5/9 combos flip raw→cal fail→success in ≥3/5 reps; `t_raw` via mf-035 recipe on raw p; argmax mean flip count | pj-049 |
+| S7 calibration-O3 | skipped (pj-050); ID O3 = jump complement | pj-050, pj-051 |
+| S7 C1/C2 tie-break after equal `risk_final` | argmax \(e_{\mathrm{wrong}}-e_{\mathrm{right}}\); then smallest `event_id` | pj-046 |
+| S7 empty pool (any slot) | record; do not silently relax; remediation ADR when observed | pj-052 |
 
 ## Fog (not yet sharp)
 

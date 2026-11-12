@@ -46,7 +46,7 @@ For C1 and C2, among false-negative cases choose the event with the worst (most 
 ## Consequences
 
 - Atlas scripts read `event_table`, LRP, and OOF parquets only (no test CSV for case mining).
-- pj-029 (or follow-on) must fix: **which OOF row** when an event has multiple repetitions; jump slots C3–C6 rules; tie-break on equal `risk_final`.
+- pj-029 fixed OOF repetition policy; jump slots C3–C5 in pj-045; C6 in pj-030; **tie-break on equal `risk_final` for C1/C2** in pj-046.
 
 ## Checks
 

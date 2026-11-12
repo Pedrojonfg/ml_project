@@ -1,6 +1,6 @@
 # pj-030. S7 atlas — C6 multi-model failure; jump slots deferred to S2
 
-- **Status:** accepted
+- **Status:** accepted (Decision 1 on C3–C5 superseded by pj-045; O4 still deferred via pj-032)
 - **Date:** 2026-10-28
 - **Tags:** modeling | evaluation | interpretation
 - **Decided by:** Pedro
@@ -12,7 +12,9 @@ Core slot **C6** (pj-027) is a hard HR event where several models fail F₂ toge
 
 ## Decision 1 — Defer jump atlas rules
 
-**C3, C4, C5, and O4** case-selection ADRs are **not written** until an S2 taxonomy ADR (or team contract) defines jump labels or an agreed operational rule. Implementation of jump panels may proceed later without reopening C1/C2/C6.
+**Superseded for C3–C5 by [pj-045](./pj-045-s7-c3-c5-jump-selection.md)** (2026-11-12). **O4** remains deferred until a follow-on ADR (pj-032).
+
+~~**C3, C4, C5, and O4** case-selection ADRs are **not written** until an S2 taxonomy ADR (or team contract) defines jump labels or an agreed operational rule.~~
 
 ## Decision 2 — C6 qualification and selection
 

@@ -1,6 +1,6 @@
 # pj-032. S7 atlas — optional O2–O4 deferred (Mario S2 / S6)
 
-- **Status:** accepted
+- **Status:** accepted (O2→pj-049; O3→pj-050 skip C2; O4→pj-048 — pj-032 deferral cleared for C2)
 - **Date:** 2026-10-28
 - **Tags:** modeling | evaluation | interpretation
 - **Decided by:** Pedro
