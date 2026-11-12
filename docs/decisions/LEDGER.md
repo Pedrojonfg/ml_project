@@ -2,7 +2,7 @@
 
 ## Destination
 
-Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. Pendiente C2: S7 implementación; reabrir pj-019 (B1) y pj-026 (R4, RF).
+Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**.
 
 ## Notes
 
@@ -143,6 +143,7 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisi
 | pj-041 | Progress Report next steps (W1) | accepted | Four bullets: S6, S7, harden uncertainty, Sentence Outline | [pj-041-progress-report-next-steps.md](./pj-041-progress-report-next-steps.md) |
 | pj-042 | W1 importance figure despite B1 | accepted | Amends pj-019 for W1 only: RF impurity figure with permutation-disagreement caveat; pj-019 reopened for final report | [pj-042-w1-importance-figure-override.md](./pj-042-w1-importance-figure-override.md) |
 | pj-043 | W1 RF row with R4 note | accepted | RF kept in Table 2 with footnote; pj-026 R4 fired for RF, reopen in C2 | [pj-043-w1-rf-row-r4-caveat.md](./pj-043-w1-rf-row-r4-caveat.md) |
+| pj-044 | C2 stretch in scope + ownership | accepted | S8/S9/S10 not cut; Pedro S7/S5-reopen/S9/S8+W2; Mario S10+S11; freeze Sun 15 Nov | [pj-044-c2-stretch-in-scope.md](./pj-044-c2-stretch-in-scope.md) |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
 | — | HR threshold in prose | auto-trivial | State \(10^{-6}\) once as competition/notification-style high-risk cut | — |

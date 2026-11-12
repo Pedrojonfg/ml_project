@@ -110,7 +110,7 @@ Ruta crítica: S1 → S3 → S5/S6 → S7 → Results del Final Report.
 | **Pedro** | S1 Protocolo, S3 Features, S5 Árboles, S7 Atlas; integra W2 | 6+5+7+6 = **24** + escritura ~13 | infra de datos + modelo fuerte + narrativa oral | revisa S6 |
 | **Mario** | S2 EDA/taxonomía, S4 Temario, S6 Two-stage, S11 Repo/bib; integra W1 y W3 | 6+6+9+3 = **24** + escritura ~13 | EDA + modelos del curso + la apuesta arriesgada (RQ secundaria) | revisa S1 |
 
-- `~` S8/S9/S10 fuera de la carga: los coge quien tenga sus must cuesta abajo primero.
+- `~` S8/S9/S10: **in C2** per pj-044 (Pedro S8/S9; Mario S10); no longer “pick up if spare capacity only”.
 - Mario tiene el unknown principal (S6) → slack explícito (appetite 9 h) y Pedro como buddy **[Inference]**.
 - Cada uno se reparte sus tareas dentro del scope; nadie hace de taskmaster **[Book ch09]**.
 - Nadie espera al otro para empezar: Pedro arranca en S1, Mario en S2 (independiente).
@@ -147,10 +147,12 @@ Ruta crítica: S1 → S3 → S5/S6 → S7 → Results del Final Report.
 
 ## 11. Cut list (en orden)
 
-1. S10 Kernel ridge
-2. S9 Lead-time / leave-mission-out
-3. S8 PyTorch (el proposal lo dejó "si está justificado"; se reporta como trabajo futuro)
-4. KNN dentro de S4 (queda logística + ridge)
+> **C2 update (2026-11-12, [pj-044](./decisions/pj-044-c2-stretch-in-scope.md)):** S8, S9 and S10 are **in scope** through the Sentence Outline freeze (Sun 15 Nov). Ownership: Pedro → S7, S5 reopens, S9, S8; Mario → S10 (+ S11). KNN already reopened (mf-043). Items below remain historical cut priority only if the team later re-opens a cut.
+
+1. S10 Kernel ridge — **kept in C2 (Mario)**
+2. S9 Lead-time / leave-mission-out — **kept in C2 (Pedro)**
+3. S8 PyTorch — **kept in C2 (Pedro)**; still ablation-rank per ADR 010
+4. KNN dentro de S4 — **done** (mf-043)
 5. Tuning fino de GBDT (dejar defaults razonables + 1 búsqueda pequeña)
 6. Atlas reducido a 5 casos
 - **Nunca se corta**: protocolo, comparación vs LRP, ≥1 método del temario, two-stage + calibración (RQ secundaria), historia git, Declaración de IA.
