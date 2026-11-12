@@ -1,4 +1,4 @@
-"""S4 linear regressors: OLS, ridge, lasso on risk_final (mf-008..mf-015)."""
+"""S4 regressors: OLS, ridge, lasso (mf-008..mf-015) and KNN (mf-043) on risk_final."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import Lasso, LinearRegression, Ridge
 from sklearn.metrics import average_precision_score
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -22,6 +23,7 @@ from src.models.trees import make_imputer
 N_NUMERIC = 30  # numeric columns 0..29 scaled, 30..34 one-hot unscaled, per mf-010
 RIDGE_ALPHAS = np.logspace(0, 6, 25)  # per mf-013
 LASSO_ALPHAS = np.logspace(-4, 2, 25)  # per mf-013
+K_GRID = (5, 10, 20, 50, 100, 200, 400)  # per mf-043
 INNER_SEED = 0  # per mf-015
 INNER_SPLITS = 5  # per mf-015
 SURROGATE_ALARM, SURROGATE_QUIET = 0.0, -100.0  # maps p_hr to the -6 protocol F2
@@ -36,8 +38,13 @@ def make_preprocessor() -> Pipeline:
     return Pipeline([("imputer", make_imputer()), ("scaler", scaler)])
 
 
-def make_model(name: str, alpha: float | None = None):
-    # per mf-014
+def make_model(name: str, alpha: float | None = None, k: int | None = None):
+    # per mf-014 (linear) and mf-043 (knn)
+    if name == "knn":
+        return KNeighborsRegressor(
+            n_neighbors=k, weights="uniform", algorithm="auto", leaf_size=30,
+            p=2, metric="minkowski", metric_params=None, n_jobs=None,
+        )
     if name == "ols":
         return LinearRegression(fit_intercept=True, positive=False, copy_X=True)
     if name == "ridge":
@@ -82,6 +89,40 @@ def select_alpha(name: str, X_train: np.ndarray, y_train: np.ndarray) -> dict:
     return {"alpha": alpha, "mean_ap": mean_ap, "nonconverged": sorted(nonconv)}
 
 
+def select_k(X_train: np.ndarray, y_train: np.ndarray) -> dict:
+    # per mf-043: same inner CV and criterion as select_alpha (mf-013), grid K_GRID, ties to the largest K
+    grid = [int(k) for k in K_GRID]
+    y_hr = y_train >= HR_THRESHOLD_LOG10
+    skf = StratifiedKFold(INNER_SPLITS, shuffle=True, random_state=INNER_SEED)  # per mf-015
+    aps = {k: [] for k in grid}
+    for tr, va in skf.split(X_train, y_hr):
+        if max(grid) > len(tr):
+            raise ValueError("K grid larger than the inner training part")
+        pre = make_preprocessor().fit(X_train[tr])  # per mf-010, refit per inner training part
+        Ztr, Zva = pre.transform(X_train[tr]), pre.transform(X_train[va])
+        idx = make_model("knn", k=max(grid)).fit(Ztr, y_train[tr]).kneighbors(Zva)[1]  # sorted by distance
+        for k in grid:  # mean of the k nearest = KNeighborsRegressor(k).predict with uniform weights
+            aps[k].append(average_precision_score(y_hr[va], y_train[tr][idx[:, :k]].mean(axis=1)))
+    mean_ap = {k: float(np.mean(aps[k])) for k in grid}
+    best = max(mean_ap.values())
+    return {"k": max(k for k in grid if mean_ap[k] == best), "mean_ap": mean_ap}
+
+
+def _fit_predict_knn(X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray) -> dict:
+    sel = select_k(X_train, y_train)
+    pre = make_preprocessor().fit(X_train)  # per mf-043, preprocessing refit on the outer train fold
+    Ztr, Zva = pre.transform(X_train), pre.transform(X_val)
+    model = make_model("knn", k=sel["k"]).fit(Ztr, y_train)
+    idx = model.kneighbors(None)[1]  # X=None: each training event excludes itself (mf-043)
+    t = choose_alarm_line(y_train[idx].mean(axis=1), y_train)
+    r_val = model.predict(Zva)
+    return {
+        "alpha": None, "k": sel["k"], "t": t, "r_hat_val": r_val,
+        "p_hr_val": (r_val >= t).astype(np.float64),  # per mf-012
+        "final_converged": True, "nonconverged_alphas": [], "mean_ap": sel["mean_ap"],
+    }
+
+
 def choose_alarm_line(r_hat_train: np.ndarray, y_train: np.ndarray) -> float:
     # per mf-012: candidates = r_hat of training HR; exact F2 = 5tp/(4P+tp+fp); ties -> median
     r = np.asarray(r_hat_train, dtype=np.float64)
@@ -98,6 +139,8 @@ def choose_alarm_line(r_hat_train: np.ndarray, y_train: np.ndarray) -> float:
 
 
 def fit_predict_fold(name: str, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray) -> dict:
+    if name == "knn":
+        return _fit_predict_knn(X_train, y_train, X_val)
     alpha, nonconv_alphas, mean_ap = None, [], None
     if name != "ols":
         sel = select_alpha(name, X_train, y_train)
@@ -156,7 +199,7 @@ def run_linear_cv(name: str, X: np.ndarray, y: np.ndarray, event_ids: np.ndarray
                 "r_hat": res["r_hat_val"], "p_hr": res["p_hr_val"],
             }))
             records.append({
-                "rep": int(rep), "fold": int(k), "alpha": res["alpha"], "t": res["t"],
+                "rep": int(rep), "fold": int(k), "alpha": res["alpha"], "k": res.get("k"), "t": res["t"],
                 "final_converged": res["final_converged"],
                 "nonconverged_alphas": res["nonconverged_alphas"],
             })

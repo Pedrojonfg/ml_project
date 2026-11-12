@@ -2,7 +2,7 @@
 
 ## Destination
 
-Project Proposal: **cerradas** (016–024). Ejecución S1–S5 + S4 code en `main`. **W1 Progress Report:** decisiones pj-033..pj-043 **accepted**; borrador en `presentations/progress-report/`. Pendiente C2: reabrir pj-019 (B1) y pj-026 (R4, RF).
+Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. Pendiente C2: S7 implementación; reabrir pj-019 (B1) y pj-026 (R4, RF).
 
 ## Notes
 
@@ -122,6 +122,7 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S5 + S4 code en `mai
 | mf-040 | Reliability of paired L differences between two rows in S6 | accepted | A paired L difference is not reliable if more than 2.5% of the resamples have F2 = 0 in at least one of the two rows. Found at implementation. Decided by Mario | [mf-040-s6-paired-l-reliability.md](./mf-040-s6-paired-l-reliability.md) |
 | mf-041 | Solver of the L1 logistic model in S6 | accepted | liblinear (intercept_scaling 100, max_iter 10000, tol 1e-4) replaces saga for L1, which did not converge at any C (supersedes the L1 part of mf-030). Found at implementation. Decided by Mario | [mf-041-s6-l1-solver.md](./mf-041-s6-l1-solver.md) |
 | mf-042 | Grid-edge result of the logistic strength in S6 | accepted | Grids left as they are; edge selections (L1 25/25 at 0.01, L2 19/25 at 1e-4) reported as a limitation; one-fold L1 AUC curve shows a flat zone 1e-3..1e-2 and collapse below. Decided by Mario | [mf-042-s6-logistic-grid-edge-result.md](./mf-042-s6-logistic-grid-edge-result.md) |
+| mf-043 | KNN magnitude regressor (S4) | accepted | Reopens KNN from mf-009: `risk_final` regressor, K by inner 5-fold AP over a fixed grid, mf-010 preprocessing, Euclidean, mf-012 alarm line with the event excluded from its own neighbours. Renumbered from mf-021 on merge (mf-021 already used by S6). Decided by Mario | [mf-043-knn-regressor.md](./mf-043-knn-regressor.md) |
 | — | S6 stage-1 execution split over (repetition, fold) tasks in several processes | auto-trivial | Engineering only: the 25 outer folds are independent and seeded, so results are identical to the sequential run; chosen by Mario (option A) after L1 with liblinear was measured at about 25-30 h sequential. No ADR | — |
 | — | S6 output names and figure layout | auto-trivial | AI (engineering) | Files `s6_<clf>__<reg>`, `s6_stage1_<clf>`, columns `z`, `p_cal`, `p_hr` (alarm flag, contract of pj-020), 3-panel reliability figure at 150 dpi, checkpoints in `data/s6_cache/`. Reason: naming and plotting only | — |
 | — | S6 `random_state` of lbfgs models | auto-trivial | AI (engineering) | lr_none and lr_l2 pass `random_state=None` (mf-030 says 0, "lbfgs does not use it"); inert, no effect on results. Found at audit | — |
@@ -253,7 +254,11 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S4 HR-zone bias review criterion | triggered 2026-11-01; mf-008 confirmed without floor (no target floor for linear models) | [mf-008](./mf-008-magnitude-regressor-target.md) |
 | S4 logistic penalty variants | none, L2, L1 | [mf-009](./mf-009-model-families-penalties.md) |
 | S4 magnitude regressor penalty variants | none (OLS), L2 (ridge), L1 (lasso) | [mf-009](./mf-009-model-families-penalties.md) |
-| S4 elastic net / KNN | not included (fog / deferred) | [mf-009](./mf-009-model-families-penalties.md) |
+| S4 elastic net | not included (fog) | [mf-009](./mf-009-model-families-penalties.md) |
+| S4 KNN | included, magnitude regressor (reopened 2026-11-12) | [mf-043](./mf-043-knn-regressor.md) |
+| S4 KNN K selection | stratified inner 5-fold, mean inner AP of `r_hat` vs `y_hr`; grid {5,10,20,50,100,200,400}; ties to largest K | [mf-043](./mf-043-knn-regressor.md) |
+| S4 KNN preprocessing and distance | mf-010 preprocessing; Euclidean on 35 columns; equal weights | [mf-043](./mf-043-knn-regressor.md) |
+| S4 KNN alarm line | mf-012 option 1 with the event excluded from its own neighbours | [mf-043](./mf-043-knn-regressor.md) |
 | S4 imputation | `SimpleImputer`, strategy `median`, fit on train fold, all 35 columns | [mf-010](./mf-010-preprocessing-linear-models.md) |
 | S4 `SimpleImputer` `add_indicator` | False | [mf-010](./mf-010-preprocessing-linear-models.md) |
 | S4 `SimpleImputer` `keep_empty_features` | False | [mf-010](./mf-010-preprocessing-linear-models.md) |
@@ -356,7 +361,7 @@ Every modeling parameter the implementation needs. Library defaults must be list
 - Modeling events whose last CDM has `time_to_tca >= 2` (type Z; label CDM is also an input) — needs a different task definition (pj-003).
 ## Fog addendum (S4)
 
-- Elastic net and KNN: not included in S4 (mf-009; deferred by Mario).
+- Elastic net: not included in S4 (mf-009). KNN reopened 2026-11-12 (mf-043; renumbered on merge).
 - S4 logistic models (mf-007, mf-009, mf-011): kept for S6, not in the S4 table.
 - Source of the ~0.16 F2 gap between training-fold alarm line and an oracle line (mf-012): hypothesis (step-function noise vs scale shift across folds), to contrast with stored t per fold.
 - Effect of lasso start point / sweep order on `r_hat` under collinearity (mf-014): not measured.

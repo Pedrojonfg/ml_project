@@ -1,4 +1,4 @@
-"""S4: OLS, ridge, lasso repeated nested CV vs LRP (mf-008..mf-015)."""
+"""S4: OLS, ridge, lasso (and knn on request) repeated nested CV vs LRP (mf-008..mf-015, mf-043)."""
 # ponytail: one-shot CLI; bootstrap per pj-006, mf-016..mf-019 (src/evaluation.py)
 
 import json
@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT))
 
 from src.evaluation import bootstrap_report  # noqa: E402
 from src.features import FEATURE_COLUMNS, build_features  # noqa: E402
-from src.models.linear import INNER_SEED, INNER_SPLITS, LASSO_ALPHAS, RIDGE_ALPHAS, run_linear_cv  # noqa: E402
+from src.models.linear import INNER_SEED, INNER_SPLITS, K_GRID, LASSO_ALPHAS, RIDGE_ALPHAS, run_linear_cv  # noqa: E402
 from src.protocol import build_event_table, make_folds  # noqa: E402
 
 DATA = ROOT / "data/esa/Collision Avoidance Challenge - Dataset/kelvins_competition_data"
@@ -45,6 +45,7 @@ def main() -> None:
             "metrics_per_rep": res.metrics_per_rep,
             "fold_records": res.fold_records,  # alpha and alarm line t per fold and repetition, per mf-012, mf-013
             "alpha_grid": (list(RIDGE_ALPHAS) if slug == "ridge" else list(LASSO_ALPHAS) if slug == "lasso" else None),
+            "k_grid": list(K_GRID) if slug == "knn" else None,
             "inner_seed": INNER_SEED,
             "inner_splits": INNER_SPLITS,
             "bootstrap": bootstrap_report(y, lrp, res.oof_r_hat, res.oof_p_hr),  # per pj-006, mf-016..mf-019
