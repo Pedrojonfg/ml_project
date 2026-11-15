@@ -12,11 +12,11 @@ def f(est, ci, d=3):
 
 lrp = json.load(open(R / "s1_baselines.json"))["baselines"]["all"]["LRP"]
 rows = [("LRP (baseline)", f"{lrp['F2']:.3f}", "-", f"{lrp['MSE_HR_clipped']:.3f}", f"{lrp['L_clipped']:.3f}", "-")]
-for m in [m for m in ["ols", "ridge", "lasso", "knn"] if (R / f"{m}.json").exists()]:
+for m in [m for m in ["ols", "ridge", "lasso", "knn", "kernel_ridge"] if (R / f"{m}.json").exists()]:
     b = json.load(open(R / f"{m}.json"))["bootstrap"]
     F, M, L = b["F2"], b["MSE_HR_clipped"], b["L_clipped"]
     rows.append((
-        m,
+        m + (" (2 reps)" if m == "kernel_ridge" else ""),  # per mf-052: note in the table
         f(F["estimate"], F["ci"]),
         f(F["paired_vs_LRP"]["estimate"], F["paired_vs_LRP"]["ci"]),
         f(M["estimate"], M["ci"]),
