@@ -2,7 +2,7 @@
 
 ## Destination
 
-Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**. S7: **decisiones C2 listas** (pj-045..052): 8 core + O1/O2/O3; empty-pool record; next = implement `src/atlas/`.
+Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**. S7: pj-045..052 accepted. **S9:** pj-053..060 accepted; implementación S9 + deliverables W2. **S8:** pj-061..070 accepted (MLP+GRU ablation ready to implement). **S9:** pj-053..060 accepted. Pendiente W2: formato figura/tabla S9; ranking LMO vs event-CV (fog).
 
 ## Notes
 
@@ -152,6 +152,24 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisi
 | pj-050 | S7 O3 deferred C2 | accepted | Skip **calibration** O3; ID O3 reused by jump complement (pj-051) | [pj-050-s7-o3-deferred-c2.md](./pj-050-s7-o3-deferred-c2.md) |
 | pj-051 | S7 S4 slots + renumber | accepted | 8 core: C3/C4 S4 majority w/ t; jumps C5–C7; multi-fail C8; ex-O4→O3; no S4 in jumps | [pj-051-s7-s4-slots-and-renumber.md](./pj-051-s7-s4-slots-and-renumber.md) |
 | pj-052 | S7 empty pool policy | accepted | Record empty pools for all slots; no silent relax; remediate via later ADR | [pj-052-s7-empty-pool-policy.md](./pj-052-s7-empty-pool-policy.md) |
+| pj-053 | S9 scope (lead-time + LMO) | accepted | Both stretch artefacts for W2 | [pj-053-s9-scope-lead-time-and-lmo.md](./pj-053-s9-scope-lead-time-and-lmo.md) |
+| pj-054 | S9 lead-time cut grid | accepted | `t_cut` ∈ {2,3,4}; drop events with no CDM ≥ `t_cut` per point | [pj-054-s9-lead-time-cut-grid.md](./pj-054-s9-lead-time-cut-grid.md) |
+| pj-055 | S9 lead-time features/labels | accepted | Same v1 `FEATURE_COLUMNS`; usable window = `t_cut`; S1 labels | [pj-055-s9-lead-time-features-and-labels.md](./pj-055-s9-lead-time-features-and-labels.md) |
+| pj-056 | S9 lead-time model rows | accepted | LRP + GBDT + best of {ols,ridge,lasso} per cut; re-select hparams each `t_cut` | [pj-056-s9-lead-time-model-rows.md](./pj-056-s9-lead-time-model-rows.md) |
+| pj-057 | S9 lead-time y-axis | accepted | Primary: L unclipped; may switch to F₂ after W2 feedback | [pj-057-s9-lead-time-curve-y-metric.md](./pj-057-s9-lead-time-curve-y-metric.md) |
+| pj-058 | S9 LMO scheme | accepted | 19 leave-one-mission-out folds; mission_id from CDM join | [pj-058-s9-lmo-scheme.md](./pj-058-s9-lmo-scheme.md) |
+| pj-059 | S9 LMO model rows | accepted | Same triad as pj-056; `t_cut = 2`; re-select each fold | [pj-059-s9-lmo-model-rows.md](./pj-059-s9-lmo-model-rows.md) |
+| pj-060 | S9 LMO zero-HR holdout | accepted | Skip from summaries; record skipped + reason | [pj-060-s9-lmo-zero-hr-holdout.md](./pj-060-s9-lmo-zero-hr-holdout.md) |
+| pj-061 | S8 scope (MLP + sequence) | accepted | Both arms: tabular MLP and sequence CDM model | [pj-061-s8-scope-mlp-and-sequence.md](./pj-061-s8-scope-mlp-and-sequence.md) |
+| pj-062 | S8 task + alarm | accepted | Regress `risk_final`; `p_hr` at −6; both arms | [pj-062-s8-task-regress-alarm-minus6.md](./pj-062-s8-task-regress-alarm-minus6.md) |
+| pj-063 | S8 input representation | accepted | MLP=pj-009 X; seq=masked usable CDM channels | [pj-063-s8-input-tabular-and-masked-sequence.md](./pj-063-s8-input-tabular-and-masked-sequence.md) |
+| pj-064 | S8 architecture | accepted | Tabular MLP + masked GRU | [pj-064-s8-architecture-mlp-gru.md](./pj-064-s8-architecture-mlp-gru.md) |
+| pj-065 | S8 preprocessing | accepted | Fold median impute + StandardScaler (numeric); both arms | [pj-065-s8-preprocessing-impute-scale.md](./pj-065-s8-preprocessing-impute-scale.md) |
+| pj-066 | S8 training loop | accepted | Adam 1e-3; batch 64; max 50; ES patience 10; same both arms | [pj-066-s8-training-adam-early-stopping.md](./pj-066-s8-training-adam-early-stopping.md) |
+| pj-067 | S8 network sizes + T | accepted | MLP 128→64→1; GRU h=64 last-valid; T=20 | [pj-067-s8-network-sizes-and-T.md](./pj-067-s8-network-sizes-and-T.md) |
+| pj-068 | S8 floor c + MSE | accepted | pj-026 floor c; MSE; no sample weights | [pj-068-s8-floor-c-mse-no-weights.md](./pj-068-s8-floor-c-mse-no-weights.md) |
+| pj-069 | S8 torch seeds | accepted | Seed per CV rep (pj-005); no strict CUDA determinism | [pj-069-s8-torch-seeds.md](./pj-069-s8-torch-seeds.md) |
+| pj-070 | S8 artifacts + comparison | accepted | slugs mlp/gru; results+preds; bootstrap like S5 | [pj-070-s8-artifacts-and-comparison.md](./pj-070-s8-artifacts-and-comparison.md) |
 | — | S7 atlas module paths | auto-trivial | AI (engineering) | `src/atlas/`, `scripts/run_s7_atlas.py`, case list + empty-pool record under `results/atlas_*`. Reason: layout only | — |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
@@ -364,6 +382,49 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S7 calibration-O3 | skipped (pj-050); ID O3 = jump complement | pj-050, pj-051 |
 | S7 C1/C2 tie-break after equal `risk_final` | argmax \(e_{\mathrm{wrong}}-e_{\mathrm{right}}\); then smallest `event_id` | pj-046 |
 | S7 empty pool (any slot) | record; do not silently relax; remediation ADR when observed | pj-052 |
+| S9 deliverables | lead-time curve + leave-mission-out (W2) | [pj-053](./pj-053-s9-scope-lead-time-and-lmo.md) |
+| S9 lead-time cuts `t_cut` (days) | 2, 3, 4 | [pj-054](./pj-054-s9-lead-time-cut-grid.md) |
+| S9 lead-time cohort per cut | events with ≥1 CDM at `time_to_tca ≥ t_cut`; exclude others at that point | [pj-054](./pj-054-s9-lead-time-cut-grid.md) |
+| S9 lead-time usable CDM threshold | `time_to_tca ≥ t_cut` (replaces `TTC_MIN=2` only inside S9 runs) | [pj-055](./pj-055-s9-lead-time-features-and-labels.md) |
+| S9 lead-time features | same v1 columns as S3; labels `risk_final` / `y_hr` unchanged | [pj-055](./pj-055-s9-lead-time-features-and-labels.md) |
+| S9 lead-time curve rows | LRP; GBDT; S4 = argmin L unclipped among {ols, ridge, lasso} per `t_cut` | [pj-056](./pj-056-s9-lead-time-model-rows.md) |
+| S9 lead-time hyperparameters | re-run S5 GBDT grid + S4 α selection (mf-013) at each `t_cut`; no freeze from t=2 | [pj-056](./pj-056-s9-lead-time-model-rows.md) |
+| S9 lead-time S4 tie-break | equal L unclipped → higher F₂; then slug lexicographic | [pj-056](./pj-056-s9-lead-time-model-rows.md) |
+| S9 lead-time primary metric (y-axis) | L unclipped (revision to F₂ allowed per pj-057) | [pj-057](./pj-057-s9-lead-time-curve-y-metric.md) |
+| S9 lead-time secondary metrics in output | F₂, MSE_HR, L clipped/unclipped per pj-007 | [pj-057](./pj-057-s9-lead-time-curve-y-metric.md) |
+| S9 LMO scheme | 19-fold leave-one-mission-out (one mission held out per run) | [pj-058](./pj-058-s9-lmo-scheme.md) |
+| S9 LMO mission_id source | first `mission_id` per `event_id` in training CDM | [pj-058](./pj-058-s9-lmo-scheme.md) |
+| S9 LMO curve rows | LRP; GBDT; best {ols,ridge,lasso} by L unclipped on hold-out; re-select each fold | [pj-059](./pj-059-s9-lmo-model-rows.md) |
+| S9 LMO `t_cut` | 2 (standard usable window only) | [pj-059](./pj-059-s9-lmo-model-rows.md) |
+| S9 LMO zero-HR hold-out | skip in summaries; record `skipped`, reason `zero_hr_in_holdout` | [pj-060](./pj-060-s9-lmo-zero-hr-holdout.md) |
+| S9 LMO primary metric | L unclipped (same default as lead-time; pj-057 revision trigger applies) | [pj-059](./pj-059-s9-lmo-model-rows.md), [pj-057](./pj-057-s9-lead-time-curve-y-metric.md) |
+| S8 model arms | tabular MLP + sequence CDM model | [pj-061](./pj-061-s8-scope-mlp-and-sequence.md) |
+| S8 training target | `risk_final` (both arms) | [pj-062](./pj-062-s8-task-regress-alarm-minus6.md) |
+| S8 alarm rule | `p_hr = 1{r_hat >= -6}` (both arms; no learned `t`) | [pj-062](./pj-062-s8-task-regress-alarm-minus6.md) |
+| S8 tabular input | pj-009 `FEATURE_COLUMNS` | [pj-063](./pj-063-s8-input-tabular-and-masked-sequence.md) |
+| S8 sequence input | per usable CDM (`ttc>=2`), channels aligned to S5/pj-009 variables; variable length via mask | [pj-063](./pj-063-s8-input-tabular-and-masked-sequence.md) |
+| S8 sequence max length `T` | 20; truncate to usable CDMs closest to TCA | [pj-067](./pj-067-s8-network-sizes-and-T.md) |
+| S8 tabular encoder | MLP (feedforward) | [pj-064](./pj-064-s8-architecture-mlp-gru.md) |
+| S8 sequence encoder | GRU (masked) | [pj-064](./pj-064-s8-architecture-mlp-gru.md) |
+| S8 MLP sizes | d→128→64→1, ReLU, dropout 0 | [pj-067](./pj-067-s8-network-sizes-and-T.md) |
+| S8 GRU sizes | hidden 64, 1 layer, dropout 0; pool last valid state | [pj-067](./pj-067-s8-network-sizes-and-T.md) |
+| S8 missing values | per-fold median impute (both arms) | [pj-065](./pj-065-s8-preprocessing-impute-scale.md) |
+| S8 feature scaling | StandardScaler on numeric only; one-hot unscaled; fold-fit (both arms) | [pj-065](./pj-065-s8-preprocessing-impute-scale.md) |
+| S8 optimizer | Adam; lr=1e-3; betas=(0.9, 0.999); eps=1e-8; weight_decay=0 | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
+| S8 batch size | 64 | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
+| S8 max epochs | 50 | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
+| S8 early stopping | patience 10; monitor inner-val regression loss/MSE; restore best | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
+| S8 inner val fraction | 0.20 of fold train; shuffled; seed tied to fold/rep | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
+| S8 training recipe scope | same for MLP and GRU | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
+| S8 loss | MSE on y_fit | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md) |
+| S8 training target transform | y_fit = max(risk_final, c_fold) per pj-026 | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md) |
+| S8 sample weights | none | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md) |
+| S8 torch seed | CV repetition seed (pj-005: 42–46); no strict CUDA determinism | [pj-069](./pj-069-s8-torch-seeds.md) |
+| S8 slugs / artifacts | mlp, gru; results/*.json + preds/*.parquet; p_hr at −6 | [pj-070](./pj-070-s8-artifacts-and-comparison.md) |
+| S8 uncertainty / comparison | same bootstrap/BCa and bake-off framing as other regressor rows | [pj-070](./pj-070-s8-artifacts-and-comparison.md) |
+| S9 W2 deliverables format | deferred-fog | pj-053 |
+| S9 LMO vs event-CV ranking table | deferred-fog | pj-058 |
+| S9 `mission_id` on events | deferred-fog (engineering: join from CDM at runtime) | pj-053 |
 
 ## Fog (not yet sharp)
 
