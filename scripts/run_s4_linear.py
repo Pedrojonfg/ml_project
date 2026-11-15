@@ -1,4 +1,4 @@
-"""S4: OLS, ridge, lasso (and knn on request) repeated nested CV vs LRP (mf-008..mf-015, mf-043)."""
+"""S4: OLS, ridge, lasso (and knn, kernel_ridge on request) repeated nested CV vs LRP (mf-008..mf-015, mf-043..mf-053)."""
 # ponytail: one-shot CLI; bootstrap per pj-006, mf-016..mf-019 (src/evaluation.py)
 
 import json
@@ -14,12 +14,14 @@ sys.path.insert(0, str(ROOT))
 
 from src.evaluation import bootstrap_report  # noqa: E402
 from src.features import FEATURE_COLUMNS, build_features  # noqa: E402
+from src.models import kernel_ridge as kr  # noqa: E402
 from src.models.linear import INNER_SEED, INNER_SPLITS, K_GRID, LASSO_ALPHAS, RIDGE_ALPHAS, run_linear_cv  # noqa: E402
 from src.protocol import build_event_table, make_folds  # noqa: E402
 
 DATA = ROOT / "data/esa/Collision Avoidance Challenge - Dataset/kelvins_competition_data"
 RESULTS = ROOT / "results"
 PRED = ROOT / "preds"
+KR_SEEDS = (42, 43)  # per mf-053: kernel ridge runs on 2 repetitions
 
 
 def main() -> None:
@@ -33,12 +35,14 @@ def main() -> None:
     y = merged.risk_final.to_numpy(dtype=np.float64)
     lrp = merged.lrp.to_numpy(dtype=np.float64)
     eid = merged.event_id.to_numpy(dtype=np.int64)
+    del cdm, feats, merged  # 3 GB machine: the kernel ridge fit needs the memory
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     PRED.mkdir(parents=True, exist_ok=True)
     for slug in names:
         t0 = time.time()
-        res = run_linear_cv(slug, X, y, eid, folds)
+        reps = sorted(folds[folds.seed.isin(KR_SEEDS)].rep.unique()) if slug == "kernel_ridge" else None  # per mf-053
+        res = run_linear_cv(slug, X, y, eid, folds, reps=reps)
         out = {
             "model": slug,
             "metrics": res.metrics,
@@ -46,6 +50,9 @@ def main() -> None:
             "fold_records": res.fold_records,  # alpha and alarm line t per fold and repetition, per mf-012, mf-013
             "alpha_grid": (list(RIDGE_ALPHAS) if slug == "ridge" else list(LASSO_ALPHAS) if slug == "lasso" else None),
             "k_grid": list(K_GRID) if slug == "knn" else None,
+            "lambda_grid": list(kr.LAMBDA_GRID) if slug == "kernel_ridge" else None,  # per mf-049
+            "c_gamma": kr.C_GAMMA if slug == "kernel_ridge" else None,
+            "seeds": list(KR_SEEDS) if slug == "kernel_ridge" else None,
             "inner_seed": INNER_SEED,
             "inner_splits": INNER_SPLITS,
             "bootstrap": bootstrap_report(y, lrp, res.oof_r_hat, res.oof_p_hr),  # per pj-006, mf-016..mf-019

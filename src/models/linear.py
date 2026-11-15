@@ -141,6 +141,9 @@ def choose_alarm_line(r_hat_train: np.ndarray, y_train: np.ndarray) -> float:
 def fit_predict_fold(name: str, X_train: np.ndarray, y_train: np.ndarray, X_val: np.ndarray) -> dict:
     if name == "knn":
         return _fit_predict_knn(X_train, y_train, X_val)
+    if name == "kernel_ridge":  # mf-044..mf-053, S10
+        from src.models import kernel_ridge  # lazy: kernel_ridge imports helpers from this module
+        return kernel_ridge.fit_predict_fold(X_train, y_train, X_val)
     alpha, nonconv_alphas, mean_ap = None, [], None
     if name != "ols":
         sel = select_alpha(name, X_train, y_train)
@@ -190,8 +193,8 @@ def metrics_pooled_from_oof(
 
 
 def run_linear_cv(name: str, X: np.ndarray, y: np.ndarray, event_ids: np.ndarray,
-                  folds: pd.DataFrame) -> LinearCvResult:
-    reps = sorted(folds.rep.unique())
+                  folds: pd.DataFrame, reps=None) -> LinearCvResult:
+    reps = sorted(folds.rep.unique()) if reps is None else sorted(reps)  # reps subset per mf-053
     oof_r = np.full((len(reps), len(y)), np.nan)
     oof_p = np.full((len(reps), len(y)), np.nan)
     frames, records = [], []
@@ -207,7 +210,9 @@ def run_linear_cv(name: str, X: np.ndarray, y: np.ndarray, event_ids: np.ndarray
                 "r_hat": res["r_hat_val"], "p_hr": res["p_hr_val"],
             }))
             records.append({
-                "rep": int(rep), "fold": int(k), "alpha": res["alpha"], "k": res.get("k"), "t": res["t"],
+                "rep": int(rep), "fold": int(k), "alpha": res["alpha"], "k": res.get("k"), "lam": res.get("lam"),
+                "gamma": res.get("gamma"), "m": res.get("m"), "n_oof": res.get("n_oof"), "t": res["t"],
+                "mean_ap": res.get("mean_ap"),  # per fold inner mean AP per grid value (mf-049)
                 "final_converged": res["final_converged"],
                 "nonconverged_alphas": res["nonconverged_alphas"],
             })

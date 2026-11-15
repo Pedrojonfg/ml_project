@@ -60,3 +60,21 @@ Verdict: READY
 | Stage-2 regressor trained on HR events only (selection effect) | hazard | solid | outside-notes: selection bias (ESL ch.7 context) | Predicted the output for a true risk of -9 lands above -9 because training risks were all >= -6; extrapolation behavior of the chosen model family not examined |
 
 Notes: calibration is not in the course notes by the index (not grepped; poppler/pypdf missing, notes pages not opened). All external references are from memory and unverified. Open for Stage 2: calibration method (Platt vs isotonic vs other), data used to calibrate, how the two stages combine (the formula above is one option, not chosen), what the stage-2 regressor is trained on, number of bins for the reliability diagram, calibration metrics (not examined).
+
+## S10: kernel ridge (RBF) — 2026-11-15
+
+Verdict: READY. Tiny numeric examples (two points (1,2), (2,3), lambda = 5, then 0.01 and 1000). All sources outside-notes: Bishop PRML ch.6 and ESL ch.5/12, from memory, unverified; the notes PDF could not be opened (poppler missing), so syllabus chapters 5 and 6 are cited by name only.
+
+| Concept | Role | Status | Source | Evidence |
+|---------|------|--------|--------|----------|
+| Ridge primal: closed form, effect of lambda | prerequisite | solid | notes ch.5; outside-notes: ESL 3.4 | Derived w = 8/(5+lambda) unaided, computed 1.6 (lambda 0) and 0.8 (lambda 5); lambda large gives w near 0 and a near-constant prediction (first said "predicts nothing"); with unpenalized intercept it predicts the training mean (chose B) |
+| Dual form: w = sum alpha_i x_i, alpha_i = residual_i / lambda | core | solid | notes 6.2; outside-notes: Bishop PRML 6.1 | Computed alpha = (0.24, 0.28) and checked w = 0.8 |
+| Kernel as similarity, Gram matrix K, alpha = (K + lambda I)^-1 y | core | solid | notes 6.3 | Computed f(3) with linear and RBF kernels; used K = I to get f(x_i) = y_i/(1+lambda) for lambda 5 and 0.01 |
+| RBF kernel and gamma | core | solid | outside-notes: Bishop PRML 6.2 | Question 6c wrong (said small gamma memorizes); after teaching, answered correctly that large gamma with small lambda memorizes (7c, 11c) |
+| lambda and gamma as bias-variance control (over/under-fit) | core | solid | notes ch.5 | Question 10b wrong (called small gamma over-fit); after teaching, classified train/validation error pairs correctly and mapped them to (gamma 100, lambda 0.01) and gamma 0.0001 |
+| Scaling before distances, scaler on train only | hazard | solid | S4 addendum KNN (2026-11-12) | Not re-examined; carried from the KNN record, same distance-based regime |
+| Memorizing model and the alarm line fitted on training predictions | hazard | solid | S4 mf-012 | Question 8 wrong (said B); 8b partly wrong. After teaching: with held-out predictions (4-event example) chose t = -6.8 and saw the alarm fire at r_hat = -6.5 (Q12a, b); first described the held-out events as validation data, then correctly said they come from the outer training fold and that using the outer validation fold would be leakage (Q13) |
+| Cost: K is n x n, solve is O(n^3) | hazard | solid | outside-notes: ESL ch.12 | 7100^2 = 50.4 M entries, x4 and x8 when n doubles |
+| Nested selection of two hyperparameters (grid x inner folds) | hazard | solid | outside-notes: ESL 7.10 | Question 10a wrong (175 combinations, forgot inner folds); after teaching 3 x 2 x 5 = 30 |
+
+Not examined, carried to the ADR as open questions: kernel family (linear, polynomial, Laplacian) beyond RBF; sklearn `gamma` parametrization (exp(-gamma d^2) as used here); `KernelRidge` has no `fit_intercept` (checked in sklearn 1.9.1: parameters are alpha, kernel, gamma, degree, coef0, kernel_params), so centering y and the intercept must be decided; self-weight on the training diagonal for the alarm line (analogue of the KNN self-neighbour, mf-043).
