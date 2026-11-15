@@ -78,17 +78,18 @@ def crp_predictions(n_events: int) -> np.ndarray:
     return np.full(int(n_events), CRP_RISK, dtype=np.float64)
 
 
-def lrp_from_cdms(cdm_table: Mapping[str, np.ndarray]) -> dict[int, float]:
-    """Latest Risk Prediction: risk at smallest time_to_tca among CDMs with ttc >= 2.
+def lrp_from_cdms(cdm_table: Mapping[str, np.ndarray], ttc_min: float = 2.0) -> dict[int, float]:
+    """Latest Risk Prediction: risk at smallest time_to_tca among CDMs with ttc >= ttc_min.
 
-    (Paper r_{-2}: latest known risk still at least 2 days before TCA.)
+    (Paper r_{-2}: latest known risk still at least 2 days before TCA when ttc_min = 2.)
     """
     event_id = np.asarray(cdm_table["event_id"])
     ttc = np.asarray(cdm_table["time_to_tca"], dtype=np.float64)
     risk = np.asarray(cdm_table["risk"], dtype=np.float64)
+    cut = float(ttc_min)
     out: dict[int, float] = {}
     for eid in np.unique(event_id):
-        m = (event_id == eid) & (ttc >= 2.0)
+        m = (event_id == eid) & (ttc >= cut)
         if not np.any(m):
             continue
         # among eligible, latest in time = closest to TCA = min time_to_tca

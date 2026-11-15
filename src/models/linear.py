@@ -181,6 +181,14 @@ def _rep_metrics(y: np.ndarray, r_hat: np.ndarray, p_hr: np.ndarray) -> dict[str
     }
 
 
+def metrics_pooled_from_oof(
+    y: np.ndarray, oof_r_hat: np.ndarray, oof_p_hr: np.ndarray,
+) -> dict[str, float]:
+    """Pooled OOF metrics over all repetitions (S9 linear pick, pj-056)."""
+    r = int(oof_r_hat.shape[0])
+    return _rep_metrics(np.tile(y, r), oof_r_hat.ravel(), oof_p_hr.ravel())
+
+
 def run_linear_cv(name: str, X: np.ndarray, y: np.ndarray, event_ids: np.ndarray,
                   folds: pd.DataFrame) -> LinearCvResult:
     reps = sorted(folds.rep.unique())

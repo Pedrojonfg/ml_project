@@ -110,11 +110,17 @@ def _features_one_event(usable: pd.DataFrame) -> dict[str, float]:
     return row
 
 
-def build_features(event_table: pd.DataFrame, cdm: pd.DataFrame) -> pd.DataFrame:
+def build_features(
+    event_table: pd.DataFrame,
+    cdm: pd.DataFrame,
+    *,
+    ttc_min: float | None = None,
+) -> pd.DataFrame:
     """One row per event_id in event_table; columns match FEATURE_COLUMNS."""
+    cut = float(TTC_MIN if ttc_min is None else ttc_min)
     ids = event_table["event_id"].to_numpy()
     cdm = cdm.loc[cdm["event_id"].isin(ids), list(_CDM_USECOLS)].copy()
-    usable = cdm[cdm["time_to_tca"] >= TTC_MIN]
+    usable = cdm[cdm["time_to_tca"] >= cut]
 
     feats = usable.groupby("event_id", sort=False).apply(
         _features_one_event, include_groups=False
