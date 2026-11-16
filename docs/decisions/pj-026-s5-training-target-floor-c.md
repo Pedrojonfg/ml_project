@@ -1,6 +1,6 @@
 # pj-026. S5 training-target floor c derived from F₂ theory
 
-- **Status:** accepted
+- **Status:** accepted (derivation extended with weights by pj-072; iteration-2 outcome of the revocation criteria in pj-071)
 - **Date:** 2026-10-28
 - **Tags:** modeling | preprocessing | evaluation
 - **Decided by:** Pedro

@@ -1,6 +1,6 @@
 # pj-066. S8 training — Adam, batch 64, early stopping
 
-- **Status:** accepted
+- **Status:** accepted (max epochs and early-stopping monitor superseded by pj-074)
 - **Date:** 2026-11-15
 - **Tags:** modeling | hyperparameters | optimization
 - **Decided by:** Pedro
