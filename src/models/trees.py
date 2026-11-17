@@ -18,6 +18,8 @@ from src.metrics import HR_THRESHOLD_LOG10, f2_score, kelvins_l, mse_hr
 from src.protocol import N_SPLITS
 
 N_ESTIMATORS_GRID = (300, 500, 1000)  # per pj-024
+W_GRID = (1, 2, 5, 10)
+INNER_SPLITS = 3
 P_HR_THRESHOLD = HR_THRESHOLD_LOG10  # per pj-020, pj-001
 
 
@@ -105,7 +107,17 @@ class CvResult:
     floors: list[dict] = field(default_factory=list)  # per pj-026
 
 
-def floor_c(y_train: np.ndarray, lrp_train: np.ndarray) -> dict:
+def _sw(y, w):
+    return {} if w == 1 else {"model__sample_weight": hr_weights(y, w)}
+
+
+# per pj-072
+def hr_weights(y, w):
+    y = np.asarray(y, dtype=np.float64)
+    return np.where(y >= P_HR_THRESHOLD, float(w), 1.0)
+
+
+def floor_c(y_train: np.ndarray, lrp_train: np.ndarray, w: float = 1.0) -> dict:
     # per pj-026
     y_train = np.asarray(y_train, dtype=np.float64)
     lrp_train = np.asarray(lrp_train, dtype=np.float64)
@@ -122,13 +134,16 @@ def floor_c(y_train: np.ndarray, lrp_train: np.ndarray) -> dict:
         mc = m(c)
         return (-6.0 - mc) / (mu_hr - mc)
 
-    c = brentq(lambda c: p(c) - p_star, -29.99, -6.0005)
+    w = float(w)
+    p_star_w = w * p_star / (w * p_star + 1.0 - p_star)
+    c = brentq(lambda c: p(c) - p_star_w, -29.99, -6.0005)
     return {
         "c": float(c),
         "mu_hr": mu_hr,
         "sd_hr": sd_hr,
         "f_star": f_star,
         "p_star": float(p_star),
+        "w": w,
     }
 
 
@@ -252,18 +267,22 @@ def importance_diagnostics(
     rf_n_estimators: int,
     gbdt_n_estimators: int,
     lrp: np.ndarray | None = None,
+    rf_w: float = 1.0,
+    gbdt_w: float = 1.0,
 ) -> dict:
     # mandatory B1 (rep 0, fold 0) and B3 — per pj-019
     rep, fold_id = 0, 0
     train_m, val_m = _fold_masks(folds, rep, fold_id)
     rs = 42
-    y_train = y[train_m]
-    if lrp is not None:
-        fc = floor_c(y[train_m], lrp[train_m])
-        y_train = np.maximum(y[train_m], fc["c"])
 
-    def b1_for(pipe: Pipeline, global_imp: np.ndarray, label: str) -> dict:
-        pipe.fit(X[train_m], y_train)
+    def b1_for(pipe: Pipeline, global_imp: np.ndarray, label: str, w: float = 1.0) -> dict:
+        y_train = y[train_m]
+        if lrp is not None:
+            fc = floor_c(y[train_m], lrp[train_m], w)
+            y_train = np.maximum(y[train_m], fc["c"])
+            pipe.fit(X[train_m], y_train, model__sample_weight=hr_weights(y[train_m], w))
+        else:
+            pipe.fit(X[train_m], y_train)
         perm = permutation_importance(
             pipe,
             X[val_m],
@@ -288,8 +307,8 @@ def importance_diagnostics(
 
     rf_pipe = make_rf(rf_n_estimators, rs)
     gbdt_pipe = make_gbdt(gbdt_n_estimators, rs)
-    b1_rf = b1_for(rf_pipe, rf_imp, "rf")
-    b1_gbdt = b1_for(gbdt_pipe, gbdt_imp, "gbdt")
+    b1_rf = b1_for(rf_pipe, rf_imp, "rf", rf_w)
+    b1_gbdt = b1_for(gbdt_pipe, gbdt_imp, "gbdt", gbdt_w)
 
     rf_r1, gb_r1 = top_k_names(rf_imp, 1)[0], top_k_names(gbdt_imp, 1)[0]
     fam_rf, fam_gb = feature_family(rf_r1), feature_family(gb_r1)
@@ -330,6 +349,7 @@ def _floor_per_prediction(
     floor_map = {(int(f["rep"]), int(f["fold"])): f for f in res.floors}
     c_pp = np.empty(r * n, dtype=np.float64)
     mu_pp = np.empty(r * n, dtype=np.float64)
+    w_pp = np.empty(r * n, dtype=np.float64)
     for r_idx, rep in enumerate(reps):
         fcol = folds[folds.rep == rep].fold.to_numpy()
         for i in range(n):
@@ -337,12 +357,13 @@ def _floor_per_prediction(
             idx = r_idx * n + i
             c_pp[idx] = flo["c"]
             mu_pp[idx] = flo["mu_hr"]
-    return yt, rp, ev, c_pp, mu_pp
+            w_pp[idx] = float(flo.get("w", 1.0))
+    return yt, rp, ev, c_pp, mu_pp, w_pp
 
 
 def floor_c_diagnostics(y: np.ndarray, res: CvResult, folds: pd.DataFrame) -> dict:
     # per pj-026
-    yt, rp, ev, c_pp, mu_pp = _floor_per_prediction(y, res, folds)
+    yt, rp, ev, c_pp, mu_pp, w_pp = _floor_per_prediction(y, res, folds)
     f_stars = [float(f["f_star"]) for f in res.floors]
     f_star_mean = float(np.mean(f_stars)) if f_stars else 0.0
     cs = [float(f["c"]) for f in res.floors]
@@ -383,7 +404,8 @@ def floor_c_diagnostics(y: np.ndarray, res: CvResult, folds: pd.DataFrame) -> di
     n_hr_ev_zone = len(np.unique(ev[hr_in_zone]))
     r3_eval = n_hr_ev_zone >= 10
     if r3_eval:
-        p_hat = np.clip((rp - c_pp) / (mu_pp - c_pp), 0.0, 1.0)
+        p_w = np.clip((rp - c_pp) / (mu_pp - c_pp), 0.0, 1.0)
+        p_hat = p_w / (w_pp - (w_pp - 1.0) * p_w)
         obs = float(np.mean(yt[zone] >= -6.0))
         mean_p = float(np.mean(p_hat[zone]))
         ratio = obs / mean_p if mean_p else 0.0
@@ -427,3 +449,94 @@ def floor_c_diagnostics(y: np.ndarray, res: CvResult, folds: pd.DataFrame) -> di
         "R4": r4,
         "reopen_required": bool(reopen),
     }
+
+
+# per pj-073
+def select_by_inner_cv(fit_predict, ws, tr, y, seed):
+    from sklearn.model_selection import StratifiedKFold
+    tr = np.asarray(tr)
+    skf = StratifiedKFold(n_splits=INNER_SPLITS, shuffle=True, random_state=seed)
+    splits = list(skf.split(np.zeros(len(tr)), y[tr] >= P_HR_THRESHOLD))
+    scores = {}
+    for w in ws:
+        idxs, preds = [], {}
+        for a, b in splits:
+            out = fit_predict(tr[a], tr[b], w)
+            idxs.append(tr[b])
+            for v, p in out.items():
+                preds.setdefault(v, []).append(np.asarray(p, dtype=np.float64))
+        yy = y[np.concatenate(idxs)]
+        for v, ps in preds.items():
+            scores[(w, v)] = kelvins_pack(yy, np.concatenate(ps))["L_unclipped"]
+    best, best_l = None, None
+    for key in sorted(scores):
+        if best is None or scores[key] < best_l:
+            best, best_l = key, scores[key]
+    return best, scores
+
+
+def _fit_variants(kind, X, y, lrp, fit_idx, w, ns, rs):
+    fc = floor_c(y[fit_idx], lrp[fit_idx], w)
+    pipe = (make_rf if kind == "rf" else make_gbdt)(max(ns), rs)
+    pipe.fit(X[fit_idx], np.maximum(y[fit_idx], fc["c"]), **_sw(y[fit_idx], w))
+    return pipe, fc
+
+
+def _predict_variants(kind, pipe, Xp, ns):
+    Xi = pipe.named_steps["imputer"].transform(Xp)
+    m = pipe.named_steps["model"]
+    out = {}
+    if kind == "rf":
+        per_tree = np.stack([t.predict(Xi) for t in m.estimators_])
+        for n in ns:
+            out[n] = per_tree[:n].mean(axis=0)
+    else:
+        staged = list(m.staged_predict(Xi))
+        for n in ns:
+            out[n] = staged[n - 1]
+    return out
+
+
+def run_nested_tree_cv(kind, X, y, lrp, event_ids, folds, cache_dir=None):
+    import os, pickle, tempfile
+    if kind not in ("rf", "gbdt"):
+        raise ValueError(kind)
+    reps = sorted(folds.rep.unique())
+    ns = tuple(N_ESTIMATORS_GRID); ws = tuple(W_GRID)
+    oof = np.full((len(reps), len(y)), np.nan)
+    rows, floors, imps = [], [], []
+    for i, rep in enumerate(reps):
+        path = os.path.join(cache_dir, f"rep{int(rep)}.pkl") if cache_dir is not None else None
+        if path and os.path.exists(path):
+            with open(path, "rb") as fh:
+                d = pickle.load(fh)
+        else:
+            rs = 42 + int(rep)
+            d = {"pred": np.full(len(y), np.nan), "rows": [], "floors": [], "imps": []}
+            for k in range(N_SPLITS):
+                train_m, val_m = _fold_masks(folds, int(rep), k)
+                tr, va = np.flatnonzero(train_m), np.flatnonzero(val_m)
+                def fp(fit_idx, pred_idx, w):
+                    pipe, _ = _fit_variants(kind, X, y, lrp, fit_idx, w, ns, rs)
+                    return _predict_variants(kind, pipe, X[pred_idx], ns)
+                (bw, bn), scores = select_by_inner_cv(fp, ws, tr, y, rs)
+                fc = floor_c(y[tr], lrp[tr], bw)
+                pipe = (make_rf if kind == "rf" else make_gbdt)(bn, rs)
+                pipe.fit(X[tr], np.maximum(y[tr], fc["c"]), **_sw(y[tr], bw))
+                pred = pipe.predict(X[va])
+                d["pred"][va] = pred
+                d["imps"].append(pipe.named_steps["model"].feature_importances_)
+                d["floors"].append({"rep": int(rep), "fold": k, **fc, "n_estimators": int(bn),
+                                    "inner_L": {f"{a}|{b}": float(v) for (a, b), v in scores.items()}})
+                d["rows"].append(pd.DataFrame({"event_id": event_ids[va], "rep": int(rep), "fold": k,
+                                               "r_hat": pred, "p_hr": p_hr_from_r_hat(pred)}))
+            if path:
+                fd, tmp = tempfile.mkstemp(dir=cache_dir)
+                with os.fdopen(fd, "wb") as fh:
+                    pickle.dump(d, fh)
+                os.replace(tmp, path)
+        oof[i] = d["pred"]; rows += d["rows"]; floors += d["floors"]; imps += d["imps"]
+    per_rep = [kelvins_pack(y, oof[i]) for i in range(len(reps))]
+    metrics = {k: float(np.mean([m[k] for m in per_rep])) for k in per_rep[0]}
+    pooled = kelvins_pack(np.tile(y, len(reps)), oof.ravel())
+    return CvResult(oof, metrics, per_rep, pooled, rows, np.mean(imps, axis=0), floors)

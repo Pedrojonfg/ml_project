@@ -3,3 +3,4 @@ pandas==3.0.0
 scikit-learn==1.9.1
 matplotlib==3.11.2
 pytest==9.0.3
+torch==2.15.0  # CPU wheel: pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu (pj-070)
