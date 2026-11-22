@@ -513,8 +513,11 @@ def run_nested_tree_cv(kind, X, y, lrp, event_ids, folds, cache_dir=None):
         else:
             rs = 42 + int(rep)
             d = {"pred": np.full(len(y), np.nan), "rows": [], "floors": [], "imps": []}
-            for k in range(N_SPLITS):
+            n_folds = int(folds.fold.max()) + 1  # honor folds in use (tests may use < N_SPLITS)
+            for k in range(n_folds):
                 train_m, val_m = _fold_masks(folds, int(rep), k)
+                if not np.any(val_m):
+                    continue
                 tr, va = np.flatnonzero(train_m), np.flatnonzero(val_m)
                 def fp(fit_idx, pred_idx, w):
                     pipe, _ = _fit_variants(kind, X, y, lrp, fit_idx, w, ns, rs)

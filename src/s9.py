@@ -1,10 +1,13 @@
-"""S9 lead-time curve and leave-mission-out (pj-053..060)."""
+"""S9 lead-time curve and leave-mission-out (pj-053..060, pj-077, pj-078)."""
 
 from __future__ import annotations
 
 import json
+import os
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from statistics import mode
 from typing import Any
 
 import numpy as np
@@ -13,10 +16,17 @@ import pandas as pd
 from src.features import FEATURE_COLUMNS, build_features
 from src.metrics import lrp_from_cdms
 from src.models.linear import _rep_metrics, fit_predict_fold, metrics_pooled_from_oof, run_linear_cv
-from src.models.trees import (
+import src.models.trees as trees
+from src.models.trees import (  # noqa: F401 — old names kept for test monkeypatches
+    N_ESTIMATORS_GRID,
+    W_GRID,
+    _fit_variants,
+    _predict_variants,
+    _sw,
     floor_c,
     kelvins_pack,
     make_gbdt,
+    run_nested_tree_cv,
     run_oof_cv,
     select_gbdt_n_estimators,
 )
@@ -50,6 +60,36 @@ def lrp_array(cdm: pd.DataFrame, event_ids: np.ndarray, t_cut: float) -> np.ndar
     if np.any(np.isnan(out)):
         raise RuntimeError("missing LRP for cohort event")
     return out
+
+
+def gbdt_from_bakeoff(path_or_dict: Path | str | dict) -> dict[str, float]:
+    """Top-level metrics from results/gbdt.json (pj-078)."""
+    if isinstance(path_or_dict, (str, Path)):
+        data = json.loads(Path(path_or_dict).read_text())
+    else:
+        data = path_or_dict
+    return dict(data["metrics"] if "metrics" in data else data)
+
+
+def _atomic_write_json(path: Path, obj: dict[str, Any]) -> None:
+    # ponytail: temp + replace so a crash cannot leave a corrupt "done" checkpoint
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), suffix=".tmp")
+    try:
+        try:
+            os.close(fd)
+        except OSError:
+            pass
+        Path(tmp).write_text(json.dumps(obj, indent=2, default=_json_default) + "\n")
+        os.replace(tmp, path)
+        tmp = ""
+    finally:
+        if tmp and os.path.exists(tmp):
+            try:
+                os.unlink(tmp)
+            except OSError:
+                pass
 
 
 def _pick_linear_slug(
@@ -89,42 +129,73 @@ class LeadTimePoint:
     models: dict[str, Any]
 
 
-def run_leadtime_point(
-    t_cut: int,
-    cdm: pd.DataFrame,
-    table: pd.DataFrame,
-    folds: pd.DataFrame,
-) -> LeadTimePoint:
+def _cohort_xy(
+    t_cut: float, cdm: pd.DataFrame, table: pd.DataFrame, folds: pd.DataFrame,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, pd.DataFrame, int]:
     ids = cohort_event_ids(cdm, table, float(t_cut))
     sub = table[table.event_id.isin(ids)].sort_values("event_id", ignore_index=True)
     sub_folds = folds[folds.event_id.isin(ids)].sort_values(["rep", "event_id"]).reset_index(drop=True)
     feats = build_features(sub, cdm, ttc_min=float(t_cut))
     merged = feats.merge(sub[["event_id", "risk_final", "y_hr"]], on="event_id")
+    merged = merged.sort_values("event_id", ignore_index=True)
     eid = merged.event_id.to_numpy(dtype=np.int64)
     X = merged[list(FEATURE_COLUMNS)].to_numpy(dtype=np.float64)
     y = merged.risk_final.to_numpy(dtype=np.float64)
     lrp = lrp_array(cdm, eid, float(t_cut))
-    n_hr = int(sub.y_hr.sum())
+    return X, y, lrp, eid, sub_folds, int(sub.y_hr.sum())
 
+
+def run_leadtime_point(
+    t_cut: int,
+    cdm: pd.DataFrame,
+    table: pd.DataFrame,
+    folds: pd.DataFrame,
+    *,
+    bakeoff_gbdt: dict | None = None,
+    bakeoff_gbdt_path: Path | str | None = None,
+    nest_cache_dir: Path | str | None = None,
+) -> LeadTimePoint:
+    X, y, lrp, eid, sub_folds, n_hr = _cohort_xy(t_cut, cdm, table, folds)
     lrp_m = kelvins_pack(y, lrp)
-    gbdt_n = select_gbdt_n_estimators(X, y, eid, sub_folds, lrp=lrp)
-    gbdt_res = run_oof_cv(lambda rs: make_gbdt(gbdt_n, rs), X, y, eid, sub_folds, lrp=lrp)
     lin_slug, lin_pooled = _pick_linear_slug(X, y, eid, sub_folds)
     lin_res = run_linear_cv(lin_slug, X, y, eid, sub_folds)
     lin_mean = lin_res.metrics
     lin_mean["L_unclipped_pooled_pick"] = lin_pooled["L_unclipped"]
 
+    if t_cut == 2 and (bakeoff_gbdt is not None or bakeoff_gbdt_path is not None):
+        # per pj-078: reuse bake-off GBDT; do not retrain
+        src = bakeoff_gbdt if bakeoff_gbdt is not None else bakeoff_gbdt_path
+        assert src is not None
+        m = gbdt_from_bakeoff(src)
+        gbdt_block: dict[str, Any] = {
+            "metrics": m,
+            "metrics_pooled": m,
+            "source": "bakeoff",
+            "reused_bakeoff": True,
+        }
+    else:
+        # per pj-077: nested (w, n_estimators) + c(w) + HR weights
+        nest = Path(nest_cache_dir) if nest_cache_dir is not None else None
+        if nest is not None:
+            nest.mkdir(parents=True, exist_ok=True)
+        res = run_nested_tree_cv("gbdt", X, y, lrp, eid, sub_folds, cache_dir=nest)
+        ws = [f["w"] for f in res.floors]
+        ns = [int(f["n_estimators"]) for f in res.floors]
+        gbdt_block = {
+            "metrics": res.metrics,
+            "metrics_pooled": res.metrics_pooled,
+            "w": float(mode(ws)) if ws else float(W_GRID[0]),
+            "n_estimators": int(mode(ns)) if ns else int(N_ESTIMATORS_GRID[0]),
+            "fold_records": res.floors,
+        }
+
     return LeadTimePoint(
         t_cut=t_cut,
-        n_events=len(ids),
+        n_events=len(eid),
         n_hr=n_hr,
         models={
             "lrp": {"metrics": lrp_m, "metrics_pooled": lrp_m},
-            "gbdt": {
-                "metrics": gbdt_res.metrics,
-                "metrics_pooled": gbdt_res.metrics_pooled,
-                "n_estimators": gbdt_n,
-            },
+            "gbdt": gbdt_block,
             "linear": {
                 "slug": lin_slug,
                 "metrics": lin_mean,
@@ -138,32 +209,59 @@ def _metric_block_l_unclipped(block: dict[str, Any]) -> float:
     return float(block["metrics_pooled"]["L_unclipped"])
 
 
+def _curve_entry_from_models(p: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "t_cut": p["t_cut"],
+        "n_events": p["n_events"],
+        "n_hr": p["n_hr"],
+        "L_unclipped": {
+            "lrp": _metric_block_l_unclipped(p["models"]["lrp"]),
+            "gbdt": _metric_block_l_unclipped(p["models"]["gbdt"]),
+            "linear": _metric_block_l_unclipped(p["models"]["linear"]),
+        },
+        "linear_slug": p["models"]["linear"]["slug"],
+        "detail": p["models"],
+    }
+
+
 def run_leadtime_curve(
     cdm: pd.DataFrame,
     table: pd.DataFrame | None = None,
     folds: pd.DataFrame | None = None,
+    *,
+    cache_dir: Path | str | None = None,
+    bakeoff_gbdt_path: Path | str | None = None,
 ) -> dict[str, Any]:
     table = table if table is not None else build_event_table(cdm)
     folds = folds if folds is not None else make_folds(table)
-    points = [run_leadtime_point(t, cdm, table, folds) for t in LEAD_TIME_CUTS]
+    cache = Path(cache_dir) if cache_dir is not None else None
+    if cache is not None:
+        cache.mkdir(parents=True, exist_ok=True)
+    bake = None
+    if bakeoff_gbdt_path is not None:
+        bake = json.loads(Path(bakeoff_gbdt_path).read_text())
+
+    points: list[dict[str, Any]] = []
+    for t in LEAD_TIME_CUTS:
+        cp = cache / f"t{t}.json" if cache is not None else None
+        if cp is not None and cp.is_file():
+            points.append(_curve_entry_from_models(json.loads(cp.read_text())))
+            continue
+        nest = cache / f"gbdt_t{t}" if cache is not None else None
+        pt = run_leadtime_point(
+            t, cdm, table, folds,
+            bakeoff_gbdt=bake if t == 2 else None,
+            nest_cache_dir=nest,
+        )
+        raw = {"t_cut": pt.t_cut, "n_events": pt.n_events, "n_hr": pt.n_hr, "models": pt.models}
+        if cp is not None:
+            _atomic_write_json(cp, raw)
+        points.append(_curve_entry_from_models(raw))
+
     return {
         "kind": "leadtime",
         "primary_metric": "L_unclipped",
-        "points": [
-            {
-                "t_cut": p.t_cut,
-                "n_events": p.n_events,
-                "n_hr": p.n_hr,
-                "L_unclipped": {
-                    "lrp": _metric_block_l_unclipped(p.models["lrp"]),
-                    "gbdt": _metric_block_l_unclipped(p.models["gbdt"]),
-                    "linear": _metric_block_l_unclipped(p.models["linear"]),
-                },
-                "linear_slug": p.models["linear"]["slug"],
-                "detail": p.models,
-            }
-            for p in points
-        ],
+        "points": points,
     }
 
 
@@ -177,20 +275,31 @@ def _lmo_eval_split(
     y_te: np.ndarray,
     lrp_te: np.ndarray,
 ) -> dict[str, Any]:
-    gbdt_n = select_gbdt_n_estimators(X_tr, y_tr, eid_tr, folds_tr, lrp=lrp_tr)
-    lin_slug, _ = _pick_linear_slug(X_tr, y_tr, eid_tr, folds_tr)
+    # per pj-077: nested select (w, n) on the LMO training part, then refit
+    ns = tuple(N_ESTIMATORS_GRID)
+    ws = tuple(W_GRID)
+    tr = np.arange(len(y_tr), dtype=np.int64)
+    rs = 42
 
-    fc = floor_c(y_tr, lrp_tr)
-    gb = make_gbdt(gbdt_n, 42)
-    gb.fit(X_tr, np.maximum(y_tr, fc["c"]))
+    def fp(fit_idx, pred_idx, w):
+        pipe, _ = _fit_variants("gbdt", X_tr, y_tr, lrp_tr, fit_idx, w, ns, rs)
+        return _predict_variants("gbdt", pipe, X_tr[pred_idx], ns)
+
+    (bw, bn), _scores = trees.select_by_inner_cv(fp, ws, tr, y_tr, rs)
+    fc = floor_c(y_tr, lrp_tr, bw)
+    gb = make_gbdt(int(bn), rs)
+    gb.fit(X_tr, np.maximum(y_tr, fc["c"]), **_sw(y_tr, bw))
     r_gbdt = gb.predict(X_te)
 
+    lin_slug, _ = _pick_linear_slug(X_tr, y_tr, eid_tr, folds_tr)
     lin = fit_predict_fold(lin_slug, X_tr, y_tr, X_te)
     r_lin = lin["r_hat_val"]
     p_lin = lin["p_hr_val"]
 
     return {
-        "gbdt_n_estimators": gbdt_n,
+        "w": float(bw),
+        "n_estimators": int(bn),
+        "gbdt_n_estimators": int(bn),
         "linear_slug": lin_slug,
         "metrics": {
             "lrp": kelvins_pack(y_te, lrp_te),
@@ -204,6 +313,8 @@ def run_lmo(
     cdm: pd.DataFrame,
     table: pd.DataFrame | None = None,
     t_cut: float = 2.0,
+    *,
+    cache_dir: Path | str | None = None,
 ) -> dict[str, Any]:
     table = table if table is not None else build_event_table(cdm)
     ids = cohort_event_ids(cdm, table, t_cut)
@@ -211,20 +322,31 @@ def run_lmo(
     feats = build_features(sub, cdm, ttc_min=t_cut)
     merged = feats.merge(sub[["event_id", "risk_final", "y_hr"]], on="event_id")
     missions = mission_ids_for_events(cdm, merged.event_id.to_numpy(dtype=np.int64))
+    cache = Path(cache_dir) if cache_dir is not None else None
+    if cache is not None:
+        cache.mkdir(parents=True, exist_ok=True)
 
     rows: list[dict[str, Any]] = []
     for mid in sorted(missions.unique()):
+        cp = cache / f"mission_{int(mid)}.json" if cache is not None else None
+        if cp is not None and cp.is_file():
+            rows.append(json.loads(cp.read_text()))
+            continue
+
         test_m = missions.to_numpy() == mid
         n_test = int(test_m.sum())
         n_hr_test = int(sub.y_hr.to_numpy()[test_m].sum())
         if n_hr_test == 0:
-            rows.append({
+            row: dict[str, Any] = {
                 "mission_id": int(mid),
                 "status": "skipped",
                 "reason": LMO_REASON_ZERO_HR,
                 "n_test": n_test,
                 "n_hr_test": 0,
-            })
+            }
+            if cp is not None:
+                _atomic_write_json(cp, row)
+            rows.append(row)
             continue
 
         train_m = ~test_m
@@ -242,13 +364,16 @@ def run_lmo(
         lrp_te = lrp_array(cdm, eid_te, t_cut)
 
         block = _lmo_eval_split(X_tr, y_tr, lrp_tr, eid_tr, folds_tr, X_te, y_te, lrp_te)
-        rows.append({
+        row = {
             "mission_id": int(mid),
             "status": "ok",
             "n_test": n_test,
             "n_hr_test": n_hr_test,
             **block,
-        })
+        }
+        if cp is not None:
+            _atomic_write_json(cp, row)
+        rows.append(row)
 
     eval_rows = [r for r in rows if r.get("status") == "ok"]
     summary = {}
@@ -256,10 +381,11 @@ def run_lmo(
         for key in ("lrp", "gbdt", "linear"):
             l_vals = [r["metrics"][key]["L_unclipped"] for r in eval_rows]
             l_fin = [x for x in l_vals if np.isfinite(x)]
+            f2s = [r["metrics"][key]["F2"] for r in eval_rows if "F2" in r["metrics"][key]]
             summary[key] = {
                 "L_unclipped_mean": float(np.mean(l_fin)) if l_fin else None,
                 "L_unclipped_mean_n": len(l_fin),
-                "F2_mean": float(np.mean([r["metrics"][key]["F2"] for r in eval_rows])),
+                "F2_mean": float(np.mean(f2s)) if f2s else None,
             }
 
     return {
