@@ -2,7 +2,7 @@
 
 ## Destination
 
-Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**. S7: pj-045..052 accepted. **S9:** pj-053..060 accepted; implementación S9 + deliverables W2. **S8:** pj-061..070 accepted (MLP+GRU ablation ready to implement). **Iteration 2 (S8 + S5 retrain):** pj-071..076 accepted (rf, gbdt, mlp, gru retrained with HR weights + recomputed c, w and n_estimators by nested 3-fold CV; S7 regenerated; S9 regen pending pj-077+). **S9:** pj-053..060 accepted; S9 GBDT aligns to iteration-2 protocol (pj-077); lead-time t_cut=2 reuses bake-off GBDT (pj-078). Regen: cuts 3–4 + LMO under pj-077; t=2 GBDT copied. Pendiente W2: formato figura/tabla S9; ranking LMO vs event-CV (fog).
+Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 (+ S11 until pj-079). **S11 ownership:** Pedro (pj-079; supersedes Mario row in pj-044). Freeze Sentence Outline **dom 15 nov**. S7: pj-045..052 accepted. **S9:** pj-053..060 accepted; implementación S9 + deliverables W2. **S8:** pj-061..070 accepted (MLP+GRU ablation ready to implement). **Iteration 2 (S8 + S5 retrain):** pj-071..076 accepted (rf, gbdt, mlp, gru retrained with HR weights + recomputed c, w and n_estimators by nested 3-fold CV; S7 regenerated). **S9 regen:** pj-077–078 accepted; cuts 3–4 + LMO done; t=2 GBDT reused. Cierre decidido (pj-079–085): S11 → Pedro (full plan); official test = all bake-off+S6, single full-train fit + re-selection (seed 42), event filter ≥1 CDM ttc≥2, two report tables. Merge `scope/s8-iteration-2` → main done locally (2026-11-24). Fog escritura S9 / iter.1 sigue.
 
 ## Notes
 
@@ -189,6 +189,14 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisi
 | pj-076 | S8 weighted-loss normalization | accepted | Weighted mean Σwℓ/Σw (training loss and monitor) | [pj-076-s8-weighted-mean-loss-normalization.md](./pj-076-s8-weighted-mean-loss-normalization.md) |
 | pj-077 | S9 GBDT iteration-2 protocol | accepted | Lead-time + LMO GBDT use pj-072/073 (weights, c(w), nested w+n); supersedes pj-056/059 GBDT hparam clause; linears unchanged | [pj-077-s9-gbdt-iteration-2-protocol.md](./pj-077-s9-gbdt-iteration-2-protocol.md) |
 | pj-078 | S9 lead-time t=2 reuse GBDT | accepted | At t_cut=2 reuse results/gbdt.json (+ preds); no retrain; cuts 3–4 and LMO still regenerate under pj-077 | [pj-078-s9-leadtime-t2-reuse-gbdt.md](./pj-078-s9-leadtime-t2-reuse-gbdt.md) |
+| pj-079 | S11 ownership Pedro | accepted | Pedro owns S11 in full; supersedes Mario S11 row in pj-044; S10 and W3 integration stay Mario | [pj-079-s11-ownership-pedro.md](./pj-079-s11-ownership-pedro.md) |
+| pj-080 | S11 done-criteria full | accepted | README + regen script + MLA bib + AI declaration; no cut from plan S11 | [pj-080-s11-done-criteria-full.md](./pj-080-s11-done-criteria-full.md) |
+| pj-081 | Official test model set | accepted | CRP/LRP + all single-stage slugs + all S6 stage-1/pairs; no S9 | [pj-081-official-test-model-set.md](./pj-081-official-test-model-set.md) |
+| pj-082 | Official test single fit | accepted | One fit on full filtered train per learned slug; no fold ensemble; hparam freeze rule separate | [pj-082-official-test-single-fit.md](./pj-082-official-test-single-fit.md) |
+| pj-083 | Official test hparam re-selection | accepted | Re-run each family’s selection on full filtered train; inner seed 42; then c(w)/t/preprocess on full train; no test in selection | [pj-083-official-test-hparam-reselection.md](./pj-083-official-test-hparam-reselection.md) |
+| pj-084 | Official test event filter | accepted | Keep events with ≥1 CDM ttc≥2; not full pj-003; inputs only ttc≥2; label true_risk private | [pj-084-official-test-event-filter.md](./pj-084-official-test-event-filter.md) |
+| pj-085 | OOF vs official test reporting | accepted | Final Report: two separate tables (OOF bake-off vs one-shot official test); no unmarked mix | [pj-085-official-test-vs-oof-reporting.md](./pj-085-official-test-vs-oof-reporting.md) |
+| — | Merge scope/s8-iteration-2 → main | auto-trivial | AI (engineering) | Merged locally 2026-11-24; resolved requirements.txt by keeping pyarrow + torch. Reason: user requested merge without ADR to unblock S11 branch | — |
 | — | S9 prior artifacts before overwrite | auto-trivial | AI (engineering) | Copy `results/s9_leadtime.*` and `results/s9_lmo.json` aside (e.g. `results/iter1/`) before regen overwrites them. Reason: same pattern as iteration-1 model preserve | — |
 | — | Iteration-1 outputs preserved | auto-trivial | AI (engineering) | Copy `results/{rf,gbdt,mlp,gru}.json` and `preds/{rf,gbdt,mlp,gru}.parquet` to `results/iter1/` and `preds/iter1/` before the rerun overwrites the slugs. Reason: pj-075 quotes a few first-iteration figures | — |
 | — | S8 implementation details | auto-trivial | AI (engineering) | `src/models/neural.py`, `scripts/run_s8.py`; GRU channels `risk, miss_distance, relative_speed, t_weighted_rms, time_to_tca` + `c_object_type` one-hot of the last usable CDM repeated on each step (unscaled); steps in time order, last valid = closest to TCA; inner 80/20 split shuffled with seed `(s_r, fold)`; imputer, scaler and floor `c` fit on the 80% fitting part only; tabular preprocessing = `linear.make_preprocessor` (mf-010); bootstrap as S4 (`bootstrap_report`); torch 2.15.0 CPU. Reason: details pj-063/066/067 left to implementation | — |
@@ -468,6 +476,13 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S9 W2 deliverables format | deferred-fog | pj-053 |
 | S9 LMO vs event-CV ranking table | deferred-fog | pj-058 |
 | S9 `mission_id` on events | deferred-fog (engineering: join from CDM at runtime) | pj-053 |
+| S11 owner | Pedro (supersedes Mario in pj-044) | [pj-079](./pj-079-s11-ownership-pedro.md) |
+| S11 done-criteria | README + regen entrypoint + MLA bib + AI declaration (full plan; no cut) | [pj-080](./pj-080-s11-done-criteria-full.md) |
+| Official test model set | CRP, LRP, ols/ridge/lasso/knn/kernel_ridge/rf/gbdt/mlp/gru, all S6 stage-1 and pairs; not S9 | [pj-081](./pj-081-official-test-model-set.md) |
+| Official test fit protocol | One fit on full filtered train (`pj-003`); predict test; no outer-fold ensemble | [pj-082](./pj-082-official-test-single-fit.md) |
+| Official test hyperparameter freeze | Re-selection with each family’s rule on full filtered train as outer train; inner/nested seed 42 if rep-indexed; then preprocess, c(w), alarm t on full train | [pj-083](./pj-083-official-test-hparam-reselection.md) |
+| Official test event filter | ≥1 CDM with time_to_tca ≥ 2 (not full pj-003); inputs only those CDMs; label = private true_risk | [pj-084](./pj-084-official-test-event-filter.md) |
+| Final Report split presentation | Two separate tables: internal OOF vs official test; prose states purpose of each; no unmarked merge | [pj-085](./pj-085-official-test-vs-oof-reporting.md) |
 
 ## Fog (not yet sharp)
 
