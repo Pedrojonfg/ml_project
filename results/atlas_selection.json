@@ -17,9 +17,9 @@
   ],
   "assignments": {
     "C1": {
-      "event_id": 8661,
+      "event_id": 12992,
       "k": 3,
-      "caption": "C1: event_id=8661, k=3/5, risk_final=-4.8435, y_hr=True, lrp=-11.1927, jump=jump-up, delta=6.3492",
+      "caption": "C1: event_id=12992, k=3/5, risk_final=-5.8389, y_hr=True, lrp=-6.3537, jump=stable-high, delta=0.5148",
       "meta": {}
     },
     "C2": {
@@ -53,9 +53,9 @@
       "meta": {}
     },
     "C7": {
-      "event_id": 7404,
+      "event_id": 12077,
       "k": 3,
-      "caption": "C7: event_id=7404, k=3/5, risk_final=-30.0000, y_hr=False, lrp=-4.6668, jump=jump-down, delta=-25.3332",
+      "caption": "C7: event_id=12077, k=3/5, risk_final=-30.0000, y_hr=False, lrp=-4.0152, jump=jump-down, delta=-25.9848",
       "meta": {}
     },
     "C8": {

@@ -1,6 +1,6 @@
 # pj-068. S8 imbalance — floor c + MSE; no sample weights
 
-- **Status:** accepted
+- **Status:** accepted (no-weights clause superseded by pj-072; loss normalization in pj-076)
 - **Date:** 2026-11-15
 - **Tags:** modeling | loss
 - **Decided by:** Pedro

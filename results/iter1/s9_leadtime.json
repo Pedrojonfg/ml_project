@@ -1,0 +1,39 @@
+{
+  "kind": "leadtime",
+  "primary_metric": "L_unclipped",
+  "points": [
+    {
+      "t_cut": 2,
+      "n_events": 8892,
+      "n_hr": 93,
+      "L_unclipped": {
+        "lrp": 24.71163504195662,
+        "gbdt": 1.9585996235645662,
+        "linear": 644.8156048640012
+      },
+      "linear_slug": "lasso"
+    },
+    {
+      "t_cut": 3,
+      "n_events": 8253,
+      "n_hr": 74,
+      "L_unclipped": {
+        "lrp": 51.5769217862525,
+        "gbdt": 3.0432582593364956,
+        "linear": 1753.010557759378
+      },
+      "linear_slug": "lasso"
+    },
+    {
+      "t_cut": 4,
+      "n_events": 7620,
+      "n_hr": 68,
+      "L_unclipped": {
+        "lrp": 69.57656965823314,
+        "gbdt": 3.877558582207181,
+        "linear": 2505.123750146674
+      },
+      "linear_slug": "ols"
+    }
+  ]
+}

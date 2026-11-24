@@ -2,7 +2,7 @@
 
 ## Destination
 
-Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**. S7: pj-045..052 accepted. **S9:** pj-053..060 accepted; implementación S9 + deliverables W2. **S8:** pj-061..070 accepted (MLP+GRU ablation ready to implement). **S9:** pj-053..060 accepted. Pendiente W2: formato figura/tabla S9; ranking LMO vs event-CV (fog).
+Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisions en `main` (KNN = mf-043). **W1 Progress Report:** pj-033..pj-043 accepted. **C2 (pj-044):** S8/S9/S10 **entran** (no cut); Pedro = S7 → S5 reopens → S9 → S8 + W2; Mario = S10 + S11; freeze Sentence Outline **dom 15 nov**. S7: pj-045..052 accepted. **S9:** pj-053..060 accepted; implementación S9 + deliverables W2. **S8:** pj-061..070 accepted (MLP+GRU ablation ready to implement). **Iteration 2 (S8 + S5 retrain):** pj-071..076 accepted (rf, gbdt, mlp, gru retrained with HR weights + recomputed c, w and n_estimators by nested 3-fold CV; S7 regenerated; S9 regen pending pj-077+). **S9:** pj-053..060 accepted; S9 GBDT aligns to iteration-2 protocol (pj-077); lead-time t_cut=2 reuses bake-off GBDT (pj-078). Regen: cuts 3–4 + LMO under pj-077; t=2 GBDT copied. Pendiente W2: formato figura/tabla S9; ranking LMO vs event-CV (fog).
 
 ## Notes
 
@@ -73,7 +73,7 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisi
 | pj-018 | S5 RF `n_estimators` search | accepted | Grid {100,300,500}; selection rule → pj-022 | [pj-018-s5-rf-n-estimators-search.md](./pj-018-s5-rf-n-estimators-search.md) |
 | pj-022 | S5 tuning selection metric | superseded by pj-025 | Hyperparameter pick: lowest mean **L clipped** OOF (pj-007 clip); report both L still | [pj-022-s5-tuning-select-l-clipped.md](./pj-022-s5-tuning-select-l-clipped.md) |
 | pj-025 | S5 tuning selection metric (v2) | accepted | Supersedes pj-022: select by lowest pooled OOF **unclipped** L; report both (pj-007) | [pj-025-s5-tuning-select-l-unclipped.md](./pj-025-s5-tuning-select-l-unclipped.md) |
-| pj-026 | S5 training-target floor c | accepted | Fit on max(risk_final, c); c per training fold from F₂-optimal threshold p* = F*/5, F* = LRP F₂; revoke via R0–R4 | [pj-026-s5-training-target-floor-c.md](./pj-026-s5-training-target-floor-c.md) |
+| pj-026 | S5 training-target floor c | accepted | Fit on max(risk_final, c); c per training fold from F₂-optimal threshold p* = F*/5, F* = LRP F₂; revoke via R0–R4; derivation extended with weights by pj-072, iteration-2 outcome of R-criteria in pj-071 | [pj-026-s5-training-target-floor-c.md](./pj-026-s5-training-target-floor-c.md) |
 | pj-024 | S5 relaxed trees + estimator grids | accepted | depth 8, split 2, leaf 1; n_estimators {300,500,1000} RF+GBDT; select L clipped | [pj-024-s5-relaxed-tree-hyperparameters.md](./pj-024-s5-relaxed-tree-hyperparameters.md) |
 | pj-019 | S5 feature importances | accepted | Both models; impurity; mean over 25 folds; top 10 plot; mandatory B1/B3 gates | [pj-019-s5-feature-importances.md](./pj-019-s5-feature-importances.md) |
 | pj-020 | S5 artifacts and `p_hr` | accepted | slugs `rf`/`gbdt`; `p_hr` = hard threshold on `r_hat`; imputer flags | [pj-020-s5-artifacts-and-p-hr.md](./pj-020-s5-artifacts-and-p-hr.md) |
@@ -176,11 +176,22 @@ Project Proposal: **cerradas** (016–024). Ejecución S1–S6 + S4/S5/S7-decisi
 | pj-063 | S8 input representation | accepted | MLP=pj-009 X; seq=masked usable CDM channels | [pj-063-s8-input-tabular-and-masked-sequence.md](./pj-063-s8-input-tabular-and-masked-sequence.md) |
 | pj-064 | S8 architecture | accepted | Tabular MLP + masked GRU | [pj-064-s8-architecture-mlp-gru.md](./pj-064-s8-architecture-mlp-gru.md) |
 | pj-065 | S8 preprocessing | accepted | Fold median impute + StandardScaler (numeric); both arms | [pj-065-s8-preprocessing-impute-scale.md](./pj-065-s8-preprocessing-impute-scale.md) |
-| pj-066 | S8 training loop | accepted | Adam 1e-3; batch 64; max 50; ES patience 10; same both arms | [pj-066-s8-training-adam-early-stopping.md](./pj-066-s8-training-adam-early-stopping.md) |
+| pj-066 | S8 training loop | accepted | Adam 1e-3; batch 64; max 50; ES patience 10; same both arms (max epochs and monitor superseded by pj-074) | [pj-066-s8-training-adam-early-stopping.md](./pj-066-s8-training-adam-early-stopping.md) |
 | pj-067 | S8 network sizes + T | accepted | MLP 128→64→1; GRU h=64 last-valid; T=20 | [pj-067-s8-network-sizes-and-T.md](./pj-067-s8-network-sizes-and-T.md) |
-| pj-068 | S8 floor c + MSE | accepted | pj-026 floor c; MSE; no sample weights | [pj-068-s8-floor-c-mse-no-weights.md](./pj-068-s8-floor-c-mse-no-weights.md) |
+| pj-068 | S8 floor c + MSE | accepted | pj-026 floor c; MSE; no sample weights (no-weights clause superseded by pj-072; normalization pj-076) | [pj-068-s8-floor-c-mse-no-weights.md](./pj-068-s8-floor-c-mse-no-weights.md) |
 | pj-069 | S8 torch seeds | accepted | Seed per CV rep (pj-005); no strict CUDA determinism | [pj-069-s8-torch-seeds.md](./pj-069-s8-torch-seeds.md) |
 | pj-070 | S8 artifacts + comparison | accepted | slugs mlp/gru; results+preds; bootstrap like S5 | [pj-070-s8-artifacts-and-comparison.md](./pj-070-s8-artifacts-and-comparison.md) |
+| pj-071 | Iteration 2 scope (S8 + S5 retrain) | accepted | rf, gbdt, mlp, gru retrained; alarm −6, target `risk_final`, floor `c` kept for all four (despite R-criteria); S7/S9 regenerate | [pj-071-s8-s5-iteration-2-scope.md](./pj-071-s8-s5-iteration-2-scope.md) |
+| pj-072 | HR sample weights + recomputed c | accepted | weight w on HR; c solves q(c) = w·p*/(w·p*+1−p*); w=1 gives pj-026; R3 converted; supersedes no-weights of pj-068 | [pj-072-hr-sample-weights-recomputed-c.md](./pj-072-hr-sample-weights-recomputed-c.md) |
+| pj-073 | Selection of w (+ n_estimators) by nested CV | accepted | inner 3-fold CV, stratified by HR, seed 42+r; w ∈ {1,2,5,10}; pooled L unclipped; tie → smallest w; per model and outer fold; RF/GBDT joint with n_estimators | [pj-073-nested-cv-selection-of-w.md](./pj-073-nested-cv-selection-of-w.md) |
+| pj-074 | S8 epochs + weighted monitor | accepted | max epochs 100 (mlp, gru); patience 10; weighted-MSE monitor; GRU → 200 if median best epoch > 90; supersedes pj-066 on epochs/monitor | [pj-074-s8-epochs-and-weighted-monitor.md](./pj-074-s8-epochs-and-weighted-monitor.md) |
+| pj-075 | Iteration 2 reporting | accepted | Final iteration only, stated as second, with a few figures (which: fog) | [pj-075-iteration-2-reporting.md](./pj-075-iteration-2-reporting.md) |
+| pj-076 | S8 weighted-loss normalization | accepted | Weighted mean Σwℓ/Σw (training loss and monitor) | [pj-076-s8-weighted-mean-loss-normalization.md](./pj-076-s8-weighted-mean-loss-normalization.md) |
+| pj-077 | S9 GBDT iteration-2 protocol | accepted | Lead-time + LMO GBDT use pj-072/073 (weights, c(w), nested w+n); supersedes pj-056/059 GBDT hparam clause; linears unchanged | [pj-077-s9-gbdt-iteration-2-protocol.md](./pj-077-s9-gbdt-iteration-2-protocol.md) |
+| pj-078 | S9 lead-time t=2 reuse GBDT | accepted | At t_cut=2 reuse results/gbdt.json (+ preds); no retrain; cuts 3–4 and LMO still regenerate under pj-077 | [pj-078-s9-leadtime-t2-reuse-gbdt.md](./pj-078-s9-leadtime-t2-reuse-gbdt.md) |
+| — | S9 prior artifacts before overwrite | auto-trivial | AI (engineering) | Copy `results/s9_leadtime.*` and `results/s9_lmo.json` aside (e.g. `results/iter1/`) before regen overwrites them. Reason: same pattern as iteration-1 model preserve | — |
+| — | Iteration-1 outputs preserved | auto-trivial | AI (engineering) | Copy `results/{rf,gbdt,mlp,gru}.json` and `preds/{rf,gbdt,mlp,gru}.parquet` to `results/iter1/` and `preds/iter1/` before the rerun overwrites the slugs. Reason: pj-075 quotes a few first-iteration figures | — |
+| — | S8 implementation details | auto-trivial | AI (engineering) | `src/models/neural.py`, `scripts/run_s8.py`; GRU channels `risk, miss_distance, relative_speed, t_weighted_rms, time_to_tca` + `c_object_type` one-hot of the last usable CDM repeated on each step (unscaled); steps in time order, last valid = closest to TCA; inner 80/20 split shuffled with seed `(s_r, fold)`; imputer, scaler and floor `c` fit on the 80% fitting part only; tabular preprocessing = `linear.make_preprocessor` (mf-010); bootstrap as S4 (`bootstrap_report`); torch 2.15.0 CPU. Reason: details pj-063/066/067 left to implementation | — |
 | — | S7 atlas module paths | auto-trivial | AI (engineering) | `src/atlas/`, `scripts/run_s7_atlas.py`, case list + empty-pool record under `results/atlas_*`. Reason: layout only | — |
 | — | Output column names (S2) | auto-trivial | AI (engineering) | `jump_class` for the label; analysis columns named at implementation. Reason: naming only, no modeling effect | — |
 | — | No-replay Kelvins | auto-trivial | Dataset + RQ similar; claim = estudio/eval, no leaderboard 2019 | — |
@@ -246,9 +257,9 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S5 F* for c | F₂ of LRP on the training fold | pj-026 |
 | S5 μ_HR for c | mean `risk_final` of HR events in the training fold | pj-026 |
 | S5 floor-c revocation | R0 F₂=0; R1 F₂ outside [F*/2, 2F*]; R2 threshold-sweep gain > 0.05 (t ∈ [−7, −5], step 0.01); R3 alarm-zone HR rate / mean p̂ outside [0.5, 2] (≥10 HR); R4 \|detected − missed HR mean\| > 0.8·SD_HR (≥10 HR per group) → nested-CV c | pj-026 |
-| S5 RF `n_estimators` | search {300, 500, 1000}; select per pj-025; tie → smaller n | pj-024, pj-025 |
+| S5 RF `n_estimators` | search {300, 500, 1000}; iteration 1: select per pj-025; iteration 2: jointly with w by nested CV (pj-073); tie → smaller n | pj-024, pj-025, pj-073 |
 | S5 GBDT estimator | GradientBoostingRegressor | pj-017 |
-| S5 GBDT `n_estimators` | search {300, 500, 1000}; select per pj-025; tie → smaller n | pj-024, pj-025 |
+| S5 GBDT `n_estimators` | search {300, 500, 1000}; iteration 1: select per pj-025; iteration 2: jointly with w by nested CV (pj-073); tie → smaller n | pj-024, pj-025, pj-073 |
 | S5 GBDT `learning_rate` | 0.1 | pj-017 |
 | S5 GBDT `max_depth` | 8 | pj-024 |
 | S5 GBDT `min_samples_split` | 2 | pj-024 |
@@ -410,7 +421,9 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S9 lead-time usable CDM threshold | `time_to_tca ≥ t_cut` (replaces `TTC_MIN=2` only inside S9 runs) | [pj-055](./pj-055-s9-lead-time-features-and-labels.md) |
 | S9 lead-time features | same v1 columns as S3; labels `risk_final` / `y_hr` unchanged | [pj-055](./pj-055-s9-lead-time-features-and-labels.md) |
 | S9 lead-time curve rows | LRP; GBDT; S4 = argmin L unclipped among {ols, ridge, lasso} per `t_cut` | [pj-056](./pj-056-s9-lead-time-model-rows.md) |
-| S9 lead-time hyperparameters | re-run S5 GBDT grid + S4 α selection (mf-013) at each `t_cut`; no freeze from t=2 | [pj-056](./pj-056-s9-lead-time-model-rows.md) |
+| S9 lead-time hyperparameters | GBDT: at `t_cut=2` reuse bake-off (`pj-078`); at `t_cut∈{3,4}` iteration-2 nested `(w, n_estimators)` + `c(w)` (`pj-072`/`073`); S4 α (mf-013) unchanged | [pj-056](./pj-056-s9-lead-time-model-rows.md), [pj-077](./pj-077-s9-gbdt-iteration-2-protocol.md), [pj-078](./pj-078-s9-leadtime-t2-reuse-gbdt.md) |
+| S9 lead-time GBDT at t_cut=2 | reuse `results/gbdt.json` / `preds/gbdt.parquet`; do not retrain in S9 | [pj-078](./pj-078-s9-leadtime-t2-reuse-gbdt.md) |
+| S9 LMO GBDT hyperparameters | same iteration-2 protocol as lead-time cuts 3–4; re-select each fold | [pj-059](./pj-059-s9-lmo-model-rows.md), [pj-077](./pj-077-s9-gbdt-iteration-2-protocol.md) |
 | S9 lead-time S4 tie-break | equal L unclipped → higher F₂; then slug lexicographic | [pj-056](./pj-056-s9-lead-time-model-rows.md) |
 | S9 lead-time primary metric (y-axis) | L unclipped (revision to F₂ allowed per pj-057) | [pj-057](./pj-057-s9-lead-time-curve-y-metric.md) |
 | S9 lead-time secondary metrics in output | F₂, MSE_HR, L clipped/unclipped per pj-007 | [pj-057](./pj-057-s9-lead-time-curve-y-metric.md) |
@@ -434,23 +447,33 @@ Every modeling parameter the implementation needs. Library defaults must be list
 | S8 feature scaling | StandardScaler on numeric only; one-hot unscaled; fold-fit (both arms) | [pj-065](./pj-065-s8-preprocessing-impute-scale.md) |
 | S8 optimizer | Adam; lr=1e-3; betas=(0.9, 0.999); eps=1e-8; weight_decay=0 | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
 | S8 batch size | 64 | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
-| S8 max epochs | 50 | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
-| S8 early stopping | patience 10; monitor inner-val regression loss/MSE; restore best | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
+| S8 max epochs | ~~50~~ → 100, MLP and GRU; GRU → 200 if median best epoch > 90 (iteration 2) | [pj-074](./pj-074-s8-epochs-and-weighted-monitor.md) |
+| S8 early stopping | patience 10; monitor ~~unweighted~~ weighted MSE on inner val (iteration 2); restore best | [pj-066](./pj-066-s8-training-adam-early-stopping.md), [pj-074](./pj-074-s8-epochs-and-weighted-monitor.md) |
 | S8 inner val fraction | 0.20 of fold train; shuffled; seed tied to fold/rep | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
 | S8 training recipe scope | same for MLP and GRU | [pj-066](./pj-066-s8-training-adam-early-stopping.md) |
-| S8 loss | MSE on y_fit | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md) |
-| S8 training target transform | y_fit = max(risk_final, c_fold) per pj-026 | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md) |
-| S8 sample weights | none | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md) |
+| S8 loss | MSE on y_fit; weighted mean Σwℓ/Σw (iteration 2) | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md), [pj-076](./pj-076-s8-weighted-mean-loss-normalization.md) |
+| S8 training target transform | y_fit = max(risk_final, c_fold); c_fold = c(w) per pj-072 (iteration 2) | [pj-068](./pj-068-s8-floor-c-mse-no-weights.md) |
+| S8 sample weights | ~~none~~ → w on HR events, w selected per pj-073 (iteration 2) | [pj-072](./pj-072-hr-sample-weights-recomputed-c.md) |
 | S8 torch seed | CV repetition seed (pj-005: 42–46); no strict CUDA determinism | [pj-069](./pj-069-s8-torch-seeds.md) |
 | S8 slugs / artifacts | mlp, gru; results/*.json + preds/*.parquet; p_hr at −6 | [pj-070](./pj-070-s8-artifacts-and-comparison.md) |
 | S8 uncertainty / comparison | same bootstrap/BCa and bake-off framing as other regressor rows | [pj-070](./pj-070-s8-artifacts-and-comparison.md) |
+| Iteration 2: retrained models | rf, gbdt, mlp, gru; alarm −6, target `risk_final`, floor `c` kept; S7/S9 regenerate | [pj-071](./pj-071-s8-s5-iteration-2-scope.md) |
+| Iteration 2: HR weight grid | w ∈ {1, 2, 5, 10} on HR events (`risk_final` ≥ −6); non-HR weight 1 | [pj-072](./pj-072-hr-sample-weights-recomputed-c.md), [pj-073](./pj-073-nested-cv-selection-of-w.md) |
+| Iteration 2: c with weights | q(c) = p*_w, p*_w = w·p*/(w·p*+1−p*), Brent on [−29.99, −6.0005], per training part; w=1 → pj-026 | [pj-072](./pj-072-hr-sample-weights-recomputed-c.md) |
+| Iteration 2: R3 with weights | p = p_w / (w − (w−1)·p_w) before comparing with the observed HR rate | [pj-072](./pj-072-hr-sample-weights-recomputed-c.md) |
+| Iteration 2: inner CV | 3 folds, `StratifiedKFold(shuffle=True, random_state=42+r)` stratified by `y_hr`, inside each outer training part | [pj-073](./pj-073-nested-cv-selection-of-w.md) |
+| Iteration 2: selection criterion | pooled L unclipped over the 3 held-out parts; tie (incl. L = ∞) → smallest w, then smaller `n_estimators` | [pj-073](./pj-073-nested-cv-selection-of-w.md) |
+| Iteration 2: selection unit | per model and per outer fold; refit on the whole outer training part | [pj-073](./pj-073-nested-cv-selection-of-w.md) |
+| Iteration 2: other hyperparameters | unchanged for all four models | [pj-073](./pj-073-nested-cv-selection-of-w.md) |
 | S9 W2 deliverables format | deferred-fog | pj-053 |
 | S9 LMO vs event-CV ranking table | deferred-fog | pj-058 |
 | S9 `mission_id` on events | deferred-fog (engineering: join from CDM at runtime) | pj-053 |
 
 ## Fog (not yet sharp)
 
-- S5 tuning when all candidates have F₂ = 0 (L = ∞): tie-break still undefined; R0 in pj-026 reopens c in that case.
+- S5 tuning when all candidates have F₂ = 0 (L = ∞): tie-break defined for iteration 2 by pj-073 (smallest w, then smaller `n_estimators`); R0 in pj-026 reopens c in that case.
+- Which first-iteration figures appear in the W2 text (pj-075).
+- GRU 200-epoch trigger (median best epoch > 90, pj-074) is an uncalibrated intuition.
 - S5 iteration 2 levers still to decide (in order): loss / statistic (e.g. quantile), sample weights on HR, residual on LRP, alarm threshold ≠ −6, classification + magnitude (overlaps S6).
 - Rúbrica interna exacta del profe para el project (syllabus describe entregables, no desglose de puntos).
 - Papel empírico final de cada familia de modelos (lineal / trees / NN) — se resolverá al implementar; el proposal no lo congela (011).

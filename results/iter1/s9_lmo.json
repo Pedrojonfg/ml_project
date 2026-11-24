@@ -1,0 +1,472 @@
+{
+  "kind": "lmo",
+  "t_cut": 2.0,
+  "primary_metric": "L_unclipped",
+  "n_missions_total": 19,
+  "n_missions_evaluated": 13,
+  "n_missions_skipped": 6,
+  "folds": [
+    {
+      "mission_id": 1,
+      "status": "ok",
+      "n_test": 1405,
+      "n_hr_test": 24,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.5526315789473684,
+          "MSE_HR_clipped": 0.23116779390114273,
+          "MSE_HR_unclipped": 1.379987275663541,
+          "L_clipped": 0.4183036270592107,
+          "L_unclipped": 2.4971198321530745
+        },
+        "gbdt": {
+          "F2": 0.4761904761904762,
+          "MSE_HR_clipped": 0.7066863642479069,
+          "MSE_HR_unclipped": 0.7270474213674939,
+          "L_clipped": 1.4840413649206043,
+          "L_unclipped": 1.526799584871737
+        },
+        "linear": {
+          "F2": 0.505952380952381,
+          "MSE_HR_clipped": 1.2844872855391856,
+          "MSE_HR_unclipped": 310.11547655715,
+          "L_clipped": 2.5387513408303897,
+          "L_unclipped": 612.9341183717787
+        }
+      }
+    },
+    {
+      "mission_id": 2,
+      "status": "ok",
+      "n_test": 1182,
+      "n_hr_test": 15,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.6542056074766355,
+          "MSE_HR_clipped": 0.29073421802228455,
+          "MSE_HR_unclipped": 11.77559893433904,
+          "L_clipped": 0.44440801897692067,
+          "L_unclipped": 17.99984408534682
+        },
+        "gbdt": {
+          "F2": 0.4787234042553192,
+          "MSE_HR_clipped": 0.9135395434754352,
+          "MSE_HR_unclipped": 0.9432847730647701,
+          "L_clipped": 1.9082826019264645,
+          "L_unclipped": 1.9704170815130753
+        },
+        "linear": {
+          "F2": 0.5652173913043479,
+          "MSE_HR_clipped": 1.3978550028490593,
+          "MSE_HR_unclipped": 271.81170189674793,
+          "L_clipped": 2.47312808196372,
+          "L_unclipped": 480.89762643270785
+        }
+      }
+    },
+    {
+      "mission_id": 3,
+      "status": "ok",
+      "n_test": 343,
+      "n_hr_test": 9,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.6249999999999999,
+          "MSE_HR_clipped": 0.12584010166198603,
+          "MSE_HR_unclipped": 0.12593858500891497,
+          "L_clipped": 0.20134416265917768,
+          "L_unclipped": 0.201501736014264
+        },
+        "gbdt": {
+          "F2": 0.5555555555555555,
+          "MSE_HR_clipped": 0.47385493448876137,
+          "MSE_HR_unclipped": 0.5002608067289699,
+          "L_clipped": 0.8529388820797706,
+          "L_unclipped": 0.9004694521121459
+        },
+        "linear": {
+          "F2": 0.5555555555555555,
+          "MSE_HR_clipped": 0.6936788457930055,
+          "MSE_HR_unclipped": 301.2973257959648,
+          "L_clipped": 1.2486219224274102,
+          "L_unclipped": 542.3351864327367
+        }
+      }
+    },
+    {
+      "mission_id": 4,
+      "status": "ok",
+      "n_test": 208,
+      "n_hr_test": 5,
+      "gbdt_n_estimators": 500,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.5172413793103449,
+          "MSE_HR_clipped": 0.1147295136170505,
+          "MSE_HR_unclipped": 0.16341199756766633,
+          "L_clipped": 0.2218103929929643,
+          "L_unclipped": 0.3159298619641549
+        },
+        "gbdt": {
+          "F2": 0.5,
+          "MSE_HR_clipped": 0.48183655352097016,
+          "MSE_HR_unclipped": 0.49215479009490315,
+          "L_clipped": 0.9636731070419403,
+          "L_unclipped": 0.9843095801898063
+        },
+        "linear": {
+          "F2": 0.6896551724137933,
+          "MSE_HR_clipped": 0.8151932998646212,
+          "MSE_HR_unclipped": 298.8540232545591,
+          "L_clipped": 1.1820302848037005,
+          "L_unclipped": 433.33833371911055
+        }
+      }
+    },
+    {
+      "mission_id": 5,
+      "status": "ok",
+      "n_test": 1410,
+      "n_hr_test": 10,
+      "gbdt_n_estimators": 500,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.33783783783783783,
+          "MSE_HR_clipped": 0.07610850752343845,
+          "MSE_HR_unclipped": 1.3647112422559065,
+          "L_clipped": 0.22528118226937782,
+          "L_unclipped": 4.039545277077483
+        },
+        "gbdt": {
+          "F2": 0.1639344262295082,
+          "MSE_HR_clipped": 0.10498840606993962,
+          "MSE_HR_unclipped": 0.12868932493240187,
+          "L_clipped": 0.6404292770266315,
+          "L_unclipped": 0.7850048820876513
+        },
+        "linear": {
+          "F2": 0.3333333333333333,
+          "MSE_HR_clipped": 0.26204346161983255,
+          "MSE_HR_unclipped": 302.4228735952747,
+          "L_clipped": 0.7861303848594977,
+          "L_unclipped": 907.2686207858242
+        }
+      }
+    },
+    {
+      "mission_id": 6,
+      "status": "ok",
+      "n_test": 652,
+      "n_hr_test": 4,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "ols",
+      "metrics": {
+        "lrp": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 0.7537734888086016,
+          "MSE_HR_unclipped": 160.48050785653015,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        },
+        "gbdt": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 0.7537734888086016,
+          "MSE_HR_unclipped": 0.9078078269750425,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        },
+        "linear": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 0.7537734888086016,
+          "MSE_HR_unclipped": 311.79237382768366,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        }
+      }
+    },
+    {
+      "mission_id": 7,
+      "status": "ok",
+      "n_test": 1267,
+      "n_hr_test": 1,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 0.9721508938145553,
+          "MSE_HR_unclipped": 88.41692556475564,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        },
+        "gbdt": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 0.9721508938145553,
+          "MSE_HR_unclipped": 1.168452324812176,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        },
+        "linear": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 0.9721508938145553,
+          "MSE_HR_unclipped": 370.500146177493,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        }
+      }
+    },
+    {
+      "mission_id": 9,
+      "status": "skipped",
+      "reason": "zero_hr_in_holdout",
+      "n_test": 261,
+      "n_hr_test": 0
+    },
+    {
+      "mission_id": 10,
+      "status": "skipped",
+      "reason": "zero_hr_in_holdout",
+      "n_test": 58,
+      "n_hr_test": 0
+    },
+    {
+      "mission_id": 13,
+      "status": "skipped",
+      "reason": "zero_hr_in_holdout",
+      "n_test": 4,
+      "n_hr_test": 0
+    },
+    {
+      "mission_id": 14,
+      "status": "ok",
+      "n_test": 5,
+      "n_hr_test": 1,
+      "gbdt_n_estimators": 1000,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 1.339920037748927,
+          "MSE_HR_unclipped": 40.31255793582905,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        },
+        "gbdt": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 1.339920037748927,
+          "MSE_HR_unclipped": 1.4980804866784028,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        },
+        "linear": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 1.339920037748927,
+          "MSE_HR_unclipped": 371.37869776225347,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        }
+      }
+    },
+    {
+      "mission_id": 15,
+      "status": "ok",
+      "n_test": 1357,
+      "n_hr_test": 13,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.5128205128205128,
+          "MSE_HR_clipped": 0.4312233010210005,
+          "MSE_HR_unclipped": 10.27147090504446,
+          "L_clipped": 0.840885436990951,
+          "L_unclipped": 20.029368264836698
+        },
+        "gbdt": {
+          "F2": 0.4411764705882353,
+          "MSE_HR_clipped": 1.654133689115383,
+          "MSE_HR_unclipped": 1.7113126241698944,
+          "L_clipped": 3.749369695328202,
+          "L_unclipped": 3.8789752814517606
+        },
+        "linear": {
+          "F2": 0.3623188405797102,
+          "MSE_HR_clipped": 1.8198468953231033,
+          "MSE_HR_unclipped": 321.2477327864369,
+          "L_clipped": 5.0227774310917646,
+          "L_unclipped": 886.6437424905658
+        }
+      }
+    },
+    {
+      "mission_id": 16,
+      "status": "ok",
+      "n_test": 58,
+      "n_hr_test": 2,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.5263157894736843,
+          "MSE_HR_clipped": 0.7089532662836819,
+          "MSE_HR_unclipped": 0.7089532662836819,
+          "L_clipped": 1.3470112059389954,
+          "L_unclipped": 1.3470112059389954
+        },
+        "gbdt": {
+          "F2": 0.5882352941176471,
+          "MSE_HR_clipped": 0.3353236246407728,
+          "MSE_HR_unclipped": 0.3353236246407728,
+          "L_clipped": 0.5700501618893138,
+          "L_unclipped": 0.5700501618893138
+        },
+        "linear": {
+          "F2": 0.5555555555555556,
+          "MSE_HR_clipped": 0.8809671825560399,
+          "MSE_HR_unclipped": 304.8938303753688,
+          "L_clipped": 1.5857409286008717,
+          "L_unclipped": 548.8088946756639
+        }
+      }
+    },
+    {
+      "mission_id": 18,
+      "status": "ok",
+      "n_test": 86,
+      "n_hr_test": 6,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.8333333333333334,
+          "MSE_HR_clipped": 0.003576580013933513,
+          "MSE_HR_unclipped": 0.003576580013933513,
+          "L_clipped": 0.004291896016720215,
+          "L_unclipped": 0.004291896016720215
+        },
+        "gbdt": {
+          "F2": 0.7575757575757576,
+          "MSE_HR_clipped": 0.7475683726180734,
+          "MSE_HR_unclipped": 0.7478838172516716,
+          "L_clipped": 0.9867902518558569,
+          "L_unclipped": 0.9872066387722066
+        },
+        "linear": {
+          "F2": 0.8823529411764706,
+          "MSE_HR_clipped": 1.7015805654734926,
+          "MSE_HR_unclipped": 309.52187287149764,
+          "L_clipped": 1.9284579742032917,
+          "L_unclipped": 350.79145592103066
+        }
+      }
+    },
+    {
+      "mission_id": 19,
+      "status": "ok",
+      "n_test": 524,
+      "n_hr_test": 1,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.23809523809523808,
+          "MSE_HR_clipped": 0.013030307610257762,
+          "MSE_HR_unclipped": 0.013030307610257762,
+          "L_clipped": 0.054727291963082604,
+          "L_unclipped": 0.054727291963082604
+        },
+        "gbdt": {
+          "F2": 0.4166666666666667,
+          "MSE_HR_clipped": 0.18721600199999688,
+          "MSE_HR_unclipped": 0.18721600199999688,
+          "L_clipped": 0.4493184047999925,
+          "L_unclipped": 0.4493184047999925
+        },
+        "linear": {
+          "F2": 0.4166666666666667,
+          "MSE_HR_clipped": 1.6587001982148983,
+          "MSE_HR_unclipped": 308.2322272811629,
+          "L_clipped": 3.9808804757157557,
+          "L_unclipped": 739.757345474791
+        }
+      }
+    },
+    {
+      "mission_id": 20,
+      "status": "ok",
+      "n_test": 25,
+      "n_hr_test": 2,
+      "gbdt_n_estimators": 300,
+      "linear_slug": "lasso",
+      "metrics": {
+        "lrp": {
+          "F2": 0.8333333333333334,
+          "MSE_HR_clipped": 0.1644592460306885,
+          "MSE_HR_unclipped": 0.1644592460306885,
+          "L_clipped": 0.1973510952368262,
+          "L_unclipped": 0.1973510952368262
+        },
+        "gbdt": {
+          "F2": 0.0,
+          "MSE_HR_clipped": 0.3089716000691947,
+          "MSE_HR_unclipped": 0.3808131802398575,
+          "L_clipped": Infinity,
+          "L_unclipped": Infinity
+        },
+        "linear": {
+          "F2": 0.9090909090909091,
+          "MSE_HR_clipped": 0.3089716000691947,
+          "MSE_HR_unclipped": 290.29150711529064,
+          "L_clipped": 0.3398687600761142,
+          "L_unclipped": 319.32065782681974
+        }
+      }
+    },
+    {
+      "mission_id": 22,
+      "status": "skipped",
+      "reason": "zero_hr_in_holdout",
+      "n_test": 17,
+      "n_hr_test": 0
+    },
+    {
+      "mission_id": 23,
+      "status": "skipped",
+      "reason": "zero_hr_in_holdout",
+      "n_test": 16,
+      "n_hr_test": 0
+    },
+    {
+      "mission_id": 24,
+      "status": "skipped",
+      "reason": "zero_hr_in_holdout",
+      "n_test": 14,
+      "n_hr_test": 0
+    }
+  ],
+  "summary": {
+    "lrp": {
+      "L_unclipped_mean": 4.668669054654812,
+      "L_unclipped_mean_n": 10,
+      "F2_mean": 0.4331395854329453
+    },
+    "gbdt": {
+      "L_unclipped_mean": 1.3391723408541878,
+      "L_unclipped_mean_n": 9,
+      "F2_mean": 0.3367736962445512
+    },
+    "linear": {
+      "L_unclipped_mean": 582.2095982131029,
+      "L_unclipped_mean_n": 10,
+      "F2_mean": 0.4442845189714403
+    }
+  }
+}

@@ -10,12 +10,12 @@
     ],
     "permutation_top5": [
       "risk_agg_min",
-      "risk_agg_mean",
       "risk_agg_max",
-      "risk_snap_p75",
-      "risk_snap_last"
+      "risk_agg_mean",
+      "risk_snap_first",
+      "risk_snap_p75"
     ],
-    "overlap": 3,
+    "overlap": 2,
     "rank1_match": false,
     "fail": true
   },
