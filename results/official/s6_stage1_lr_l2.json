@@ -1,0 +1,12 @@
+{
+  "model": "s6_stage1_lr_l2",
+  "metrics": {
+    "F2": 0.6050656660412758,
+    "MSE_HR_clipped": 28.172734021297813,
+    "MSE_HR_unclipped": 28.172734021297813,
+    "L_clipped": 46.56144878558678,
+    "L_unclipped": 46.56144878558678
+  },
+  "seconds": 12.9,
+  "n_test": 2167
+}
