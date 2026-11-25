@@ -102,6 +102,28 @@ def main() -> None:
             summary["models"][name] = base[name]
             print(name, json.dumps(base[name]))
 
+    from src.models.linear import _rep_metrics
+
+    def _compose_s6_pair(slug: str) -> dict | None:
+        # ponytail: reuse stage1 + magnitude test preds when both already exist (avoids re-running L1 select)
+        if not (slug.startswith("s6_") and "__" in slug):
+            return None
+        body = slug[len("s6_") :]
+        clf, reg = body.split("__", 1)
+        s1_path, reg_path = OUT / f"s6_stage1_{clf}.parquet", OUT / f"{reg}.parquet"
+        if not (s1_path.exists() and reg_path.exists()):
+            return None
+        s1 = pd.read_parquet(s1_path)
+        rg = pd.read_parquet(reg_path)
+        df = s1[["event_id", "p_hr"]].merge(rg[["event_id", "r_hat"]], on="event_id").sort_values("event_id")
+        order = pd.Index(eid_te)
+        df = df.set_index("event_id").loc[order].reset_index()
+        return {
+            "r_hat": df["r_hat"].to_numpy(dtype=np.float64),
+            "p_hr": df["p_hr"].to_numpy(dtype=np.float64),
+            "composed_from": [f"s6_stage1_{clf}", reg],
+        }
+
     for slug in want:
         if slug in ("CRP", "LRP"):
             continue
@@ -111,22 +133,27 @@ def main() -> None:
             print(slug, "cache hit")
             continue
         t0 = time.time()
-        kw = {}
-        if slug == "mlp":
-            kw["inputs_train"] = (X_tr,)
-            kw["inputs_test"] = (X_te,)
-        elif slug == "gru":
-            kw["inputs_train"] = gru_tr
-            kw["inputs_test"] = gru_te
-        pred = fit_predict_slug(slug, X_tr, y_tr, X_te, lrp_train=lrp_tr, **kw)
-        from src.models.linear import _rep_metrics
-
+        composed = _compose_s6_pair(slug)
+        if composed is not None:
+            pred = composed
+            note = {"composed_from": composed["composed_from"]}
+        else:
+            kw = {}
+            if slug == "mlp":
+                kw["inputs_train"] = (X_tr,)
+                kw["inputs_test"] = (X_te,)
+            elif slug == "gru":
+                kw["inputs_train"] = gru_tr
+                kw["inputs_test"] = gru_te
+            pred = fit_predict_slug(slug, X_tr, y_tr, X_te, lrp_train=lrp_tr, **kw)
+            note = {}
         metrics = _rep_metrics(y_te, pred["r_hat"], pred["p_hr"])
         payload = {
             "model": slug,
             "metrics": metrics,
             "seconds": round(time.time() - t0, 1),
             "n_test": int(len(y_te)),
+            **note,
         }
         _atomic_write(path, payload)
         pd.DataFrame({
