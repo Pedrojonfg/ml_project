@@ -1,0 +1,16 @@
+{
+  "model": "s6_lr_l2__ridge",
+  "metrics": {
+    "F2": 0.6050656660412758,
+    "MSE_HR_clipped": 1.751525148747134,
+    "MSE_HR_unclipped": 219.51474477177655,
+    "L_clipped": 2.894768695448752,
+    "L_unclipped": 362.794911514285
+  },
+  "seconds": 0.0,
+  "n_test": 2167,
+  "composed_from": [
+    "s6_stage1_lr_l2",
+    "ridge"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "model": "s6_lr_none__ols",
+  "metrics": {
+    "F2": 0.616822429906542,
+    "MSE_HR_clipped": 1.751525148747134,
+    "MSE_HR_unclipped": 57.715289612405094,
+    "L_clipped": 2.8395938017567173,
+    "L_unclipped": 93.56872709889917
+  },
+  "seconds": 1.3,
+  "n_test": 2167
+}

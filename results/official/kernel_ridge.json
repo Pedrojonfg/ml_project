@@ -1,0 +1,12 @@
+{
+  "model": "kernel_ridge",
+  "metrics": {
+    "F2": 0.17934002869440457,
+    "MSE_HR_clipped": 1.751525148747134,
+    "MSE_HR_unclipped": 276.29641916045,
+    "L_clipped": 9.76650422941402,
+    "L_unclipped": 1540.6288332386694
+  },
+  "seconds": 1206.6,
+  "n_test": 2167
+}

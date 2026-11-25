@@ -1,0 +1,12 @@
+{
+  "model": "lasso",
+  "metrics": {
+    "F2": 0.5898491083676269,
+    "MSE_HR_clipped": 1.751525148747134,
+    "MSE_HR_unclipped": 419.7857831832396,
+    "L_clipped": 2.9694461242713035,
+    "L_unclipped": 711.6833393967014
+  },
+  "seconds": 3.6,
+  "n_test": 2167
+}

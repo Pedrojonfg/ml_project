@@ -1,0 +1,12 @@
+{
+  "model": "s6_lr_none__lasso",
+  "metrics": {
+    "F2": 0.616822429906542,
+    "MSE_HR_clipped": 1.751525148747134,
+    "MSE_HR_unclipped": 419.7857831832396,
+    "L_clipped": 2.8395938017567173,
+    "L_unclipped": 680.5618000091915
+  },
+  "seconds": 4.7,
+  "n_test": 2167
+}
